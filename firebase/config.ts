@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -7,9 +8,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
-  setPersistence,
-  browserSessionPersistence,
-  User,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -25,19 +23,39 @@ const firebaseConfig = {
 // Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
+export const firestore = getFirestore();
 export const auth = getAuth();
 
-export const signUp = (email: string, password: string, name: string) => {
+//// -------------
+import useUserProfile from "../hooks/useUserProfile";
+
+const { createUserDataInFirestore } = useUserProfile();
+export const signUp = (
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string
+) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      console.log({ userCredential });
       updateProfile(user, {
-        displayName: name,
-      }).then(() => {
-        sendEmailVerification(user).then(() => {
-          console.log("Email verification sent!");
+        displayName: firstName,
+      })
+        .then(() =>
+          createUserDataInFirestore({
+            email,
+            firstName,
+            lastName,
+            userId: user.uid,
+          })
+        )
+        .then(() => {
+          sendEmailVerification(user).then(() => {
+            console.log("Email verification sent!");
+          });
         });
-      });
     })
 
     .catch((error) => {
@@ -72,7 +90,7 @@ export const signOutUser = () => {
     });
 };
 
-export const updateUserProfile = (name: string) => {
+export const updateAuthProfile = (name: string) => {
   if (!auth.currentUser) return;
 
   updateProfile(auth.currentUser, {

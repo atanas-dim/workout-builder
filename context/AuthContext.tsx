@@ -7,6 +7,7 @@ const AuthContext = createContext<{ user: User | null }>({
   user: null,
 });
 
+// Code example - https://colinhacks.com/essays/nextjs-firebase-authentication
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
 

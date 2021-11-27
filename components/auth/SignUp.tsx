@@ -7,11 +7,12 @@ import router from "next/router";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const handleSignUp = () => {
-    if (!email || !password || !name) return;
-    signUp(email, password, name);
+    if (!email || !password || !firstName || !lastName) return;
+    signUp(email, password, firstName, lastName);
     router.push("/welcome");
   };
 
@@ -27,13 +28,22 @@ export default function SignIn() {
           Sign Up
         </Typography>
         <TextField
-          id="name"
+          id="first-name"
           type="text"
-          label="Name"
+          label="First name"
           variant="outlined"
           sx={{ mb: 2 }}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <TextField
+          id="last-name"
+          type="text"
+          label="Last name"
+          variant="outlined"
+          sx={{ mb: 2 }}
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
         />
         <TextField
           id="email"
