@@ -4,19 +4,19 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 
 import { useAuth } from "../context/AuthContext";
 
-import useExercizes from "../hooks/useExercizes";
+import useExercises from "../hooks/useExercises";
 
 //Using getServerSideProps to authenticate token for private routes
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
 
 export default function Exercises() {
-  const [exercizeTitle, setExercizeTitle] = useState("");
-  const { exercizesData, createExercize } = useExercizes();
+  const [exerciseTitle, setExerciseTitle] = useState("");
+  const { exercisesData, createExercise } = useExercises();
 
   const onCreateClick = () => {
-    if (!exercizeTitle) return;
-    createExercize(exercizeTitle);
-    setExercizeTitle("");
+    if (!exerciseTitle) return;
+    createExercise(exerciseTitle);
+    setExerciseTitle("");
   };
 
   return (
@@ -27,22 +27,22 @@ export default function Exercises() {
       style={{ maxWidth: 600, margin: "auto", padding: 80 }}
     >
       <TextField
-        id="exercize-name"
+        id="exercise-name"
         type="text"
-        label="Exercize name"
+        label="Exercise name"
         variant="outlined"
         sx={{ mb: 2 }}
-        value={exercizeTitle}
-        onChange={(e) => setExercizeTitle(e.target.value)}
+        value={exerciseTitle}
+        onChange={(e) => setExerciseTitle(e.target.value)}
       />
       <Button variant="contained" onClick={onCreateClick}>
         Create new exercise
       </Button>
 
-      {exercizesData?.map((exercize) => {
+      {exercisesData?.map((exercise) => {
         return (
-          <Typography component="h2" variant="h4" key={exercize.id}>
-            {exercize.title}
+          <Typography component="h2" variant="h4" key={exercise.id}>
+            {exercise.title}
           </Typography>
         );
       })}
