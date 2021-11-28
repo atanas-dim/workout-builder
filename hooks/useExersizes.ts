@@ -30,13 +30,13 @@ export default function useExersizes() {
     if (!exersizeTitle || !user) return;
 
     try {
-      const collectionRef = collection(
+      const exersizesCollectionRef = collection(
         firestore,
-        "exersizes",
+        "users",
         user.uid,
         "exersizes"
       );
-      await addDoc(collectionRef, {
+      await addDoc(exersizesCollectionRef, {
         title: exersizeTitle,
         created: Timestamp.fromDate(new Date()),
       });
@@ -52,11 +52,11 @@ export default function useExersizes() {
 
     const exersizes: Exersize[] = [];
 
-    const exersizesRef = collection(
+    const exersizesCollectionRef = collection(
       firestore,
-      `exersizes/${user.uid}/exersizes`
+      `users/${user.uid}/exersizes`
     );
-    const exersizesQuery = query(exersizesRef, orderBy("title"));
+    const exersizesQuery = query(exersizesCollectionRef, orderBy("title"));
 
     const querySnapshot = await getDocs(exersizesQuery);
     querySnapshot.forEach((doc) => {
