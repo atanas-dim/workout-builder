@@ -26,7 +26,9 @@ export const firebaseApp = initializeApp(firebaseConfig);
 export const firestore = getFirestore();
 export const auth = getAuth();
 
-//// -------------
+// TO DO: move to separate file
+// ------------- Auth Functions ------------------------
+
 import useUserProfile from "../hooks/useUserProfile";
 
 const { createUserDataInFirestore } = useUserProfile();
@@ -96,14 +98,8 @@ export const updateAuthProfile = (name: string) => {
   updateProfile(auth.currentUser, {
     displayName: name,
     // photoURL: "https://example.com/jane-q-user/profile.jpg",
-  })
-    .then(() => {
-      console.log("Profile updated");
-      // Profile updated!
-      // ...
-    })
-    .catch((error) => {
-      // An error occurred
-      console.log({ error });
-    });
+  }).catch((error) => {
+    // An error occurred
+    console.log({ error });
+  });
 };

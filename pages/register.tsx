@@ -11,7 +11,7 @@ export default function Register() {
 
   useEffect(() => {
     if (user) router.push("/");
-  }, [user]);
+  }, [user, router]);
 
   return (
     <Box

@@ -24,9 +24,6 @@ export default function SignIn() {
         justifyContent="center"
         alignItems="center"
       >
-        <Typography component="h1" variant="h4">
-          Sign Up
-        </Typography>
         <TextField
           id="first-name"
           type="text"

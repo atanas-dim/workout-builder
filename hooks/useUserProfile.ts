@@ -1,6 +1,3 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import router from "next/router";
 import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { firestore } from "../firebase/config";
 
