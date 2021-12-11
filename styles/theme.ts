@@ -14,6 +14,8 @@ const theme = createTheme({
     },
     background: {
       default: "#121212",
+      // default: "#040607",
+      // paper: "#040607",
     },
   },
   shape: {

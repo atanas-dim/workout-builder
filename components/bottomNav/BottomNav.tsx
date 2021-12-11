@@ -5,6 +5,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Paper,
+  ButtonBase,
 } from "@mui/material/";
 import {
   ListAlt as WorkoutsIcon,
@@ -51,41 +52,51 @@ export default function BottomNav() {
   };
 
   return (
-    <Paper
-      square
-      elevation={0}
-      sx={{ pb: isMobileDevice ? 1 : undefined }}
-      className={classes.root}
-    >
-      <BottomNavigation
-        showLabels
-        sx={{ backgroundColor: "transparent" }}
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
+    <Paper square elevation={0} className={classes.root}>
+      <ButtonBase
+        sx={{
+          width: "100%",
+          height: "100%",
+          pb: isMobileDevice ? 1 : undefined,
         }}
       >
-        <BottomNavigationAction
-          label="Training"
-          icon={<ArmFlexIcon />}
-          component="a"
-          onClick={(e: MouseEvent) => onBottomNavClick(e, RouterPaths.Training)}
-        />
-        <BottomNavigationAction
-          label="Workouts"
-          icon={<WorkoutsIcon />}
-          component="a"
-          onClick={(e: MouseEvent) => onBottomNavClick(e, RouterPaths.Workouts)}
-        />
-        <BottomNavigationAction
-          label="Exercises"
-          icon={<ExercisesIcon />}
-          component="a"
-          onClick={(e: MouseEvent) =>
-            onBottomNavClick(e, RouterPaths.Exercises)
-          }
-        />
-      </BottomNavigation>
+        <BottomNavigation
+          showLabels
+          sx={{ backgroundColor: "transparent", width: "100%" }}
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            disableRipple
+            label="Training"
+            icon={<ArmFlexIcon />}
+            component="a"
+            onClick={(e: MouseEvent) =>
+              onBottomNavClick(e, RouterPaths.Training)
+            }
+          />
+          <BottomNavigationAction
+            disableRipple
+            label="Workouts"
+            icon={<WorkoutsIcon />}
+            component="a"
+            onClick={(e: MouseEvent) =>
+              onBottomNavClick(e, RouterPaths.Workouts)
+            }
+          />
+          <BottomNavigationAction
+            disableRipple
+            label="Exercises"
+            icon={<ExercisesIcon />}
+            component="a"
+            onClick={(e: MouseEvent) =>
+              onBottomNavClick(e, RouterPaths.Exercises)
+            }
+          />
+        </BottomNavigation>
+      </ButtonBase>
     </Paper>
   );
 }
