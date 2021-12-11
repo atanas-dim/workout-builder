@@ -12,9 +12,24 @@ import {
 } from "@mui/icons-material";
 import ArmFlexIcon from "../icons/ArmFlexIcon";
 
+import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material/styles";
+import { alpha } from "@mui/system";
+
+export const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderTop: `solid 1px ${theme.palette.divider}`,
+  },
+}));
+
 import { RouterPaths, ROUTE_VALUES } from "../../pages/_app";
 
 export default function BottomNav() {
+  const classes = useStyles();
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const router = useRouter();
   const [value, setValue] = useState<number | undefined>(0);
@@ -38,14 +53,9 @@ export default function BottomNav() {
   return (
     <Paper
       square
-      sx={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        paddingBottom: isMobileDevice ? 1 : undefined,
-      }}
-      elevation={4}
+      elevation={0}
+      sx={{ pb: isMobileDevice ? 1 : undefined }}
+      className={classes.root}
     >
       <BottomNavigation
         showLabels

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Typography, CircularProgress, Box } from "@mui/material";
+
+import MainContentWrapper from "../components/mainContent/MainContentWrapper";
+import CreateNewButton from "../components/buttons/CreateNewButton";
+import CreateExerciseModal from "../components/modals/CreateExerciseModal";
+import ExerciseCard from "../components/cards/ExerciseCard";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -10,42 +15,38 @@ import useExercises from "../hooks/useExercises";
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
 
 export default function Exercises() {
-  const [exerciseTitle, setExerciseTitle] = useState("");
-  const { exercisesData, createExercise } = useExercises();
-
-  const onCreateClick = () => {
-    if (!exerciseTitle) return;
-    createExercise(exerciseTitle);
-    setExerciseTitle("");
-  };
+  const [showModal, setShowModal] = useState(false);
+  const { exercisesData, createExercise, deleteExercise, isLoading } =
+    useExercises();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      style={{ maxWidth: 600, margin: "auto", padding: 80 }}
-    >
-      <TextField
-        id="exercise-name"
-        type="text"
-        label="Exercise name"
-        variant="outlined"
+    <MainContentWrapper>
+      <CreateNewButton
+        option="exercise"
+        onClick={() => setShowModal(true)}
         sx={{ mb: 2 }}
-        value={exerciseTitle}
-        onChange={(e) => setExerciseTitle(e.target.value)}
       />
-      <Button variant="contained" onClick={onCreateClick}>
-        Create new exercise
-      </Button>
+      <CreateExerciseModal
+        showModal={showModal}
+        hideModal={() => setShowModal(false)}
+        createExercise={createExercise}
+      />
+      {isLoading && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: 300, width: "100%" }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
 
       {exercisesData?.map((exercise) => {
         return (
-          <Typography component="h2" variant="h4" key={exercise.id}>
-            {exercise.title}
-          </Typography>
+          <ExerciseCard exercise={exercise} deleteExercise={deleteExercise} />
         );
       })}
-    </Box>
+    </MainContentWrapper>
   );
 }

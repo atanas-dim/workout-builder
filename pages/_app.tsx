@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import { AuthProvider } from "../context/AuthContext";
 
 import { ThemeProvider } from "@mui/material/styles";
+
 import { CssBaseline } from "@mui/material/";
 import theme from "../styles/theme";
 

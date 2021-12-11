@@ -5,25 +5,40 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: cyan[500],
+      main: cyan[300],
+      light: cyan[100],
     },
     secondary: {
-      main: yellow[500],
+      main: yellow[300],
+      light: yellow[100],
     },
     background: {
       default: "#121212",
     },
+  },
+  shape: {
+    borderRadius: 8,
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         "#__next": {
           width: "100vw",
-          height: "100vh",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          "& input:-webkit-autofill": {
+            WebkitBoxShadow: "0 0 0 100px #3c3c3c inset !important",
+          },
         },
       },
     },
   },
 });
+
+// console.log({ theme });
 
 export default theme;

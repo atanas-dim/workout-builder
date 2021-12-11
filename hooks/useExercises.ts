@@ -7,7 +7,11 @@ import {
   getDocs,
   query,
   orderBy,
+  doc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
+
 import { firestore } from "../firebase/config";
 
 import { useAuth } from "../context/AuthContext";
@@ -21,6 +25,7 @@ type Exercise = {
 export default function useExercises() {
   const { user } = useAuth();
   const [exercisesData, setExercisesData] = useState<Exercise[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) getExercisesData();
@@ -41,6 +46,25 @@ export default function useExercises() {
         created: Timestamp.fromDate(new Date()),
       });
     } catch (error) {
+      console.error("Error deleting document: ", error);
+    }
+
+    getExercisesData();
+  };
+
+  const deleteExercise = async (exerciseId: string) => {
+    if (!exerciseId || !user) return;
+
+    try {
+      const exerciseDocRef = collection(
+        firestore,
+        "users",
+        user.uid,
+        "exercises"
+      );
+
+      await deleteDoc(doc(exerciseDocRef, exerciseId));
+    } catch (error) {
       console.error("Error adding document: ", error);
     }
 
@@ -49,6 +73,7 @@ export default function useExercises() {
 
   const getExercisesData = async () => {
     if (!user) return;
+    setIsLoading(true);
 
     const exercises: Exercise[] = [];
 
@@ -66,11 +91,14 @@ export default function useExercises() {
       exercises.push({ id, ...data });
     });
     setExercisesData(exercises);
+    setIsLoading(false);
     return exercises;
   };
 
   return {
+    isLoading,
     createExercise,
+    deleteExercise,
     exercisesData,
     getExercisesData,
   };
