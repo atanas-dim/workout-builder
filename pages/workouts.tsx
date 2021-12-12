@@ -1,8 +1,9 @@
 import React from "react";
+import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 
 //Using getServerSideProps to authenticate token for private routes
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
 
 export default function Workouts() {
-  return <div style={{ padding: 150 }}>Workouts</div>;
+  return <MainContentWrapper>Workouts</MainContentWrapper>;
 }

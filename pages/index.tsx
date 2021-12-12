@@ -4,6 +4,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
 import { Box, Typography, Button } from "@mui/material/";
+import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 
 import { signOutUser } from "../firebase/config";
 
@@ -24,14 +25,14 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Workout Builder</title>
         <meta name="Workout Builder" content="Workout Builder" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <MainContentWrapper>
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Welcome
         </Typography>
@@ -39,8 +40,8 @@ const Home: NextPage = () => {
         <Button variant="contained" onClick={handleSignOut}>
           Sign out
         </Button>
-      </main>
-    </div>
+      </MainContentWrapper>
+    </>
   );
 };
 

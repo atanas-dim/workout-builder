@@ -5,17 +5,16 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: cyan[300],
+      main: cyan[200],
       light: cyan[100],
     },
     secondary: {
-      main: yellow[300],
+      main: yellow[200],
       light: yellow[100],
     },
     background: {
-      default: "#121212",
-      // default: "#040607",
-      // paper: "#040607",
+      default: "rgb(4 17 22)",
+      paper: "rgb(6 26 34)",
     },
     text: {
       // primary: cyan[100],

@@ -16,6 +16,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3, 2),
     width: "100%",
     maxWidth: theme.breakpoints.values.sm,
+    "&:focus-visible": {
+      outline: "none",
+    },
   },
 }));
 

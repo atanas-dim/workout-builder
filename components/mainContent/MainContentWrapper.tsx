@@ -11,6 +11,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     paddingBottom: theme.spacing(10),
     minHeight: "100vh",
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 }));
 
