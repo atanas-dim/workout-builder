@@ -44,7 +44,11 @@ export default function Exercises() {
 
       {exercisesData?.map((exercise) => {
         return (
-          <ExerciseCard exercise={exercise} deleteExercise={deleteExercise} />
+          <ExerciseCard
+            key={exercise.id}
+            exercise={exercise}
+            deleteExercise={deleteExercise}
+          />
         );
       })}
     </MainContentWrapper>

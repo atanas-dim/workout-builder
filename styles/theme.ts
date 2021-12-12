@@ -17,6 +17,9 @@ const theme = createTheme({
       // default: "#040607",
       // paper: "#040607",
     },
+    text: {
+      // primary: cyan[100],
+    },
   },
   shape: {
     borderRadius: 8,
