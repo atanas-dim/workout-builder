@@ -8,12 +8,21 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
+          {/* PWA  */}
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/icon.png"></link>
+
+          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+          <link rel="manifest" href="/manifest.json" />
+          {/* Favicon Links */}
+          <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+          <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+          <link rel="icon" type="image/png" href="/icons/icon-72.png" />
         </Head>
         <body>
           <Main />
