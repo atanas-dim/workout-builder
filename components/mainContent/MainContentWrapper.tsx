@@ -7,8 +7,8 @@ import { alpha } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
+    paddingTop: theme.spacing(9),
+    paddingBottom: theme.spacing(11),
     minHeight: "100vh",
     width: "100%",
     display: "flex",

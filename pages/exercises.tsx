@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Typography, CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import CreateNewButton from "../components/buttons/CreateNewButton";
@@ -22,7 +22,7 @@ export default function Exercises() {
   return (
     <MainContentWrapper>
       <CreateNewButton
-        option="exercise"
+        label="Add new exercise"
         onClick={() => setShowModal(true)}
         sx={{ mb: 2 }}
       />

@@ -57,7 +57,7 @@ export default function BottomNav() {
         sx={{
           width: "100%",
           height: "100%",
-          pb: isMobileDevice ? 1 : undefined,
+          pb: isMobileDevice ? 2 : undefined,
         }}
       >
         <BottomNavigation

@@ -26,6 +26,9 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        body: {
+          overflowX: "hidden",
+        },
         "#__next": {
           width: "100vw",
         },

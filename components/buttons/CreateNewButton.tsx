@@ -18,12 +18,12 @@ export const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type Props = {
-  option: "exercise" | "workout";
+  label: string;
   onClick?: () => void;
   sx?: object;
 };
 
-const CreateNewButton: FC<Props> = ({ option, onClick, sx }) => {
+const CreateNewButton: FC<Props> = ({ label, onClick, sx }) => {
   const classes = useStyles();
   return (
     <Button
@@ -35,7 +35,7 @@ const CreateNewButton: FC<Props> = ({ option, onClick, sx }) => {
       className={classes.root}
       sx={sx}
     >
-      Create new {option}
+      {label}
     </Button>
   );
 };

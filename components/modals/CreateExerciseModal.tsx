@@ -25,7 +25,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   showModal: boolean;
   hideModal: () => void;
-  createExercise: (exerciseTitle: string) => Promise<void>;
+  createExercise: (exerciseTitle: string, youTubeUrl: string) => Promise<void>;
 };
 
 export const CreateExerciseModal: FC<Props> = ({
@@ -35,11 +35,13 @@ export const CreateExerciseModal: FC<Props> = ({
 }) => {
   const classes = useStyles();
   const [exerciseTitle, setExerciseTitle] = useState("");
+  const [youTubeUrl, setYouTubeUrl] = useState("");
 
   const onCreateClick = () => {
     if (!exerciseTitle) return;
-    createExercise(exerciseTitle);
+    createExercise(exerciseTitle, youTubeUrl);
     setExerciseTitle("");
+    setYouTubeUrl("");
     hideModal();
   };
 
@@ -51,7 +53,7 @@ export const CreateExerciseModal: FC<Props> = ({
   return (
     <Modal open={showModal} onClose={handleClose} className={classes.root}>
       <Card elevation={3} className={classes.card} variant="outlined">
-        <Typography component="h1" variant="h5" align="center" sx={{ mb: 2 }}>
+        <Typography component="h1" variant="h5" align="center" sx={{ mb: 4 }}>
           New exercise
         </Typography>
         <TextField
@@ -64,12 +66,22 @@ export const CreateExerciseModal: FC<Props> = ({
           value={exerciseTitle}
           onChange={(e) => setExerciseTitle(e.target.value)}
         />
+        <TextField
+          id="video-url"
+          type="text"
+          label="YouTube Video URL"
+          variant="outlined"
+          fullWidth
+          sx={{ mb: 2 }}
+          value={youTubeUrl}
+          onChange={(e) => setYouTubeUrl(e.target.value)}
+        />
         <Button
           variant="contained"
           // color="secondary"
           fullWidth
           onClick={onCreateClick}
-          sx={{ height: 48 }}
+          sx={{ mt: 2, height: 48 }}
         >
           Create exercise
         </Button>

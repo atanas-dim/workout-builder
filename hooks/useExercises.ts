@@ -31,7 +31,7 @@ export default function useExercises() {
     if (user) getExercisesData();
   }, [user]);
 
-  const createExercise = async (exerciseTitle: string) => {
+  const createExercise = async (exerciseTitle: string, youTubeUrl: string) => {
     if (!exerciseTitle || !user) return;
 
     try {
@@ -43,6 +43,7 @@ export default function useExercises() {
       );
       await addDoc(exercisesCollectionRef, {
         title: exerciseTitle,
+        youTubeUrl,
         created: Timestamp.fromDate(new Date()),
       });
     } catch (error) {

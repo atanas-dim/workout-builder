@@ -41,14 +41,14 @@ export default function Header() {
 
   const getScrollDirection = () => {
     const scrollTop = document.documentElement.scrollTop;
-    console.log({ scrollTop, previousScrollTop });
+    // console.log({ scrollTop, previousScrollTop });
 
     if (scrollTop > previousScrollTop) {
       setHasScrolledUp(true);
     } else {
       setHasScrolledUp(false);
     }
-    console.log("setting prev");
+
     setPreviousScrollTop(scrollTop <= 0 ? 0 : scrollTop);
   };
 
