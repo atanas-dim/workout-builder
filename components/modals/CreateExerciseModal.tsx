@@ -16,7 +16,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3, 2),
     width: "100%",
     maxWidth: theme.breakpoints.values.sm,
-    "&:focus-visible": {
+    "&:focus, &:focus-visible, &:focus-within": {
       outline: "none",
     },
   },
@@ -59,7 +59,7 @@ export const CreateExerciseModal: FC<Props> = ({
         <TextField
           id="exercise-name"
           type="text"
-          label="Exercise name"
+          label="Exercise Name"
           variant="outlined"
           fullWidth
           sx={{ mb: 2 }}

@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 
 import { Box, Typography, Button } from "@mui/material/";
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";

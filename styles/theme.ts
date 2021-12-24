@@ -13,8 +13,8 @@ const theme = createTheme({
       light: yellow[100],
     },
     background: {
-      default: "rgb(4 17 22)",
-      paper: "rgb(6 26 34)",
+      default: "rgb(18 18 20)",
+      paper: "rgb(23 24 28)",
     },
     text: {
       // primary: cyan[100],
