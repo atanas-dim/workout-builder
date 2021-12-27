@@ -63,7 +63,7 @@ export default function Header() {
 
     if (!isStandalone) setShowInstallButton(true);
     else setShowInstallButton(false);
-  }, [isChrome, isMobileSafari, isStandalone, deferredPrompt]);
+  }, [isStandalone, deferredPrompt]);
 
   // CHECK IF THE APP HAS BEEN SUCCESSFULLY INSTALLED IN CHROME
   useEffect(() => {
@@ -133,12 +133,6 @@ export default function Header() {
   const [hasScrolledUp, setHasScrolledUp] = useState(false);
   const [previousScrollTop, setPreviousScrollTop] = useState(0);
 
-  useEffect(() => {
-    window.addEventListener("scroll", getScrollDirection);
-
-    return () => window.removeEventListener("scroll", getScrollDirection);
-  }, [previousScrollTop]);
-
   const getScrollDirection = () => {
     const scrollTop = document.documentElement.scrollTop;
     // console.log({ scrollTop, previousScrollTop });
@@ -151,6 +145,12 @@ export default function Header() {
 
     setPreviousScrollTop(scrollTop <= 0 ? 0 : scrollTop);
   };
+
+  useEffect(() => {
+    window.addEventListener("scroll", getScrollDirection);
+
+    return () => window.removeEventListener("scroll", getScrollDirection);
+  }, [previousScrollTop, getScrollDirection]);
 
   return (
     <>

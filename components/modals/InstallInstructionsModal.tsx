@@ -45,15 +45,15 @@ const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
           Install the app
         </Typography>
         <Typography paragraph>
-          1. Tap the 'Share Button'
+          1. Tap the &#39;Share Button&#39;
           {<ShareIcon fontSize="small" sx={{ ml: 1 / 4 }} />} at the bottom of
           the browser
         </Typography>
         <Typography paragraph>
-          2. Scroll (if needed) to find the 'Add to Home Screen'
+          2. Scroll (if needed) to find the &#39;Add to Home Screen&#39;
           {<AddIcon fontSize="small" sx={{ ml: 1 / 4 }} />} button
         </Typography>
-        <Typography paragraph>3. Tap 'Add'</Typography>
+        <Typography paragraph>3. Tap &#39;Add&#39;</Typography>
       </Card>
     </Modal>
   );

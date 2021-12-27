@@ -40,7 +40,7 @@ export default function Workouts() {
       )}
 
       {workoutsData?.map((workout) => {
-        return <p>{workout.title}</p>;
+        return <p key={workout.title}>{workout.title}</p>;
         // return (
         //   <WorkoutCard
         //     key={workout.id}
