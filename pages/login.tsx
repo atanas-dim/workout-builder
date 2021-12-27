@@ -18,10 +18,14 @@ export default function Login() {
       display="flex"
       justifyContent="center"
       flexDirection="column"
-      sx={{ width: "100vw", height: "100vh" }}
+      sx={{
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "background.paper",
+      }}
     >
       <Container
-        maxWidth="md"
+        maxWidth="sm"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -30,8 +34,10 @@ export default function Login() {
         }}
       >
         <SignIn />
-        or
-        <Button variant="text" href="/register">
+        <Typography component="span" variant="button" sx={{ mt: 2, mb: 2 }}>
+          or
+        </Typography>
+        <Button variant="outlined" fullWidth href="/register">
           Create account
         </Button>
       </Container>

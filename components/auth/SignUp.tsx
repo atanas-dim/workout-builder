@@ -18,52 +18,49 @@ export default function SignIn() {
 
   return (
     <>
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <TextField
-          id="first-name"
-          type="text"
-          label="First name"
-          variant="outlined"
-          sx={{ mb: 2 }}
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <TextField
-          id="last-name"
-          type="text"
-          label="Last name"
-          variant="outlined"
-          sx={{ mb: 2 }}
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        <TextField
-          id="email"
-          type="email"
-          label="Email"
-          variant="outlined"
-          sx={{ mb: 2 }}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          id="password"
-          type="password"
-          label="Password"
-          variant="outlined"
-          sx={{ mb: 2 }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button variant="contained" onClick={handleSignUp}>
-          Sign Up
-        </Button>
-      </Box>
+      <TextField
+        id="first-name"
+        type="text"
+        label="First name"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+      <TextField
+        id="last-name"
+        type="text"
+        label="Last name"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
+      />
+      <TextField
+        id="email"
+        type="email"
+        label="Email"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <TextField
+        id="password"
+        type="password"
+        label="Password"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 2 }}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Button variant="contained" fullWidth onClick={handleSignUp}>
+        Sign Up
+      </Button>
     </>
   );
 }

@@ -9,10 +9,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: 64,
     marginBottom: theme.spacing(2),
-    borderColor: alpha(theme.palette.secondary.main, 0.4),
-    backgroundColor: alpha(theme.palette.secondary.main, 0.08),
+    borderColor: alpha(theme.palette.primary.main, 0.4),
+    backgroundColor: alpha(theme.palette.primary.main, 0.08),
     "&:focus, &:active, &:hover": {
-      borderColor: alpha(theme.palette.secondary.main, 0.4),
+      borderColor: alpha(theme.palette.primary.main, 0.4),
     },
   },
 }));
@@ -29,7 +29,7 @@ const CreateNewButton: FC<Props> = ({ label, onClick, sx }) => {
     <Button
       variant="outlined"
       fullWidth
-      color="secondary"
+      // color="inherit"
       endIcon={<PlusIcon />}
       onClick={onClick}
       className={classes.root}

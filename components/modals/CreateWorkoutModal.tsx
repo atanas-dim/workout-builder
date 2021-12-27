@@ -23,28 +23,26 @@ export const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   showModal: boolean;
   hideModal: () => void;
-  createExercise: (exerciseTitle: string, youTubeUrl: string) => Promise<void>;
+  createWorkout: (workoutTitle: string) => Promise<void>;
 };
 
-export const CreateExerciseModal: FC<Props> = ({
+const CreateWorkoutModal: FC<Props> = ({
   showModal,
   hideModal,
-  createExercise,
+  createWorkout,
 }) => {
   const classes = useStyles();
-  const [exerciseTitle, setExerciseTitle] = useState("");
-  const [youTubeUrl, setYouTubeUrl] = useState("");
+  const [workoutTitle, setWorkoutTitle] = useState("");
 
   const onCreateClick = () => {
-    if (!exerciseTitle) return;
-    createExercise(exerciseTitle, youTubeUrl);
-    setExerciseTitle("");
-    setYouTubeUrl("");
+    if (!workoutTitle) return;
+    createWorkout(workoutTitle);
+    setWorkoutTitle("");
     hideModal();
   };
 
   const handleClose = () => {
-    setExerciseTitle("");
+    setWorkoutTitle("");
     hideModal();
   };
 
@@ -52,39 +50,30 @@ export const CreateExerciseModal: FC<Props> = ({
     <Modal open={showModal} onClose={handleClose} className={classes.root}>
       <Card elevation={3} className={classes.card} variant="outlined">
         <Typography component="h1" variant="h5" align="center" sx={{ mb: 4 }}>
-          New exercise
+          New workout
         </Typography>
         <TextField
-          id="exercise-name"
+          id="workout-name"
           type="text"
-          label="Exercise Name"
+          label="Workout Name"
           variant="outlined"
           fullWidth
           sx={{ mb: 2 }}
-          value={exerciseTitle}
-          onChange={(e) => setExerciseTitle(e.target.value)}
+          value={workoutTitle}
+          onChange={(e) => setWorkoutTitle(e.target.value)}
         />
-        <TextField
-          id="video-url"
-          type="text"
-          label="YouTube Video URL"
-          variant="outlined"
-          fullWidth
-          sx={{ mb: 2 }}
-          value={youTubeUrl}
-          onChange={(e) => setYouTubeUrl(e.target.value)}
-        />
+
         <Button
           variant="contained"
           fullWidth
           onClick={onCreateClick}
           sx={{ mt: 2, height: 48 }}
         >
-          Create exercise
+          Create workout
         </Button>
       </Card>
     </Modal>
   );
 };
 
-export default CreateExerciseModal;
+export default CreateWorkoutModal;

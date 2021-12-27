@@ -1,8 +1,8 @@
 {
-  "name": "Workout Directory",
-  "short_name": "WOD",
-  "theme_color": "#80DEEA",
-  "background_color": "#121212",
+  "name": "Workout Builder",
+  "short_name": "WB",
+  "theme_color": "#80deea",
+  "background_color": "rgb(25 26 31)",
   "display": "fullscreen",
   "orientation": "portrait",
   "scope": "/",
@@ -51,3 +51,5 @@
   ],
   "splash_pages": null
 }
+
+

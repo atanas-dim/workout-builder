@@ -19,6 +19,7 @@ import { useAuth } from "../context/AuthContext";
 type Exercise = {
   id: string;
   title?: string;
+  youTubeUrl?: string;
   created?: Timestamp;
 };
 

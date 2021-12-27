@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 
+import useExercises from "../hooks/useExercises";
+
 import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-import CreateNewButton from "../components/buttons/CreateNewButton";
+import AddButton from "../components/buttons/AddButton";
 import CreateExerciseModal from "../components/modals/CreateExerciseModal";
 import ExerciseCard from "../components/cards/ExerciseCard";
-
-import { useAuth } from "../context/AuthContext";
-
-import useExercises from "../hooks/useExercises";
 
 //Using getServerSideProps to authenticate token for private routes
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
@@ -21,8 +19,8 @@ export default function Exercises() {
 
   return (
     <MainContentWrapper>
-      <CreateNewButton
-        label="Add new exercise"
+      <AddButton
+        label="Create new exercise"
         onClick={() => setShowModal(true)}
         sx={{ mb: 2 }}
       />
