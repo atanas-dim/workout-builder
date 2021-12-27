@@ -1,6 +1,8 @@
 import React, { useEffect, useState, MouseEvent } from "react";
 import { useRouter } from "next/router";
 
+import { isStandaloneOnMobileSafari } from "../../utilities/pwaHelpers/checkStandaloneMode";
+
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -15,7 +17,6 @@ import ArmFlexIcon from "../icons/ArmFlexIcon";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
-import { alpha } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -31,20 +32,18 @@ import { RouterPaths, ROUTE_VALUES } from "../../pages/_app";
 
 export default function BottomNav() {
   const classes = useStyles();
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
   const router = useRouter();
-  const [value, setValue] = useState<number | undefined>(0);
+  const [bottomNavValue, setBottomNavValue] = useState<number | undefined>(0);
 
   useEffect(() => {
-    dynamicallyImportReactDeviceDetect();
-    if (ROUTE_VALUES[router.pathname]?.bottomNavValue)
-      setValue(ROUTE_VALUES[router.pathname].bottomNavValue);
-  }, [router.pathname]);
+    if (isStandaloneOnMobileSafari()) setIsStandalone(true);
+  }, []);
 
-  const dynamicallyImportReactDeviceDetect = async () => {
-    const { isMobile } = await import("react-device-detect");
-    setIsMobileDevice(isMobile);
-  };
+  useEffect(() => {
+    if (ROUTE_VALUES[router.pathname]?.bottomNavValue)
+      setBottomNavValue(ROUTE_VALUES[router.pathname].bottomNavValue);
+  }, [router.pathname]);
 
   const onBottomNavClick = (e: any, path: string) => {
     e.preventDefault();
@@ -57,15 +56,15 @@ export default function BottomNav() {
         sx={{
           width: "100%",
           height: "100%",
-          pb: isMobileDevice ? 2 : undefined,
+          pb: isStandalone ? 2 : undefined,
         }}
       >
         <BottomNavigation
           showLabels
           sx={{ backgroundColor: "transparent", width: "100%" }}
-          value={value}
+          value={bottomNavValue}
           onChange={(event, newValue) => {
-            setValue(newValue);
+            setBottomNavValue(newValue);
           }}
         >
           <BottomNavigationAction

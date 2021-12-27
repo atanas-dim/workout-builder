@@ -1,14 +1,15 @@
 import "../styles/globals.css";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
-import App, { AppProps } from "next/app";
+import { AppProps } from "next/app";
 
 import { AuthProvider } from "../context/AuthContext";
 
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+
 import { CssBaseline } from "@mui/material/";
 import theme from "../styles/theme";
 
@@ -47,22 +48,35 @@ export const ROUTE_VALUES: {
   [RouterPaths.Register]: { title: "Register", appBar: false },
 };
 
+const SafeHydrate: FC = ({ children }) => {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === "undefined" ? null : children}
+    </div>
+  );
+};
+
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-
-        <AuthProvider>
-          {ROUTE_VALUES[router.asPath]?.appBar && <Header />}
-          <Component {...pageProps} />
-          {ROUTE_VALUES[router.asPath]?.bottomNavValue !== undefined && (
-            <BottomNav />
-          )}
-        </AuthProvider>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {/* Disabling SSR for the app content to speed up loading time and avoid longer waiting with blank screen on mobile */}
+          {/* Most data is fetched from Firebase client side */}
+          <SafeHydrate>
+            <AuthProvider>
+              {ROUTE_VALUES[router.asPath]?.appBar && <Header />}
+              <Component {...pageProps} />
+              {ROUTE_VALUES[router.asPath]?.bottomNavValue !== undefined && (
+                <BottomNav />
+              )}
+            </AuthProvider>
+          </SafeHydrate>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </>
   );
 }

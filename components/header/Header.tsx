@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import { ROUTE_VALUES, RouterPaths } from "../../pages/_app";
 
 import { isChrome, isMobileSafari } from "react-device-detect";
+import {
+  isStandaloneOnMobileSafari,
+  isStandaloneOnChrome,
+} from "../../utilities/pwaHelpers/checkStandaloneMode";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
-import { alpha } from "@mui/system";
 
 import { AppBar, Toolbar, Typography, IconButton } from "@mui/material/";
 import { DownloadForOffline as DownloadIcon } from "@mui/icons-material";
@@ -46,6 +49,32 @@ export default function Header() {
   const [showInstallButton, setShowInstallButton] = useState<boolean>(false);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
 
+  // INSTALL PROMPT FOR PWA
+  useEffect(() => {
+    // First check if it's standalone
+    if (isStandaloneOnChrome() || isStandaloneOnMobileSafari()) {
+      setIsStandalone(true);
+      return;
+    }
+
+    // Then save the install prompt to use it on Install Button onClick
+    window.addEventListener(
+      "beforeinstallprompt",
+      saveInstallPromptEvent as any
+    );
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        saveInstallPromptEvent as any
+      );
+    };
+  }, []);
+
+  const saveInstallPromptEvent = (e: any) => {
+    e.preventDefault();
+    setDeferredPrompt(e);
+  };
+
   // CHECK WHEN TO SHOW THE INSTALL BUTTON
   useEffect(() => {
     // Currently we support install on Chrome and Mobile Safari only
@@ -79,40 +108,6 @@ export default function Header() {
     setShowInstallButton(false);
   };
 
-  // INSTALL PROMPT FOR PWA
-  useEffect(() => {
-    // First check if it's standalone
-    if (isChrome && isStandaloneOnChrome()) setIsStandalone(true);
-    if (isMobileSafari && isStandaloneOnMobileSafari()) setIsStandalone(true);
-
-    // Then save the install prompt to use it on Install Button onClick
-    window.addEventListener(
-      "beforeinstallprompt",
-      saveInstallPromptEvent as any
-    );
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        saveInstallPromptEvent as any
-      );
-    };
-  }, []);
-
-  const isStandaloneOnChrome = () => {
-    if (typeof window !== "undefined")
-      return window.matchMedia("(display-mode: standalone)").matches;
-  };
-
-  const isStandaloneOnMobileSafari = () => {
-    //@ts-ignore
-    return window.navigator.standalone === true;
-  };
-
-  const saveInstallPromptEvent = (e: any) => {
-    e.preventDefault();
-    setDeferredPrompt(e);
-  };
-
   // ON INSTALL BUTTON CLICK FUNCTIONS
   const onInstallClick = async () => {
     if (isChrome) showChromeInstallPrompt();
@@ -133,7 +128,7 @@ export default function Header() {
   const [hasScrolledUp, setHasScrolledUp] = useState(false);
   const [previousScrollTop, setPreviousScrollTop] = useState(0);
 
-  const getScrollDirection = () => {
+  const getScrollDirection = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop;
     // console.log({ scrollTop, previousScrollTop });
 
@@ -144,7 +139,7 @@ export default function Header() {
     }
 
     setPreviousScrollTop(scrollTop <= 0 ? 0 : scrollTop);
-  };
+  }, [previousScrollTop]);
 
   useEffect(() => {
     window.addEventListener("scroll", getScrollDirection);

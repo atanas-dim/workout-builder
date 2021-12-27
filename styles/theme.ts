@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { cyan, yellow } from "@mui/material/colors";
+import { cyan, yellow, blueGrey } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -13,8 +13,8 @@ const theme = createTheme({
       light: yellow[100],
     },
     background: {
-      default: "rgb(18 18 20)",
-      paper: "rgb(25 26 31)",
+      default: "#121214",
+      paper: "#191a1f",
     },
     text: {
       // primary: cyan[100],
@@ -37,9 +37,12 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          "& input:-webkit-autofill": {
-            WebkitBoxShadow: "0 0 0 100px #3c3c3c inset !important",
-          },
+          "& input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:active, input:-webkit-autofill:focus":
+            {
+              WebkitBoxShadow: `0 0 0 100px ${blueGrey[900]} inset !important`,
+              backgroundColor: `${blueGrey[900]} !important`,
+              backgroundClip: "content-box !important",
+            },
         },
       },
     },
