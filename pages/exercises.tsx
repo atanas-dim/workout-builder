@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import useExercises from "../hooks/useExercises";
+import useExercises, { Exercise } from "../hooks/useExercises";
 
 import { CircularProgress, Box } from "@mui/material";
 
@@ -14,8 +14,25 @@ export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProp
 
 export default function Exercises() {
   const [showModal, setShowModal] = useState(false);
-  const { exercisesData, createExercise, deleteExercise, isLoading } =
-    useExercises();
+  const {
+    exercisesData,
+    createExercise,
+    deleteExercise,
+    updateExercise,
+    getExerciseById,
+    isLoading,
+  } = useExercises();
+  const [selectedExerciseId, setSelectedExerciseId] = useState("");
+
+  const onEditClick = (exerciseId: string) => {
+    setSelectedExerciseId(exerciseId);
+    setShowModal(true);
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
+    setSelectedExerciseId("");
+  };
 
   return (
     <MainContentWrapper>
@@ -26,8 +43,12 @@ export default function Exercises() {
       />
       <CreateExerciseModal
         showModal={showModal}
-        hideModal={() => setShowModal(false)}
+        hideModal={hideModal}
         createExercise={createExercise}
+        selectedExerciseId={selectedExerciseId}
+        getExerciseById={getExerciseById}
+        updateExercise={updateExercise}
+        deleteExercise={deleteExercise}
       />
       {isLoading && (
         <Box
@@ -45,7 +66,7 @@ export default function Exercises() {
           <ExerciseCard
             key={exercise.id}
             exercise={exercise}
-            deleteExercise={deleteExercise}
+            onEditClick={onEditClick}
           />
         );
       })}

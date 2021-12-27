@@ -56,7 +56,7 @@ export default function BottomNav() {
         sx={{
           width: "100%",
           height: "100%",
-          pb: isStandalone ? 2 : undefined,
+          pb: isStandalone ? 3.5 : undefined,
         }}
       >
         <BottomNavigation

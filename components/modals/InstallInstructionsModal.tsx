@@ -7,6 +7,7 @@ import { Modal, Card, Typography, IconButton } from "@mui/material";
 import {
   IosShare as ShareIcon,
   AddBoxOutlined as AddIcon,
+  Cancel as CloseIcon,
 } from "@mui/icons-material/";
 
 export const useStyles = makeStyles((theme: Theme) => ({
@@ -18,12 +19,13 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     margin: theme.spacing(2),
-    padding: theme.spacing(3, 2),
+    padding: theme.spacing(2, 3, 3, 3),
     display: "flex",
     flexDirection: "column",
     width: "100%",
     maxWidth: theme.breakpoints.values.sm,
     outline: "none !important",
+    position: "relative",
   },
 }));
 
@@ -37,11 +39,19 @@ const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
 
   return (
     <Modal open={showModal} onClose={hideModal} className={classes.root}>
-      <Card elevation={3} className={classes.card} variant="outlined">
-        <Typography component="span" variant="body2" align="center">
-          For best experience
-        </Typography>
-        <Typography component="span" variant="h6" align="center" sx={{ mb: 4 }}>
+      <Card className={classes.card} variant="outlined">
+        <IconButton
+          sx={{ position: "absolute", top: 16, right: 16 }}
+          onClick={hideModal}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Typography
+          component="span"
+          variant="h6"
+          align="center"
+          sx={{ mt: 0.5, mb: 4 }}
+        >
           Install the app
         </Typography>
         <Typography paragraph>

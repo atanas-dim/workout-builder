@@ -19,6 +19,7 @@ import BottomNav from "../components/bottomNav/BottomNav";
 export enum RouterPaths {
   Training = "/",
   Workouts = "/workouts",
+  WorkoutEditor = "/workout-editor",
   Exercises = "/exercises",
   Welcome = "/welcome",
   Login = "/login",
@@ -28,6 +29,9 @@ export enum RouterPaths {
 export const ROUTE_VALUES: {
   [key: string]: { bottomNavValue?: number; title: string; appBar: boolean };
 } = {
+  [RouterPaths.Welcome]: { title: "Welcome", appBar: false },
+  [RouterPaths.Login]: { title: "Login", appBar: false },
+  [RouterPaths.Register]: { title: "Register", appBar: false },
   [RouterPaths.Training]: {
     bottomNavValue: 0,
     title: "Training",
@@ -43,9 +47,10 @@ export const ROUTE_VALUES: {
     title: "Exercises",
     appBar: true,
   },
-  [RouterPaths.Welcome]: { title: "Welcome", appBar: false },
-  [RouterPaths.Login]: { title: "Login", appBar: false },
-  [RouterPaths.Register]: { title: "Register", appBar: false },
+  [RouterPaths.WorkoutEditor]: {
+    title: "Workout Editor",
+    appBar: true,
+  },
 };
 
 const SafeHydrate: FC = ({ children }) => {

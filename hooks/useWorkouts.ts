@@ -10,15 +10,24 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  arrayUnion,
 } from "firebase/firestore";
 
 import { firestore } from "../firebase/config";
 
 import { useAuth } from "../context/AuthContext";
 
-type Workout = {
+export type WorkoutExerciseEntry = {
+  draggableId: string;
+  id: string;
+  reps: number;
+  sets: number;
+};
+
+export type Workout = {
   id: string;
   title?: string;
+  exercises?: WorkoutExerciseEntry[];
   created?: Timestamp;
 };
 
@@ -31,7 +40,10 @@ export default function useWorkouts() {
     if (user) getWorkoutsData();
   }, [user]);
 
-  const createWorkout = async (workoutTitle: string) => {
+  const createWorkout = async (
+    workoutTitle: string,
+    exercises?: WorkoutExerciseEntry[]
+  ) => {
     if (!workoutTitle || !user) return;
 
     try {
@@ -43,6 +55,7 @@ export default function useWorkouts() {
       );
       await addDoc(workoutsCollectionRef, {
         title: workoutTitle,
+        exercises,
         created: Timestamp.fromDate(new Date()),
       });
     } catch (error) {

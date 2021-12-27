@@ -1,6 +1,7 @@
 import { FC } from "react";
+import Link from "next/link";
 import { Card, Typography, Button } from "@mui/material";
-import { Add as PlusIcon } from "@mui/icons-material";
+import { Add as AddIcon } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { alpha } from "@mui/system";
@@ -21,16 +22,32 @@ type Props = {
   label: string;
   onClick?: () => void;
   sx?: object;
+  href?: string;
 };
 
-const CreateNewButton: FC<Props> = ({ label, onClick, sx }) => {
+const AddButton: FC<Props> = ({ label, onClick, sx, href }) => {
   const classes = useStyles();
+
+  if (href)
+    return (
+      <Link href={href} passHref>
+        <Button
+          variant="outlined"
+          fullWidth
+          endIcon={<AddIcon />}
+          className={classes.root}
+          sx={sx}
+        >
+          {label}
+        </Button>
+      </Link>
+    );
+
   return (
     <Button
       variant="outlined"
       fullWidth
-      // color="inherit"
-      endIcon={<PlusIcon />}
+      endIcon={<AddIcon />}
       onClick={onClick}
       className={classes.root}
       sx={sx}
@@ -40,4 +57,4 @@ const CreateNewButton: FC<Props> = ({ label, onClick, sx }) => {
   );
 };
 
-export default CreateNewButton;
+export default AddButton;

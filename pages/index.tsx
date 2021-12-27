@@ -36,7 +36,7 @@ const Home: NextPage = () => {
           Welcome
         </Typography>
 
-        <Button variant="contained" onClick={handleSignOut}>
+        <Button variant="outlined" onClick={handleSignOut}>
           Sign out
         </Button>
       </MainContentWrapper>

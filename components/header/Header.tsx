@@ -11,9 +11,13 @@ import {
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
+import { alpha } from "@mui/system";
 
 import { AppBar, Toolbar, Typography, IconButton } from "@mui/material/";
-import { DownloadForOffline as DownloadIcon } from "@mui/icons-material";
+import {
+  DownloadForOffline as DownloadIcon,
+  ArrowBackIosNew as BackIcon,
+} from "@mui/icons-material";
 
 import InstallInstructionsModal from "../modals/InstallInstructionsModal";
 
@@ -37,6 +41,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     transition: theme.transitions.create(["height"], {
       duration: theme.transitions.duration.short,
     }),
+  },
+  installButton: {
+    position: "absolute",
+    right: 24,
+    animation: `$pulse 12s ${theme.transitions.easing.easeInOut} infinite `,
+  },
+  "@keyframes pulse": {
+    "75%": {
+      boxShadow: `0 0 0 -2px ${alpha(
+        theme.palette.primary.main,
+        0.4
+      )}, 0 0 0 -2px ${alpha(theme.palette.primary.main, 0.4)}`,
+    },
+    "100%": {
+      boxShadow: `0 0 0 10px transparent, 0 0 0 16px transparent`,
+    },
   },
 }));
 
@@ -155,15 +175,23 @@ export default function Header() {
         sx={{ height: hasScrolledUp ? 40 : 56 }}
       >
         <Toolbar className={classes.toolbar}>
-          <Typography variant="h6" component="div">
+          {router.pathname === RouterPaths.WorkoutEditor && (
+            <IconButton
+              sx={{ position: "absolute", left: 24 }}
+              onClick={() => router.back()}
+            >
+              <BackIcon fontSize="small" />
+            </IconButton>
+          )}
+          <Typography variant="h6" component="h1">
             {ROUTE_VALUES[router.pathname]?.title}
           </Typography>
 
-          {showInstallButton && (
+          {router.pathname !== RouterPaths.WorkoutEditor && showInstallButton && (
             <>
               <IconButton
-                sx={{ position: "absolute", right: 24 }}
                 onClick={onInstallClick}
+                className={classes.installButton}
               >
                 <DownloadIcon />
               </IconButton>

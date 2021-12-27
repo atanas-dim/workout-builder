@@ -1,6 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
-import { IconButton, Card, CardMedia, Box, Typography } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material/";
+
+import { Exercise } from "../../hooks/useExercises";
+
+import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+
+import {
+  IconButton,
+  Card,
+  CardMedia,
+  Box,
+  Typography,
+  Button,
+} from "@mui/material";
+import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material/";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -12,6 +24,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    flexShrink: 0,
     marginBottom: theme.spacing(2),
     "&:last-of-type": {
       marginBottom: 0,
@@ -20,43 +33,26 @@ export const useStyles = makeStyles((theme: Theme) => ({
   exerciseDetails: {
     flex: 1,
     height: "100%",
-    padding: theme.spacing(3, 2),
+    padding: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2, 1, 1, 2),
+    },
   },
 }));
 
 type Props = {
-  exercise: { [key: string]: any };
-  deleteExercise?: any;
+  exercise: Exercise;
+  handleAddClick?: (exerciseId: string) => void;
+  onEditClick?: (exerciseId: string) => void;
 };
 
-export const ExerciseCard: FC<Props> = ({ exercise, deleteExercise }) => {
+export const ExerciseCard: FC<Props> = ({
+  exercise,
+  handleAddClick,
+  onEditClick,
+}) => {
   const classes = useStyles();
   const { id, title, youTubeUrl } = exercise;
-  const [youTubeVideoId, setYouTubeVideoId] = useState("");
-
-  useEffect(() => {
-    if (youTubeUrl) getYouTubeVideoId(youTubeUrl);
-  }, [youTubeUrl]);
-
-  const getYouTubeVideoId = (videoUrl: string) => {
-    // https://youtu.be/rT7DgCr-3pg
-    // https://www.youtube.com/watch?v=rT7DgCr-3pg
-    const urlTypeOne = "youtu.be/";
-    const urlTypeTwo = "youtube.com/watch?v=";
-    let videoId = "";
-
-    if (videoUrl.includes(urlTypeOne)) {
-      const splitUrl = videoUrl.split(urlTypeOne);
-      videoId = splitUrl[splitUrl.length - 1];
-    }
-
-    if (videoUrl.includes(urlTypeTwo)) {
-      const splitUrl = videoUrl.split(urlTypeTwo);
-      videoId = splitUrl[splitUrl.length - 1];
-    }
-
-    setYouTubeVideoId(videoId);
-  };
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -65,8 +61,8 @@ export const ExerciseCard: FC<Props> = ({ exercise, deleteExercise }) => {
           component="img"
           sx={{ width: { xs: "40%", sm: "30%", md: "25%" }, height: "100%" }}
           image={
-            youTubeVideoId
-              ? `https://img.youtube.com/vi/${youTubeVideoId}/mqdefault.jpg`
+            youTubeUrl
+              ? getYouTubeVideoThumbUrl(youTubeUrl, "mq")
               : "/images/exercise-placeholder.jpg"
           }
           alt={`${title} video thumbnail`}
@@ -74,15 +70,33 @@ export const ExerciseCard: FC<Props> = ({ exercise, deleteExercise }) => {
       }
       <Box
         display="flex"
+        flexDirection="column"
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="flex-start"
         className={classes.exerciseDetails}
       >
-        <Typography>{title}</Typography>
+        <Typography component="h2" variant="body1" sx={{ fontWeight: 500 }}>
+          {title}
+        </Typography>
 
-        <IconButton color="inherit" onClick={() => deleteExercise(id)}>
-          <DeleteIcon />
-        </IconButton>
+        <Box display="flex" justifyContent="flex-end" sx={{ width: "100%" }}>
+          {handleAddClick && (
+            <IconButton color="inherit" onClick={() => handleAddClick(id)}>
+              <AddIcon />
+            </IconButton>
+          )}
+          {onEditClick && (
+            <Button
+              size="small"
+              variant="text"
+              onClick={() => onEditClick(id)}
+              disableRipple
+              sx={{ py: 0.5, px: 1.5, minHeight: "auto" }}
+            >
+              Edit
+            </Button>
+          )}
+        </Box>
       </Box>
     </Card>
   );

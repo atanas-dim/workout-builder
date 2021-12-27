@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { cyan, yellow, blueGrey } from "@mui/material/colors";
+import { cyan, yellow, blueGrey, pink } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -11,6 +11,9 @@ const theme = createTheme({
     secondary: {
       main: yellow[200],
       light: yellow[100],
+    },
+    error: {
+      main: pink[500],
     },
     background: {
       default: "#121214",
@@ -43,6 +46,16 @@ const theme = createTheme({
               backgroundColor: `${blueGrey[900]} !important`,
               backgroundClip: "content-box !important",
             },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minHeight: 48,
+          padding: "6px 24px",
+          borderRadius: 999,
+          minWidth: "auto",
         },
       },
     },
