@@ -5,9 +5,11 @@ import useExercises, { Exercise } from "../hooks/useExercises";
 import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-import AddButton from "../components/buttons/AddButton";
+import ActionButton from "../components/buttons/ActionButton";
 import CreateExerciseModal from "../components/modals/CreateExerciseModal";
 import ExerciseCard from "../components/cards/ExerciseCard";
+
+import { Add as AddIcon } from "@mui/icons-material";
 
 //Using getServerSideProps to authenticate token for private routes
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
@@ -36,10 +38,13 @@ export default function Exercises() {
 
   return (
     <MainContentWrapper>
-      <AddButton
+      <ActionButton
+        size="large"
         label="Create new exercise"
         onClick={() => setShowModal(true)}
         sx={{ mb: 2 }}
+        fullWidth
+        endIcon={<AddIcon />}
       />
       <CreateExerciseModal
         showModal={showModal}

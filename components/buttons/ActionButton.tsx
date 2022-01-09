@@ -1,0 +1,92 @@
+import { FC } from "react";
+import Link from "next/link";
+import { Button } from "@mui/material";
+
+import { alpha } from "@mui/system";
+import { styled } from "@mui/system";
+
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop: string) => prop !== "classes",
+})(({ size, color = "primary", variant, theme }) => {
+  const themeColor = color !== "inherit" ? theme.palette[color].main : "#fff";
+
+  return {
+    height: size === "large" ? 64 : "",
+    borderColor: variant === "outlined" ? alpha(themeColor, 0.4) : "",
+    backgroundColor:
+      variant === "outlined" || variant === "text"
+        ? alpha(themeColor, 0.08)
+        : "",
+    "&:focus, &:active, &:hover": {
+      borderColor: variant === "outlined" ? themeColor : "",
+    },
+  };
+});
+
+type Props = {
+  variant?: "text" | "outlined" | "contained" | undefined;
+  color?:
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "error"
+    | "info"
+    | "warning"
+    | undefined;
+  label: string;
+  onClick?: () => void;
+  sx?: object;
+  href?: string;
+  endIcon?: React.ReactNode;
+  fullWidth?: boolean;
+  size?: "small" | "medium" | "large" | undefined;
+  className?: string;
+};
+
+const ActionButton: FC<Props> = ({
+  variant = "outlined",
+  color = "primary",
+  label,
+  onClick,
+  sx,
+  href,
+  endIcon,
+  fullWidth,
+  size = "large",
+  className,
+}) => {
+  if (href)
+    return (
+      <Link href={href} passHref>
+        <StyledButton
+          size={size}
+          variant={variant}
+          color={color}
+          endIcon={endIcon}
+          fullWidth={fullWidth}
+          sx={sx}
+          className={className}
+        >
+          {label}
+        </StyledButton>
+      </Link>
+    );
+
+  return (
+    <StyledButton
+      size={size}
+      variant={variant}
+      color={color}
+      endIcon={endIcon}
+      fullWidth={fullWidth}
+      onClick={onClick}
+      sx={sx}
+      className={className}
+    >
+      {label}
+    </StyledButton>
+  );
+};
+
+export default ActionButton;

@@ -4,6 +4,7 @@ import Head from "next/head";
 
 import { Box, Typography, Button } from "@mui/material/";
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
+import ActionButton from "../components/buttons/ActionButton";
 
 import { signOutUser } from "../firebase/config";
 
@@ -36,9 +37,11 @@ const Home: NextPage = () => {
           Welcome
         </Typography>
 
-        <Button variant="outlined" onClick={handleSignOut}>
-          Sign out
-        </Button>
+        <ActionButton
+          label="Sign out"
+          variant="outlined"
+          onClick={handleSignOut}
+        />
       </MainContentWrapper>
     </>
   );

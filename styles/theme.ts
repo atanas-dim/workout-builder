@@ -24,7 +24,7 @@ const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 8,
+    borderRadius: 12,
   },
   components: {
     MuiCssBaseline: {
@@ -52,7 +52,6 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          minHeight: 48,
           padding: "6px 24px",
           borderRadius: 999,
           minWidth: "auto",

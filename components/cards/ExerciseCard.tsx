@@ -4,18 +4,13 @@ import { Exercise } from "../../hooks/useExercises";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 
-import {
-  IconButton,
-  Card,
-  CardMedia,
-  Box,
-  Typography,
-  Button,
-} from "@mui/material";
-import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material/";
+import { Card, CardMedia, Box, Typography, Button } from "@mui/material";
+import { Add as AddIcon } from "@mui/icons-material/";
+import ActionButton from "../buttons/ActionButton";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
+import { alpha } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -34,8 +29,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
     flex: 1,
     height: "100%",
     padding: theme.spacing(2),
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2, 1, 1, 2),
+  },
+  smallButton: {
+    padding: theme.spacing(0.5, 1.5),
+    minHeight: "auto",
+    lineHeight: 1,
+    height: 32,
+    "& > .MuiButton-endIcon": {
+      marginLeft: theme.spacing(0.5),
     },
   },
 }));
@@ -81,20 +82,25 @@ export const ExerciseCard: FC<Props> = ({
 
         <Box display="flex" justifyContent="flex-end" sx={{ width: "100%" }}>
           {handleAddClick && (
-            <IconButton color="inherit" onClick={() => handleAddClick(id)}>
-              <AddIcon />
-            </IconButton>
-          )}
-          {onEditClick && (
-            <Button
+            <ActionButton
+              label="Add"
               size="small"
               variant="text"
+              onClick={() => handleAddClick(id)}
+              endIcon={<AddIcon />}
+              className={classes.smallButton}
+              color="inherit"
+            />
+          )}
+          {onEditClick && (
+            <ActionButton
+              size="small"
+              label="Edit"
+              variant="text"
               onClick={() => onEditClick(id)}
-              disableRipple
-              sx={{ py: 0.5, px: 1.5, minHeight: "auto" }}
-            >
-              Edit
-            </Button>
+              className={classes.smallButton}
+              color="inherit"
+            />
           )}
         </Box>
       </Box>

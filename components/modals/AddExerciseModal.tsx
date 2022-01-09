@@ -42,8 +42,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: "column",
   },
   resultsContainer: {
-    overflowY: "scroll",
-    padding: "0 4px",
+    overflowY: "auto",
+    // padding: "0 4px",
     msOverflowStyle: "none", // IE 10+
     overflow: "-moz-scrollbars-none", // Firefox
     "&::-webkit-scrollbar": {
@@ -52,7 +52,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "&::-webkit-scrollbar-thumb": {
       background: "#ffffff32",
-      boxShadow: `inset 0 0 0 2px ${theme.palette.background.paper}`,
+      boxShadow: `inset 0 0 0 2px ${theme.palette.background.default}`,
     },
   },
 }));

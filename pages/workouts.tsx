@@ -7,8 +7,10 @@ import useWorkouts from "../hooks/useWorkouts";
 import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-import AddButton from "../components/buttons/AddButton";
+import ActionButton from "../components/buttons/ActionButton";
 import WorkoutCard from "../components/cards/WorkoutCard";
+
+import { Add as AddIcon } from "@mui/icons-material";
 
 //Using getServerSideProps to authenticate token for private routes
 export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
@@ -18,10 +20,13 @@ export default function Workouts() {
 
   return (
     <MainContentWrapper>
-      <AddButton
+      <ActionButton
+        size="large"
         label="Create new workout"
         href={RouterPaths.WorkoutEditor}
         sx={{ mb: 2 }}
+        fullWidth
+        endIcon={<AddIcon />}
       />
 
       {isLoading && (

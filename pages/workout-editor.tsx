@@ -13,11 +13,20 @@ import useWorkouts, { WorkoutExerciseEntry } from "../hooks/useWorkouts";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
+import { alpha } from "@mui/system";
 
-import { TextField, Paper, ButtonBase, Typography, Card } from "@mui/material";
+import {
+  TextField,
+  Paper,
+  ButtonBase,
+  Typography,
+  Button,
+} from "@mui/material";
+
+import { Add as AddIcon } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-import AddButton from "../components/buttons/AddButton";
+import ActionButton from "../components/buttons/ActionButton";
 import AddExerciseModal from "../components/modals/AddExerciseModal";
 import WorkoutEditorExerciseCard from "../components/cards/WorkoutEditorExerciseCard";
 
@@ -28,7 +37,16 @@ export const useStyles = makeStyles((theme: Theme) => ({
     left: 0,
     right: 0,
     borderTop: `solid 1px ${theme.palette.divider}`,
+    backgroundColor: theme.palette.background.default,
     zIndex: 1100,
+  },
+  saveButton: {
+    width: "100%",
+    borderRadius: 0,
+    backgroundColor: alpha(theme.palette.primary.main, 0.08),
+    "&:disabled": {
+      backgroundColor: alpha(theme.palette.grey[200], 0.08),
+    },
   },
   saveButtonLabel: {
     minHeight: 56,
@@ -171,10 +189,13 @@ const WorkoutEditor: FC = () => {
         </Droppable>
       </DragDropContext>
 
-      <AddButton
+      <ActionButton
+        size="large"
         label="Add exercise"
         onClick={() => setShowAddExerciseModal(true)}
         sx={{ mb: 2 }}
+        fullWidth
+        endIcon={<AddIcon />}
       />
       <AddExerciseModal
         showModal={showAddExerciseModal}
@@ -183,24 +204,23 @@ const WorkoutEditor: FC = () => {
       />
 
       <Paper square elevation={0} className={classes.saveButtonContainer}>
-        <ButtonBase
+        <Button
+          className={classes.saveButton}
           sx={{
-            width: "100%",
-            height: "100%",
+            p: 0,
             pb: isStandalone ? 3.5 : undefined,
           }}
-          disabled={!workoutTitle}
+          disabled={!workoutTitle || !workoutExerciseEntries.length}
           onClick={onSaveClick}
         >
           <Typography
             component="span"
             variant="button"
-            color={workoutTitle ? "primary" : "text.disabled"}
             className={classes.saveButtonLabel}
           >
             Save Workout
           </Typography>
-        </ButtonBase>
+        </Button>
       </Paper>
     </MainContentWrapper>
   );
