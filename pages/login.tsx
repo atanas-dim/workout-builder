@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
+
+import { RouterPaths } from "../pages/_app";
+
 import SignIn from "../components/auth/SignIn";
 import { useAuth } from "../context/AuthContext";
 
 import { Box, Button, Container, Typography } from "@mui/material";
+import ActionButton from "../components/buttons/ActionButton";
 
 export default function Login() {
   const { user } = useAuth();
@@ -37,9 +41,12 @@ export default function Login() {
         <Typography component="span" variant="button" sx={{ mt: 2, mb: 2 }}>
           or
         </Typography>
-        <Button variant="outlined" fullWidth href="/register">
-          Create account
-        </Button>
+        <ActionButton
+          label="Create account"
+          variant="outlined"
+          fullWidth
+          href={RouterPaths.Register}
+        />
       </Container>
     </Box>
   );

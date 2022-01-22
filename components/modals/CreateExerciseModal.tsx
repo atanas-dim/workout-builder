@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 
-import { Exercise } from "../../hooks/useExercises";
+import { Exercise } from "../../context/ExercisesContext";
 
 import {
   Modal,
@@ -14,6 +14,7 @@ import {
   Cancel as CloseIcon,
   DeleteOutline as DeleteIcon,
 } from "@mui/icons-material/";
+import ActionButton from "../buttons/ActionButton";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -39,15 +40,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   showModal: boolean;
   hideModal: () => void;
-  createExercise: (exerciseTitle: string, youTubeUrl: string) => Promise<void>;
+  createExercise: (exerciseTitle: string, youTubeUrl: string) => void;
   selectedExerciseId: string;
   getExerciseById: (exerciseId: string) => Promise<Exercise>;
   updateExercise: (
     exerciseId: string,
     exerciseTitle: string,
     youTubeUrl: string
-  ) => Promise<void>;
-  deleteExercise: (exerciseId: string) => Promise<void>;
+  ) => void;
+  deleteExercise: (exerciseId: string) => void;
 };
 
 export const CreateExerciseModal: FC<Props> = ({
@@ -66,22 +67,22 @@ export const CreateExerciseModal: FC<Props> = ({
   useEffect(() => {
     if (!selectedExerciseId) return;
     getExerciseById(selectedExerciseId).then((data) => {
-      if (!data.title) return;
-      setExerciseTitle(data.title);
+      if (!data) return;
+      setExerciseTitle(data.title || "");
       setYouTubeUrl(data.youTubeUrl || "");
     });
   }, [selectedExerciseId]);
 
   const onCreateClick = () => {
     if (!exerciseTitle) return;
-    createExercise(exerciseTitle, youTubeUrl).then(() => closeModal());
+    createExercise(exerciseTitle, youTubeUrl);
+    closeModal();
   };
 
   const onUpdateClick = () => {
     if (!exerciseTitle) return;
-    updateExercise(selectedExerciseId, exerciseTitle, youTubeUrl).then(() =>
-      closeModal()
-    );
+    updateExercise(selectedExerciseId, exerciseTitle, youTubeUrl);
+    closeModal();
   };
 
   const onDeleteClick = () => {
@@ -148,15 +149,14 @@ export const CreateExerciseModal: FC<Props> = ({
           value={youTubeUrl}
           onChange={(e) => setYouTubeUrl(e.target.value)}
         />
-        <Button
+        <ActionButton
+          label={selectedExerciseId ? "Update exercise" : "Create exercise"}
           variant="contained"
           fullWidth
           onClick={!selectedExerciseId ? onCreateClick : onUpdateClick}
           disabled={!exerciseTitle}
-          sx={{ mt: 2, height: 48 }}
-        >
-          {selectedExerciseId ? "Update" : "Create"} exercise
-        </Button>
+          sx={{ mt: 2 }}
+        />
       </Card>
     </Modal>
   );

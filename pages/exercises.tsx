@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import useExercises, { Exercise } from "../hooks/useExercises";
+import useExercises from "../hooks/useExercises";
 
-import { CircularProgress, Box } from "@mui/material";
+import { TransitionGroup } from "react-transition-group";
+
+import { CircularProgress, Box, Slide, Collapse, Grow } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
@@ -39,13 +41,13 @@ export default function Exercises() {
   return (
     <MainContentWrapper>
       <ActionButton
-        size="large"
         label="Create new exercise"
         onClick={() => setShowModal(true)}
         sx={{ mb: 2 }}
         fullWidth
         endIcon={<AddIcon />}
       />
+
       <CreateExerciseModal
         showModal={showModal}
         hideModal={hideModal}
@@ -66,10 +68,11 @@ export default function Exercises() {
         </Box>
       )}
 
-      {exercisesData?.map((exercise) => {
+      {exercisesData?.map((exercise, index) => {
         return (
           <ExerciseCard
             key={exercise.id}
+            index={index}
             exercise={exercise}
             onEditClick={onEditClick}
           />

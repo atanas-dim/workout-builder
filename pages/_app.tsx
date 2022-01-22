@@ -1,14 +1,16 @@
 import "../styles/globals.css";
 
-import { useState, useEffect, FC } from "react";
+import { FC } from "react";
 
 import { useRouter } from "next/router";
 
 import { AppProps } from "next/app";
 
-import { AuthProvider } from "../context/AuthContext";
-
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
+
+import { AuthProvider } from "../context/AuthContext";
+import { ExercisesProvider } from "../context/ExercisesContext";
+import { WorkoutsProvider } from "../context/WorkoutsContext";
 
 import { CssBaseline } from "@mui/material/";
 import theme from "../styles/theme";
@@ -71,15 +73,18 @@ function MyApp({ Component, pageProps }: AppProps) {
           <CssBaseline />
           {/* Disabling SSR for the app content to speed up loading time and avoid longer waiting with blank screen on mobile */}
           {/* Most data is fetched from Firebase client side */}
-          <SafeHydrate>
-            <AuthProvider>
-              {ROUTE_VALUES[router.asPath]?.appBar && <Header />}
-              <Component {...pageProps} />
-              {ROUTE_VALUES[router.asPath]?.bottomNavValue !== undefined && (
-                <BottomNav />
-              )}
-            </AuthProvider>
-          </SafeHydrate>
+          {/* <SafeHydrate> */}
+          <AuthProvider>
+            <ExercisesProvider>
+              <WorkoutsProvider>
+                {ROUTE_VALUES[router.pathname]?.appBar && <Header />}
+                <Component {...pageProps} />
+                {ROUTE_VALUES[router.pathname]?.bottomNavValue !==
+                  undefined && <BottomNav />}
+              </WorkoutsProvider>
+            </ExercisesProvider>
+          </AuthProvider>
+          {/* </SafeHydrate> */}
         </ThemeProvider>
       </StyledEngineProvider>
     </>

@@ -9,8 +9,9 @@ module.exports = withPWA({
     register: true,
     disable: process.env.NODE_ENV === "development",
     sw: "/sw.js",
+    dynamicStartUrlRedirect: "/login",
   },
-  target: "serverless",
+  // target: "serverless",
   async rewrites() {
     return [
       // Rewrite everything to `pages/index`

@@ -11,12 +11,10 @@ const StyledButton = styled(Button, {
   const themeColor = color !== "inherit" ? theme.palette[color].main : "#fff";
 
   return {
-    height: size === "large" ? 64 : "",
+    height: size === "large" ? 64 : size === "medium" ? 48 : "",
+    lineHeight: "initial",
     borderColor: variant === "outlined" ? alpha(themeColor, 0.4) : "",
-    backgroundColor:
-      variant === "outlined" || variant === "text"
-        ? alpha(themeColor, 0.08)
-        : "",
+    backgroundColor: variant === "outlined" ? alpha(themeColor, 0.08) : "",
     "&:focus, &:active, &:hover": {
       borderColor: variant === "outlined" ? themeColor : "",
     },
@@ -42,6 +40,7 @@ type Props = {
   fullWidth?: boolean;
   size?: "small" | "medium" | "large" | undefined;
   className?: string;
+  disabled?: boolean;
 };
 
 const ActionButton: FC<Props> = ({
@@ -53,8 +52,9 @@ const ActionButton: FC<Props> = ({
   href,
   endIcon,
   fullWidth,
-  size = "large",
+  size = "medium",
   className,
+  disabled,
 }) => {
   if (href)
     return (
@@ -67,6 +67,7 @@ const ActionButton: FC<Props> = ({
           fullWidth={fullWidth}
           sx={sx}
           className={className}
+          disabled={disabled}
         >
           {label}
         </StyledButton>
@@ -83,6 +84,7 @@ const ActionButton: FC<Props> = ({
       onClick={onClick}
       sx={sx}
       className={className}
+      disabled={disabled}
     >
       {label}
     </StyledButton>

@@ -1,43 +1,34 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button } from "@mui/material/";
-
-import { signIn, signUp } from "../../firebase/config";
 import router from "next/router";
+import { TextField } from "@mui/material/";
+import ActionButton from "../buttons/ActionButton";
+
+import { signUp } from "../../firebase/config";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const handleSignUp = () => {
-    if (!email || !password || !firstName || !lastName) return;
-    signUp(email, password, firstName, lastName);
+    if (!email || !password || !displayName) return;
+    signUp(email, password, displayName);
     router.push("/welcome");
   };
 
   return (
     <>
       <TextField
-        id="first-name"
+        id="display-name"
         type="text"
-        label="First name"
+        label="Display name"
         variant="outlined"
         fullWidth
         sx={{ mb: 2 }}
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
       />
-      <TextField
-        id="last-name"
-        type="text"
-        label="Last name"
-        variant="outlined"
-        fullWidth
-        sx={{ mb: 2 }}
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
+
       <TextField
         id="email"
         type="email"
@@ -58,9 +49,12 @@ export default function SignIn() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button variant="contained" fullWidth onClick={handleSignUp}>
-        Sign Up
-      </Button>
+      <ActionButton
+        label="Sign Up"
+        variant="contained"
+        fullWidth
+        onClick={handleSignUp}
+      />
     </>
   );
 }

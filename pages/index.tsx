@@ -34,7 +34,7 @@ const Home: NextPage = () => {
 
       <MainContentWrapper>
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-          Welcome
+          Welcome {user?.displayName}
         </Typography>
 
         <ActionButton

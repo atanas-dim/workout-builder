@@ -9,7 +9,10 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
-import useWorkouts, { WorkoutExerciseEntry } from "../hooks/useWorkouts";
+import useWorkouts from "../hooks/useWorkouts";
+import { useAuth } from "../context/AuthContext";
+
+import { WorkoutExerciseEntry } from "../context/WorkoutsContext";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -43,16 +46,17 @@ export const useStyles = makeStyles((theme: Theme) => ({
   saveButton: {
     width: "100%",
     borderRadius: 0,
-    backgroundColor: alpha(theme.palette.primary.main, 0.08),
-    "&:disabled": {
-      backgroundColor: alpha(theme.palette.grey[200], 0.08),
-    },
+    // backgroundColor: alpha(theme.palette.primary.main, 0.08),
+    // "&:disabled": {
+    //   backgroundColor: alpha(theme.palette.grey[200], 0.08),
+    // },
   },
   saveButtonLabel: {
     minHeight: 56,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    fontSize: "0.9375rem",
   },
 }));
 
@@ -67,13 +71,30 @@ const WorkoutEditor: FC = () => {
     WorkoutExerciseEntry[]
   >([]); // the data that will be rendered on each exercise card
   const [showAddExerciseModal, setShowAddExerciseModal] = useState(false);
-  const { createWorkout } = useWorkouts();
+  const [isExistingWorkout, setIsExistingWorkout] = useState(false);
+  const [existingWorkoutId, setExistingWorkoutId] = useState("");
+  const { createWorkout, getWorkoutById, updateWorkout } = useWorkouts();
+  const { user } = useAuth();
 
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     if (isStandaloneOnMobileSafari()) setIsStandalone(true);
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    if (router.query.workoutId) {
+      setExistingWorkoutId(router.query.workoutId as string);
+
+      getWorkoutById(router.query.workoutId as string).then((data) => {
+        if (!data) return;
+        setIsExistingWorkout(true);
+        setWorkoutTitle(data.title || "");
+        setWorkoutExerciseEntries(data.exercises || []);
+      });
+    }
+  }, [router, user]);
 
   const addExercise = (exerciseId: string) => {
     const newExercise = {
@@ -101,11 +122,17 @@ const WorkoutEditor: FC = () => {
     setWorkoutExerciseEntries(updatedData);
   };
 
-  const onSaveClick = async () => {
-    await createWorkout(workoutTitle, workoutExerciseEntries);
+  const onSaveClick = () => {
+    createWorkout(workoutTitle, workoutExerciseEntries);
     router.push(RouterPaths.Workouts);
   };
 
+  const onUpdateClick = () => {
+    updateWorkout(existingWorkoutId, workoutTitle, workoutExerciseEntries);
+    router.push(RouterPaths.Workouts);
+  };
+
+  // Sortable functions
   const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -168,7 +195,7 @@ const WorkoutEditor: FC = () => {
                   {(provided, snapshot) => (
                     <WorkoutEditorExerciseCard
                       key={"exercise" + index}
-                      position={index}
+                      index={index}
                       exercise={exercise}
                       updateExerciseProperty={updateExerciseProperty}
                       removeExercise={removeExercise}
@@ -190,7 +217,6 @@ const WorkoutEditor: FC = () => {
       </DragDropContext>
 
       <ActionButton
-        size="large"
         label="Add exercise"
         onClick={() => setShowAddExerciseModal(true)}
         sx={{ mb: 2 }}
@@ -205,20 +231,21 @@ const WorkoutEditor: FC = () => {
 
       <Paper square elevation={0} className={classes.saveButtonContainer}>
         <Button
+          variant="contained"
           className={classes.saveButton}
           sx={{
             p: 0,
             pb: isStandalone ? 3.5 : undefined,
           }}
           disabled={!workoutTitle || !workoutExerciseEntries.length}
-          onClick={onSaveClick}
+          onClick={isExistingWorkout ? onUpdateClick : onSaveClick}
         >
           <Typography
             component="span"
             variant="button"
             className={classes.saveButtonLabel}
           >
-            Save Workout
+            {isExistingWorkout ? "Update" : "Create"} Workout
           </Typography>
         </Button>
       </Paper>

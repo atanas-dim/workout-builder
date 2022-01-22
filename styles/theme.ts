@@ -58,6 +58,35 @@ const theme = createTheme({
         },
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: 999,
+          // paddingLeft: 0,
+          input: {
+            padding: "16.5px 24px",
+          },
+          "& legend": {
+            marginLeft: 12,
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          left: 12,
+        },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        positionStart: {
+          // position: "absolute",
+          // left: 24,
+        },
+      },
+    },
   },
 });
 

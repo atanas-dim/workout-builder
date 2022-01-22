@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { RouterPaths } from "./_app";
 
 import useWorkouts from "../hooks/useWorkouts";
 
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box, Grow } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
@@ -21,7 +21,6 @@ export default function Workouts() {
   return (
     <MainContentWrapper>
       <ActionButton
-        size="large"
         label="Create new workout"
         href={RouterPaths.WorkoutEditor}
         sx={{ mb: 2 }}
@@ -44,8 +43,8 @@ export default function Workouts() {
         return (
           <WorkoutCard
             key={"workout" + index}
+            index={index}
             workout={workout}
-            // deleteWorkout={deleteWorkout}
           />
         );
       })}

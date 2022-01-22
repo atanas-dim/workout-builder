@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { TextField, Button } from "@mui/material/";
+import { TextField } from "@mui/material/";
+import ActionButton from "../buttons/ActionButton";
 
 import { signIn } from "../../firebase/config";
 
@@ -34,9 +35,12 @@ export default function SignIn() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button variant="contained" fullWidth onClick={handleSignIn}>
-        Sign In
-      </Button>
+      <ActionButton
+        label="Sign In"
+        variant="contained"
+        fullWidth
+        onClick={handleSignIn}
+      />
     </>
   );
 }

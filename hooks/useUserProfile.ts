@@ -1,24 +1,22 @@
-import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
+import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { firestore } from "../firebase/config";
 
 type UserDetails = {
-  firstName: string;
-  lastName: string;
+  displayName: string;
   email: string;
   userId: string;
 };
 
 export default function useUserProfile() {
   const createUserDataInFirestore = async ({
-    firstName,
-    lastName,
+    displayName,
+
     email,
     userId,
   }: UserDetails) => {
     try {
       await setDoc(doc(firestore, "users", userId), {
-        firstName,
-        lastName,
+        displayName,
         email,
         joined: Timestamp.fromDate(new Date()),
       });

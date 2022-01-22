@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect, useCallback } from "react";
 
-import useExercises, { Exercise } from "../../hooks/useExercises";
+import useExercises from "../../hooks/useExercises";
+import { Exercise } from "../../context/ExercisesContext";
 
 import {
   Modal,
@@ -28,7 +29,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: theme.spacing(2, 2, 4),
+    padding: theme.spacing(1, 1, 4),
     backgroundColor: alpha(theme.palette.background.default, 0.8),
   },
   card: {
@@ -43,7 +44,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   resultsContainer: {
     overflowY: "auto",
-    // padding: "0 4px",
     msOverflowStyle: "none", // IE 10+
     overflow: "-moz-scrollbars-none", // Firefox
     "&::-webkit-scrollbar": {
@@ -122,7 +122,13 @@ const AddExerciseModal: FC<Props> = ({ showModal, hideModal, addExercise }) => {
             ),
           }}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+            "& input": {
+              pl: "0 !important",
+              borderRadius: "0 999px 999px 0 !important",
+            },
+          }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -132,9 +138,10 @@ const AddExerciseModal: FC<Props> = ({ showModal, hideModal, addExercise }) => {
           className={classes.resultsContainer}
         >
           {searchResults &&
-            searchResults.map((exercise) => (
+            searchResults.map((exercise, index) => (
               <ExerciseCard
                 key={exercise.id}
+                index={index}
                 exercise={exercise}
                 handleAddClick={handleAddClick}
               />

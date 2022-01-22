@@ -35,21 +35,19 @@ const { createUserDataInFirestore } = useUserProfile();
 export const signUp = (
   email: string,
   password: string,
-  firstName: string,
-  lastName: string
+  displayName: string
 ) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log({ userCredential });
       updateProfile(user, {
-        displayName: firstName,
+        displayName,
       })
         .then(() =>
           createUserDataInFirestore({
             email,
-            firstName,
-            lastName,
+            displayName,
             userId: user.uid,
           })
         )

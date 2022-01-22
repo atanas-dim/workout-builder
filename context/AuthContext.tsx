@@ -3,7 +3,7 @@ import nookies from "nookies";
 import { auth } from "../firebase/config";
 import { User } from "firebase/auth";
 
-const AuthContext = createContext<{ user: User | null }>({
+export const AuthContext = createContext<{ user: User | null }>({
   user: null,
 });
 
@@ -31,6 +31,7 @@ export function AuthProvider({ children }: any) {
       setUser(user);
       nookies.destroy(null, "token");
       nookies.set(null, "token", token, { path: "/" });
+      nookies.set(null, "uid", user.uid, { path: "/" });
     });
   }, []);
 
@@ -49,6 +50,7 @@ export function AuthProvider({ children }: any) {
   );
 }
 
+// Move to hooks
 export const useAuth = () => {
   return useContext(AuthContext);
 };

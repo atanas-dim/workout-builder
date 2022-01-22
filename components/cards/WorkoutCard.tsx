@@ -1,7 +1,10 @@
 import React, { FC, useState, useEffect, useCallback } from "react";
 import { cloneDeep } from "lodash";
 
-import { Workout } from "../../hooks/useWorkouts";
+import { useRouter } from "next/router";
+import { RouterPaths } from "../../pages/_app";
+
+import { Workout } from "../../context/WorkoutsContext";
 import useExercises from "../../hooks/useExercises";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
@@ -13,11 +16,16 @@ import {
   IconButton,
   Collapse,
   Divider,
+  CardMedia,
+  Grow,
+  Fade,
 } from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
 } from "@mui/icons-material/";
+
+import ActionButton from "../buttons/ActionButton";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -36,27 +44,52 @@ export const useStyles = makeStyles((theme: Theme) => ({
       marginBottom: 0,
     },
   },
+  smallButton: {
+    padding: theme.spacing(0.5, 1.5),
+    minHeight: "auto",
+    lineHeight: 1,
+    height: 32,
+    "& > .MuiButton-endIcon": {
+      marginLeft: theme.spacing(0.5),
+    },
+  },
 }));
 
 type Props = {
   workout: Workout;
-  // deleteExercise?: (exerciseId: string) => void;
+  index: number;
 };
 
-const WorkoutCard: FC<Props> = ({ workout }) => {
+const WorkoutCard: FC<Props> = ({ workout, index }) => {
+  const router = useRouter();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [exercisesData, setExercisesData] = useState<any[]>([]);
-  const { getExerciseById } = useExercises();
+  const [workoutExercises, setWorkoutExercises] = useState<any[]>([]);
+  const { getExerciseById, exercisesData } = useExercises();
 
-  const getExercisesData = useCallback(async () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const transitionTimer = setTimeout(() => {
+      setShow(true);
+    }, index * 30);
+
+    return () => {
+      clearTimeout(transitionTimer);
+    };
+  }, []);
+
+  const getWorkoutExercises = useCallback(async () => {
     if (!workout || !workout.exercises) return;
 
     const exerciseDataArray: any[] = [];
 
     for (const exercise of workout.exercises) {
       const clonedExercise: any = cloneDeep(exercise);
-      const exerciseData = await getExerciseById(exercise.id);
+      const exerciseData = exercisesData.find(
+        (exercise) => exercise.id === clonedExercise.id
+      );
+
       if (!exerciseData) {
         clonedExercise.title = "Exercise not found";
         clonedExercise.youTubeUrl = "";
@@ -67,71 +100,128 @@ const WorkoutCard: FC<Props> = ({ workout }) => {
       exerciseDataArray.push(clonedExercise);
     }
 
-    setExercisesData(exerciseDataArray);
-  }, [workout, getExerciseById]);
+    setWorkoutExercises(exerciseDataArray);
+  }, [workout]);
 
   useEffect(() => {
-    getExercisesData();
-  }, []);
+    getWorkoutExercises();
+  }, [workout]);
+
+  const onEditClick = () => {
+    router.push({
+      pathname: RouterPaths.WorkoutEditor,
+      query: { workoutId: workout.id },
+    });
+  };
 
   return (
-    <Card variant="outlined" className={classes.root}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ width: "100%" }}
-      >
-        <Typography component="h2" variant="body1" sx={{ fontWeight: 500 }}>
-          {workout.title}
-        </Typography>
-        <IconButton
-          onClick={() => setExpanded((prev) => !prev)}
-          aria-expanded={expanded}
-          aria-label="Show more"
+    <Grow in={show} appear={true} timeout={600}>
+      <Card variant="outlined" className={classes.root}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ width: "100%" }}
         >
-          {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </IconButton>
-      </Box>
-
-      <Collapse
-        in={expanded}
-        timeout="auto"
-        unmountOnExit
-        sx={{ width: "100%" }}
-      >
-        <Box sx={{ width: "100%" }}>
-          {exercisesData.length &&
-            exercisesData.map((exercise, index) => (
-              <Box sx={{ mt: 2 }} key={"exercise-details-" + index}>
-                <img
-                  src={
+          <Typography
+            component="h2"
+            variant="body1"
+            noWrap
+            sx={{ fontWeight: 500, width: "calc(100% - 20px)" }}
+          >
+            {workout.title}
+          </Typography>
+          <Box display="flex" justifyContent="flex-end" alignItems="center">
+            {expanded && (
+              <ActionButton
+                size="small"
+                label="Edit"
+                variant="text"
+                onClick={onEditClick}
+                className={classes.smallButton}
+                color="primary"
+                sx={{ ml: 1 }}
+              />
+            )}
+            <IconButton
+              onClick={() => setExpanded((prev) => !prev)}
+              size="small"
+              aria-expanded={expanded}
+              aria-label="Show more"
+            >
+              {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+          </Box>
+        </Box>
+        <Collapse
+          in={expanded}
+          timeout={workoutExercises.length * 100}
+          sx={{ width: "100%" }}
+        >
+          {workoutExercises.map((exercise, index) => (
+            <Box key={"workout-exersise-" + index}>
+              <Box
+                display="flex"
+                sx={{ width: "100%", mt: index === 0 ? 2 : 0 }}
+              >
+                <CardMedia
+                  component="img"
+                  sx={{
+                    width: { xs: "45%", sm: "30%", md: "25%" },
+                    height: "100%",
+                    minHeight: 50,
+                    mr: 2,
+                    borderRadius: 1 / 2,
+                  }}
+                  image={
                     exercise.youTubeUrl
-                      ? getYouTubeVideoThumbUrl(exercise.youTubeUrl, "hq")
+                      ? getYouTubeVideoThumbUrl(exercise.youTubeUrl, "mq")
                       : "/images/exercise-placeholder.jpg"
                   }
                   alt={exercise.title + " thumbnail"}
-                  style={{ width: "100%" }}
                 />
-                <Box key={exercise.id} sx={{ width: "100%" }}>
-                  <Typography component="h3" variant="body1">
+
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  key={exercise.id}
+                  sx={{
+                    width: {
+                      xs: "calc(60% - 32px)",
+                      sm: "calc(70% - 32px)",
+                      md: "calc(75% - 32px)",
+                    },
+                  }}
+                >
+                  <Typography
+                    component="h3"
+                    variant="body1"
+                    noWrap
+                    sx={{ width: "100%", fontWeight: 500 }}
+                  >
                     {exercise.title}
                   </Typography>
-                  <Typography component="span" variant="body2" sx={{ mr: 2 }}>
+                  <Typography component="span" variant="body2" noWrap>
                     Sets: {exercise.sets}
                   </Typography>
-                  <Typography component="span" variant="body2">
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    noWrap
+                    sx={{ width: "100%" }}
+                  >
                     Reps: {exercise.reps}
                   </Typography>
                 </Box>
-                {index !== exercisesData.length - 1 && (
-                  <Divider sx={{ mt: 2 }} />
-                )}
               </Box>
-            ))}
-        </Box>
-      </Collapse>
-    </Card>
+              {index !== workoutExercises.length - 1 && (
+                <Divider sx={{ mt: 1, mb: 1 }} />
+              )}
+            </Box>
+          ))}
+        </Collapse>
+      </Card>
+    </Grow>
   );
 };
 

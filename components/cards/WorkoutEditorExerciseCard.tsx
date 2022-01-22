@@ -1,13 +1,21 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 
-import useExercises, { Exercise } from "../../hooks/useExercises";
+import useExercises from "../../hooks/useExercises";
+import { Exercise } from "../../context/ExercisesContext";
 
 import {
   DraggableProvidedDragHandleProps,
   DraggableProvidedDraggableProps,
 } from "react-beautiful-dnd";
 
-import { Box, Card, Typography, TextField, IconButton } from "@mui/material";
+import {
+  Box,
+  Card,
+  Typography,
+  TextField,
+  IconButton,
+  Grow,
+} from "@mui/material";
 import {
   Cancel as DeleteIcon,
   DragIndicator as DragIcon,
@@ -19,7 +27,7 @@ enum ExerciseProperties {
 }
 
 type Props = {
-  position: number;
+  index: number;
   exercise: { id: string; reps: number; sets: number };
 
   updateExerciseProperty: (
@@ -36,7 +44,7 @@ type Props = {
 };
 
 const WorkoutEditorExerciseCard: FC<Props> = ({
-  position,
+  index: position,
   exercise,
   updateExerciseProperty,
   removeExercise,
