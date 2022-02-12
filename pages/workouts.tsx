@@ -1,10 +1,11 @@
+import type { NextPage } from "next";
 import React from "react";
 
-import { RouterPaths } from "./_app";
+import { RouterPath } from "./_app";
 
 import useWorkouts from "../hooks/useWorkouts";
 
-import { CircularProgress, Box, Grow } from "@mui/material";
+import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
@@ -12,17 +13,14 @@ import WorkoutCard from "../components/cards/WorkoutCard";
 
 import { Add as AddIcon } from "@mui/icons-material";
 
-//Using getServerSideProps to authenticate token for private routes
-export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
-
-export default function Workouts() {
+const Workouts: NextPage = () => {
   const { workoutsData, isLoading } = useWorkouts();
 
   return (
     <MainContentWrapper>
       <ActionButton
         label="Create new workout"
-        href={RouterPaths.WorkoutEditor}
+        href={RouterPath.WorkoutEditor}
         sx={{ mb: 2 }}
         fullWidth
         endIcon={<AddIcon />}
@@ -50,4 +48,6 @@ export default function Workouts() {
       })}
     </MainContentWrapper>
   );
-}
+};
+
+export default Workouts;

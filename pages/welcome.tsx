@@ -1,9 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-//Using getServerSideProps to authenticate token for private routes
-export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
-
 function Welcome() {
   return (
     <div>

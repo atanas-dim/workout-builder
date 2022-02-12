@@ -1,7 +1,5 @@
 import "../styles/globals.css";
 
-import { FC } from "react";
-
 import { useRouter } from "next/router";
 
 import { AppProps } from "next/app";
@@ -18,7 +16,7 @@ import theme from "../styles/theme";
 import Header from "../components/header/Header";
 import BottomNav from "../components/bottomNav/BottomNav";
 
-export enum RouterPaths {
+export enum RouterPath {
   Training = "/",
   Workouts = "/workouts",
   WorkoutEditor = "/workout-editor",
@@ -28,39 +26,41 @@ export enum RouterPaths {
   Register = "/register",
 }
 
+type RouteValues = {
+  bottomNavValue?: number;
+  title: string;
+  appBar: boolean;
+  private: boolean;
+};
 export const ROUTE_VALUES: {
-  [key: string]: { bottomNavValue?: number; title: string; appBar: boolean };
+  [key in RouterPath]: RouteValues;
 } = {
-  [RouterPaths.Welcome]: { title: "Welcome", appBar: false },
-  [RouterPaths.Login]: { title: "Login", appBar: false },
-  [RouterPaths.Register]: { title: "Register", appBar: false },
-  [RouterPaths.Training]: {
+  [RouterPath.Welcome]: { title: "Welcome", appBar: false, private: false },
+  [RouterPath.Login]: { title: "Login", appBar: false, private: false },
+  [RouterPath.Register]: { title: "Register", appBar: false, private: false },
+  [RouterPath.Training]: {
     bottomNavValue: 0,
     title: "Training",
     appBar: true,
+    private: true,
   },
-  [RouterPaths.Workouts]: {
+  [RouterPath.Workouts]: {
     bottomNavValue: 1,
     title: "Workouts",
     appBar: true,
+    private: true,
   },
-  [RouterPaths.Exercises]: {
+  [RouterPath.Exercises]: {
     bottomNavValue: 2,
     title: "Exercises",
     appBar: true,
+    private: true,
   },
-  [RouterPaths.WorkoutEditor]: {
+  [RouterPath.WorkoutEditor]: {
     title: "Workout Editor",
     appBar: true,
+    private: true,
   },
-};
-
-const SafeHydrate: FC = ({ children }) => {
-  return (
-    <div suppressHydrationWarning>
-      {typeof window === "undefined" ? null : children}
-    </div>
-  );
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -71,20 +71,19 @@ function MyApp({ Component, pageProps }: AppProps) {
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {/* Disabling SSR for the app content to speed up loading time and avoid longer waiting with blank screen on mobile */}
-          {/* Most data is fetched from Firebase client side */}
-          {/* <SafeHydrate> */}
+
           <AuthProvider>
             <ExercisesProvider>
               <WorkoutsProvider>
-                {ROUTE_VALUES[router.pathname]?.appBar && <Header />}
+                {ROUTE_VALUES[router.pathname as RouterPath]?.appBar && (
+                  <Header />
+                )}
                 <Component {...pageProps} />
-                {ROUTE_VALUES[router.pathname]?.bottomNavValue !==
+                {ROUTE_VALUES[router.pathname as RouterPath]?.bottomNavValue !==
                   undefined && <BottomNav />}
               </WorkoutsProvider>
             </ExercisesProvider>
           </AuthProvider>
-          {/* </SafeHydrate> */}
         </ThemeProvider>
       </StyledEngineProvider>
     </>

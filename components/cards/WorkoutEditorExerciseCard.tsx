@@ -1,7 +1,9 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 
 import useExercises from "../../hooks/useExercises";
+import useWorkouts from "../../hooks/useWorkouts";
 import { Exercise } from "../../context/ExercisesContext";
+import { WorkoutExerciseEntry } from "../../context/WorkoutsContext";
 
 import {
   DraggableProvidedDragHandleProps,
@@ -28,7 +30,7 @@ enum ExerciseProperties {
 
 type Props = {
   index: number;
-  exercise: { id: string; reps: number; sets: number };
+  exercise: WorkoutExerciseEntry;
 
   updateExerciseProperty: (
     position: number,
@@ -54,14 +56,14 @@ const WorkoutEditorExerciseCard: FC<Props> = ({
   draggableStyle,
 }) => {
   const [reps, setReps] = useState<string | number>(0);
-  const [sets, setSets] = useState<number>(0);
+  const [sets, setSets] = useState<string | number>(0);
   const [exerciseDataById, setExerciseDataById] = useState<Exercise>();
 
-  const { getExerciseById } = useExercises();
+  const { getWorkoutExerciseById } = useWorkouts();
 
   useEffect(() => {
     if (!exercise.id) return;
-    getExerciseById(exercise.id).then((data) => {
+    getWorkoutExerciseById(exercise.id).then((data) => {
       setExerciseDataById(data);
     });
     setSets(exercise.sets);
@@ -73,7 +75,7 @@ const WorkoutEditorExerciseCard: FC<Props> = ({
     updateExerciseProperty(position, ExerciseProperties.Reps, value);
   };
 
-  const handleSetsChange = (value: number) => {
+  const handleSetsChange = (value: string | number) => {
     setSets(value);
     updateExerciseProperty(position, ExerciseProperties.Sets, value);
   };
@@ -110,14 +112,13 @@ const WorkoutEditorExerciseCard: FC<Props> = ({
       <Box display="flex" sx={{ m: 1 }}>
         <TextField
           id={`${exercise.id}-sets`}
-          type="number"
+          type="text"
           label="Sets"
           variant="outlined"
-          InputProps={{ inputProps: { min: 0, max: 100 } }}
           fullWidth
           sx={{ mr: 2 }}
           value={sets}
-          onChange={(e) => handleSetsChange(+e.target.value)}
+          onChange={(e) => handleSetsChange(e.target.value)}
         />
         <TextField
           id={`${exercise.id}-reps`}

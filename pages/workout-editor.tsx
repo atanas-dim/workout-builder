@@ -1,30 +1,24 @@
-import React, { FC, useState, useEffect } from "react";
+import { NextPage } from "next";
+import React, { useState, useEffect } from "react";
 
 import { cloneDeep } from "lodash";
 
 import { useRouter } from "next/router";
-import { RouterPaths } from "./_app";
+import { RouterPath } from "./_app";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
 import useWorkouts from "../hooks/useWorkouts";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 import { WorkoutExerciseEntry } from "../context/WorkoutsContext";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
-import { alpha } from "@mui/system";
 
-import {
-  TextField,
-  Paper,
-  ButtonBase,
-  Typography,
-  Button,
-} from "@mui/material";
+import { TextField, Paper, Typography, Button } from "@mui/material";
 
 import { Add as AddIcon } from "@mui/icons-material";
 
@@ -33,7 +27,7 @@ import ActionButton from "../components/buttons/ActionButton";
 import AddExerciseModal from "../components/modals/AddExerciseModal";
 import WorkoutEditorExerciseCard from "../components/cards/WorkoutEditorExerciseCard";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   saveButtonContainer: {
     position: "fixed",
     bottom: 0,
@@ -46,10 +40,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
   saveButton: {
     width: "100%",
     borderRadius: 0,
-    // backgroundColor: alpha(theme.palette.primary.main, 0.08),
-    // "&:disabled": {
-    //   backgroundColor: alpha(theme.palette.grey[200], 0.08),
-    // },
   },
   saveButtonLabel: {
     minHeight: 56,
@@ -60,10 +50,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-//Using getServerSideProps to authenticate token for private routes
-export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
+const generateDraggableId = (prefix: string = "") => {
+  return Math.random().toString(36).replace("0.", prefix);
+};
 
-const WorkoutEditor: FC = () => {
+const WorkoutEditor: NextPage = () => {
   const classes = useStyles();
   const router = useRouter();
   const [workoutTitle, setWorkoutTitle] = useState("");
@@ -98,10 +89,10 @@ const WorkoutEditor: FC = () => {
 
   const addExercise = (exerciseId: string) => {
     const newExercise = {
-      draggableId: workoutExerciseEntries.length.toString(),
+      draggableId: generateDraggableId(),
       id: exerciseId,
-      reps: 1,
-      sets: 1,
+      reps: "1",
+      sets: "1",
     };
     setWorkoutExerciseEntries([...workoutExerciseEntries, newExercise]);
   };
@@ -124,12 +115,12 @@ const WorkoutEditor: FC = () => {
 
   const onSaveClick = () => {
     createWorkout(workoutTitle, workoutExerciseEntries);
-    router.push(RouterPaths.Workouts);
+    router.push(RouterPath.Workouts);
   };
 
   const onUpdateClick = () => {
     updateWorkout(existingWorkoutId, workoutTitle, workoutExerciseEntries);
-    router.push(RouterPaths.Workouts);
+    router.push(RouterPath.Workouts);
   };
 
   // Sortable functions

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { RouterPaths } from "../pages/_app";
+import { RouterPath } from "../pages/_app";
 
 import SignUp from "../components/auth/SignUp";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
-import { Box, Container, Button, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import ActionButton from "../components/buttons/ActionButton";
 
 export default function Register() {
@@ -45,7 +45,7 @@ export default function Register() {
           label="Use existing account"
           variant="outlined"
           fullWidth
-          href={RouterPaths.Login}
+          href={RouterPath.Login}
         />
       </Container>
     </Box>

@@ -12,13 +12,13 @@ module.exports = withPWA({
     dynamicStartUrlRedirect: "/login",
   },
   // target: "serverless",
-  async rewrites() {
-    return [
-      // Rewrite everything to `pages/index`
-      {
-        source: "/:any*",
-        destination: "/",
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     // Rewrite everything to `pages/index`
+  //     {
+  //       source: "/:any*",
+  //       destination: "/",
+  //     },
+  //   ];
+  // },
 });

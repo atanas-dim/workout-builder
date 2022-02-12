@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-import nookies from "nookies";
+import React, { useState, useEffect, createContext } from "react";
+
 import { auth } from "../firebase/config";
 import { User } from "firebase/auth";
+import { useRouter } from "next/router";
+import { RouterPath, ROUTE_VALUES } from "../pages/_app";
 
 export const AuthContext = createContext<{ user: User | null }>({
   user: null,
@@ -10,28 +12,25 @@ export const AuthContext = createContext<{ user: User | null }>({
 // Code example - https://colinhacks.com/essays/nextjs-firebase-authentication
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
+  const { push, pathname } = useRouter();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      (window as any).nookies = nookies;
-    }
+    if (!user && ROUTE_VALUES[pathname as RouterPath].private)
+      push({ pathname: RouterPath.Login, query: { from: pathname } });
+  }, [pathname]);
+
+  useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
-      console.log({ user });
+      // console.log({ user });
       console.log(`token changed!`);
       if (!user) {
         console.log(`no token found...`);
         setUser(null);
-        nookies.destroy(null, "token");
-        nookies.set(null, "token", "", { path: "/" });
+
         return;
       }
 
-      console.log(`updating token...`);
-      const token = await user.getIdToken();
       setUser(user);
-      nookies.destroy(null, "token");
-      nookies.set(null, "token", token, { path: "/" });
-      nookies.set(null, "uid", user.uid, { path: "/" });
     });
   }, []);
 
@@ -49,8 +48,3 @@ export function AuthProvider({ children }: any) {
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }
-
-// Move to hooks
-export const useAuth = () => {
-  return useContext(AuthContext);
-};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import { useRouter } from "next/router";
-import { ROUTE_VALUES, RouterPaths } from "../../pages/_app";
+import { ROUTE_VALUES, RouterPath } from "../../pages/_app";
 
 import { isChrome, isMobileSafari } from "react-device-detect";
 import {
@@ -175,7 +175,7 @@ export default function Header() {
         sx={{ height: hasScrolledUp ? 40 : 56 }}
       >
         <Toolbar className={classes.toolbar}>
-          {router.pathname === RouterPaths.WorkoutEditor && (
+          {router.pathname === RouterPath.WorkoutEditor && (
             <IconButton
               sx={{ position: "absolute", left: 24 }}
               onClick={() => router.back()}
@@ -184,10 +184,10 @@ export default function Header() {
             </IconButton>
           )}
           <Typography variant="h6" component="h1">
-            {ROUTE_VALUES[router.pathname]?.title}
+            {ROUTE_VALUES[router.pathname as RouterPath]?.title}
           </Typography>
 
-          {router.pathname !== RouterPaths.WorkoutEditor && showInstallButton && (
+          {router.pathname !== RouterPath.WorkoutEditor && showInstallButton && (
             <>
               <IconButton
                 onClick={onInstallClick}

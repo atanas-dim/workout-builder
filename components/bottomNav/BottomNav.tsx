@@ -28,7 +28,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-import { RouterPaths, ROUTE_VALUES } from "../../pages/_app";
+import { RouterPath, ROUTE_VALUES } from "../../pages/_app";
 
 export default function BottomNav() {
   const classes = useStyles();
@@ -41,8 +41,10 @@ export default function BottomNav() {
   }, []);
 
   useEffect(() => {
-    if (ROUTE_VALUES[router.pathname]?.bottomNavValue)
-      setBottomNavValue(ROUTE_VALUES[router.pathname].bottomNavValue);
+    if (ROUTE_VALUES[router.pathname as RouterPath]?.bottomNavValue)
+      setBottomNavValue(
+        ROUTE_VALUES[router.pathname as RouterPath].bottomNavValue
+      );
   }, [router.pathname]);
 
   const onBottomNavClick = (e: any, path: string) => {
@@ -73,7 +75,7 @@ export default function BottomNav() {
             icon={<ArmFlexIcon />}
             component="a"
             onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPaths.Training)
+              onBottomNavClick(e, RouterPath.Training)
             }
           />
           <BottomNavigationAction
@@ -82,7 +84,7 @@ export default function BottomNav() {
             icon={<WorkoutsIcon />}
             component="a"
             onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPaths.Workouts)
+              onBottomNavClick(e, RouterPath.Workouts)
             }
           />
           <BottomNavigationAction
@@ -91,7 +93,7 @@ export default function BottomNav() {
             icon={<ExercisesIcon />}
             component="a"
             onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPaths.Exercises)
+              onBottomNavClick(e, RouterPath.Exercises)
             }
           />
         </BottomNavigation>

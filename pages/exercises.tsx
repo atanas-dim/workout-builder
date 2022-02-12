@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import type { NextPage } from "next";
+import React, { useState, useEffect } from "react";
 
 import useExercises from "../hooks/useExercises";
 
-import { TransitionGroup } from "react-transition-group";
-
-import { CircularProgress, Box, Slide, Collapse, Grow } from "@mui/material";
+import { CircularProgress, Box } from "@mui/material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
@@ -13,10 +12,7 @@ import ExerciseCard from "../components/cards/ExerciseCard";
 
 import { Add as AddIcon } from "@mui/icons-material";
 
-//Using getServerSideProps to authenticate token for private routes
-export { getServerSideProps } from "../utilities/ssrHelpers/authInServerSideProps";
-
-export default function Exercises() {
+const Exercises: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
   const {
     exercisesData,
@@ -80,4 +76,6 @@ export default function Exercises() {
       })}
     </MainContentWrapper>
   );
-}
+};
+
+export default Exercises;

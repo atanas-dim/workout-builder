@@ -24,7 +24,7 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { alpha } from "@mui/system";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",

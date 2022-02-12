@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { RouterPaths } from "../pages/_app";
+import { RouterPath } from "../pages/_app";
 
 import SignIn from "../components/auth/SignIn";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import ActionButton from "../components/buttons/ActionButton";
 
 export default function Login() {
   const { user } = useAuth();
-  const router = useRouter();
+  const { push, query } = useRouter();
 
   useEffect(() => {
-    if (user) router.push("/");
-  }, [user, router]);
+    if (user) push((query.from as string) || RouterPath.Training);
+  }, [user]);
 
   return (
     <Box
@@ -45,7 +45,7 @@ export default function Login() {
           label="Create account"
           variant="outlined"
           fullWidth
-          href={RouterPaths.Register}
+          href={RouterPath.Register}
         />
       </Container>
     </Box>

@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect, useCallback } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { cloneDeep } from "lodash";
 
 import { useRouter } from "next/router";
-import { RouterPaths } from "../../pages/_app";
+import { RouterPath } from "../../pages/_app";
 
 import { Workout } from "../../context/WorkoutsContext";
-import useExercises from "../../hooks/useExercises";
+import useWorkouts from "../../hooks/useWorkouts";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 
@@ -65,7 +65,8 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [workoutExercises, setWorkoutExercises] = useState<any[]>([]);
-  const { getExerciseById, exercisesData } = useExercises();
+
+  const { getWorkoutExerciseById } = useWorkouts();
 
   const [show, setShow] = useState(false);
 
@@ -79,16 +80,17 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
     };
   }, []);
 
-  const getWorkoutExercises = useCallback(async () => {
+  const getWorkoutExercises = async () => {
     if (!workout || !workout.exercises) return;
 
     const exerciseDataArray: any[] = [];
 
     for (const exercise of workout.exercises) {
       const clonedExercise: any = cloneDeep(exercise);
-      const exerciseData = exercisesData.find(
-        (exercise) => exercise.id === clonedExercise.id
-      );
+      const exerciseData = await getWorkoutExerciseById(exercise.id);
+      // const exerciseData = exercisesData.find(
+      //   (exercise) => exercise.id === clonedExercise.id
+      // );
 
       if (!exerciseData) {
         clonedExercise.title = "Exercise not found";
@@ -101,15 +103,15 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
     }
 
     setWorkoutExercises(exerciseDataArray);
-  }, [workout]);
+  };
 
   useEffect(() => {
     getWorkoutExercises();
-  }, [workout]);
+  }, [workout, workout.exercises]);
 
   const onEditClick = () => {
     router.push({
-      pathname: RouterPaths.WorkoutEditor,
+      pathname: RouterPath.WorkoutEditor,
       query: { workoutId: workout.id },
     });
   };
