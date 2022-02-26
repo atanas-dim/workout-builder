@@ -113,14 +113,18 @@ const WorkoutEditor: NextPage = () => {
     setWorkoutExerciseEntries(updatedData);
   };
 
-  const onSaveClick = () => {
-    createWorkout(workoutTitle, workoutExerciseEntries);
-    router.push(RouterPath.Workouts);
+  const onSaveClick = async () => {
+    await createWorkout(workoutTitle, workoutExerciseEntries).then(() =>
+      router.push(RouterPath.Workouts)
+    );
   };
 
-  const onUpdateClick = () => {
-    updateWorkout(existingWorkoutId, workoutTitle, workoutExerciseEntries);
-    router.push(RouterPath.Workouts);
+  const onUpdateClick = async () => {
+    await updateWorkout(
+      existingWorkoutId,
+      workoutTitle,
+      workoutExerciseEntries
+    ).then(() => router.push(RouterPath.Workouts));
   };
 
   // Sortable functions

@@ -53,7 +53,7 @@ export default function useWorkouts() {
     try {
       const docRef = doc(workoutsCollectionRef, workoutId);
 
-      return await updateDoc(docRef, {
+      await updateDoc(docRef, {
         title: workoutTitle,
         exercises,
         updated: Timestamp.fromDate(new Date()),

@@ -13,11 +13,15 @@ export default class MyDocument extends Document {
           />
           {/* PWA  */}
           <link rel="manifest" href="/manifest.json" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
           <link rel="apple-touch-icon" href="/icon.png"></link>
 
           <meta name="theme-color" content="#191a1f" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-          <link rel="manifest" href="/manifest.json" />
+
           {/* Favicon Links */}
           <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
           <link rel="apple-touch-icon" href="/icons/icon-192.png" />
@@ -31,8 +35,6 @@ export default class MyDocument extends Document {
     );
   }
 }
-
-// THIS WAS USED BEFORE SSR WAS DISABLED ON _app.tsx - KEEPING IT FOR REFERENCE
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with static-site generation (SSG).
