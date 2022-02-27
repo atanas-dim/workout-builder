@@ -7,7 +7,6 @@ import { AppProps } from "next/app";
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 
 import { AuthProvider } from "../context/AuthContext";
-import { ExercisesProvider } from "../context/ExercisesContext";
 import { WorkoutsProvider } from "../context/WorkoutsContext";
 
 import { CssBaseline } from "@mui/material/";
@@ -20,7 +19,7 @@ export enum RouterPath {
   Training = "/",
   Workouts = "/workouts",
   WorkoutEditor = "/workout-editor",
-  Exercises = "/exercises",
+  // Exercises = "/exercises",
   Welcome = "/welcome",
   Login = "/login",
   Register = "/register",
@@ -50,12 +49,12 @@ export const ROUTE_VALUES: {
     appBar: true,
     private: true,
   },
-  [RouterPath.Exercises]: {
-    bottomNavValue: 2,
-    title: "Exercises",
-    appBar: true,
-    private: true,
-  },
+  // [RouterPath.Exercises]: {
+  //   bottomNavValue: 2,
+  //   title: "Exercises",
+  //   appBar: true,
+  //   private: true,
+  // },
   [RouterPath.WorkoutEditor]: {
     title: "Workout Editor",
     appBar: true,
@@ -73,16 +72,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           <CssBaseline />
 
           <AuthProvider>
-            <ExercisesProvider>
-              <WorkoutsProvider>
-                {ROUTE_VALUES[router.pathname as RouterPath]?.appBar && (
-                  <Header />
-                )}
-                <Component {...pageProps} />
-                {ROUTE_VALUES[router.pathname as RouterPath]?.bottomNavValue !==
-                  undefined && <BottomNav />}
-              </WorkoutsProvider>
-            </ExercisesProvider>
+            <WorkoutsProvider>
+              {ROUTE_VALUES[router.pathname as RouterPath]?.appBar && (
+                <Header />
+              )}
+              <Component {...pageProps} />
+              {ROUTE_VALUES[router.pathname as RouterPath]?.bottomNavValue !==
+                undefined && <BottomNav />}
+            </WorkoutsProvider>
           </AuthProvider>
         </ThemeProvider>
       </StyledEngineProvider>

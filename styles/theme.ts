@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { cyan, yellow, blueGrey, pink } from "@mui/material/colors";
+import { cyan, yellow, blueGrey, pink, lime } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -9,8 +9,8 @@ const theme = createTheme({
       light: cyan[100],
     },
     secondary: {
-      main: yellow[200],
-      light: yellow[100],
+      main: lime[300],
+      light: lime[100],
     },
     error: {
       main: pink[500],
@@ -29,11 +29,16 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        html: {
+          scrollBehavior: "smooth",
+          fontSize: 16,
+        },
         body: {
           overflowX: "hidden",
+          maxWidth: "100vw",
         },
         "#__next": {
-          width: "100vw",
+          width: "100%",
         },
       },
     },
@@ -64,10 +69,11 @@ const theme = createTheme({
           borderRadius: 999,
           // paddingLeft: 0,
           input: {
-            padding: "16.5px 24px",
+            paddingLeft: "16.5px",
+            paddingRight: "16.5px",
           },
           "& legend": {
-            marginLeft: 12,
+            marginLeft: 4,
           },
         },
       },
@@ -75,7 +81,7 @@ const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          left: 12,
+          left: 4,
         },
       },
     },

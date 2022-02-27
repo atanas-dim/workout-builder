@@ -69,7 +69,7 @@ export default function useWorkouts() {
     try {
       await deleteDoc(doc(workoutsCollectionRef, workoutId));
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error deleting document: ", error);
     }
   };
 
@@ -93,35 +93,12 @@ export default function useWorkouts() {
     }
   };
 
-  const exercisesCollectionRef = user
-    ? collection(firestore, "users", user.uid, "exercises")
-    : undefined;
-
-  const getWorkoutExerciseById = async (exerciseId: string) => {
-    if (!exercisesCollectionRef || !exerciseId) return;
-
-    try {
-      let exerciseData: any;
-
-      const docRef = doc(exercisesCollectionRef, exerciseId);
-      await getDoc(docRef).then((docSnap) => {
-        exerciseData = docSnap.data();
-      });
-
-      return exerciseData;
-    } catch (error) {
-      console.error("Error loading data: ", error);
-    }
-  };
-
   return {
     isLoading,
     createWorkout,
     updateWorkout,
     deleteWorkout,
     workoutsData,
-    // getWorkoutsData,
     getWorkoutById,
-    getWorkoutExerciseById,
   };
 }

@@ -3,12 +3,14 @@ import router from "next/router";
 import { TextField } from "@mui/material/";
 import ActionButton from "../buttons/ActionButton";
 
-import { signUp } from "../../firebase/config";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+
+  const { signUp } = useAuth();
 
   const handleSignUp = () => {
     if (!email || !password || !displayName) return;

@@ -26,17 +26,18 @@ import { firestore } from "../firebase/config";
 import { useAuth } from "../hooks/useAuth";
 
 export type WorkoutExerciseEntry = {
-  draggableId: string;
   id: string;
-  reps: string | number;
-  sets: string | number;
+  name: string;
+  reps: string;
+  sets: string;
+  videoUrl: string;
 };
 
 export type Workout = {
   id: string;
-  title?: string;
-  exercises?: WorkoutExerciseEntry[];
-  created?: Timestamp;
+  title: string;
+  exercises: WorkoutExerciseEntry[];
+  created: Timestamp;
 };
 type WorkoutsContextValue = {
   workoutsData: Workout[];
@@ -84,7 +85,8 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         querySnapshot.forEach((doc) => {
           const id = doc.id;
           const data = doc.data();
-          workouts.push({ id, ...data });
+          const { title, exercises, created } = data;
+          workouts.push({ id, title, exercises, created });
         });
 
         setWorkoutsData(workouts);

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { TextField } from "@mui/material/";
+import { TextField, Typography } from "@mui/material/";
 import ActionButton from "../buttons/ActionButton";
 
-import { signIn } from "../../firebase/config";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { signIn, error } = useAuth();
 
   const handleSignIn = () => {
     if (!email || !password) return;
@@ -35,6 +37,11 @@ export default function SignIn() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {error && (
+        <Typography component="p" variant="body2" color="error" sx={{ mb: 2 }}>
+          {error}
+        </Typography>
+      )}
       <ActionButton
         label="Sign In"
         variant="contained"

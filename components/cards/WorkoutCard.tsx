@@ -1,11 +1,9 @@
 import React, { FC, useState, useEffect } from "react";
-import { cloneDeep } from "lodash";
 
 import { useRouter } from "next/router";
 import { RouterPath } from "../../pages/_app";
 
 import { Workout } from "../../context/WorkoutsContext";
-import useWorkouts from "../../hooks/useWorkouts";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 
@@ -18,7 +16,6 @@ import {
   Divider,
   CardMedia,
   Grow,
-  Fade,
 } from "@mui/material";
 import {
   ExpandMore as ExpandMoreIcon,
@@ -64,9 +61,6 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
   const router = useRouter();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [workoutExercises, setWorkoutExercises] = useState<any[]>([]);
-
-  const { getWorkoutExerciseById } = useWorkouts();
 
   const [show, setShow] = useState(false);
 
@@ -79,35 +73,6 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
       clearTimeout(transitionTimer);
     };
   }, []);
-
-  const getWorkoutExercises = async () => {
-    if (!workout || !workout.exercises) return;
-
-    const exerciseDataArray: any[] = [];
-
-    for (const exercise of workout.exercises) {
-      const clonedExercise: any = cloneDeep(exercise);
-      const exerciseData = await getWorkoutExerciseById(exercise.id);
-      // const exerciseData = exercisesData.find(
-      //   (exercise) => exercise.id === clonedExercise.id
-      // );
-
-      if (!exerciseData) {
-        clonedExercise.title = "Exercise not found";
-        clonedExercise.youTubeUrl = "";
-      } else {
-        clonedExercise.title = exerciseData.title;
-        clonedExercise.youTubeUrl = exerciseData.youTubeUrl;
-      }
-      exerciseDataArray.push(clonedExercise);
-    }
-
-    setWorkoutExercises(exerciseDataArray);
-  };
-
-  useEffect(() => {
-    getWorkoutExercises();
-  }, [workout, workout.exercises]);
 
   const onEditClick = () => {
     router.push({
@@ -157,10 +122,10 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
         </Box>
         <Collapse
           in={expanded}
-          timeout={workoutExercises.length * 100}
+          timeout={workout.exercises.length * 100}
           sx={{ width: "100%" }}
         >
-          {workoutExercises.map((exercise, index) => (
+          {workout.exercises.map((exercise, index) => (
             <Box key={"workout-exersise-" + index}>
               <Box
                 display="flex"
@@ -176,11 +141,11 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
                     borderRadius: 1 / 2,
                   }}
                   image={
-                    exercise.youTubeUrl
-                      ? getYouTubeVideoThumbUrl(exercise.youTubeUrl, "mq")
+                    exercise.videoUrl
+                      ? getYouTubeVideoThumbUrl(exercise.videoUrl, "mq")
                       : "/images/exercise-placeholder.jpg"
                   }
-                  alt={exercise.title + " thumbnail"}
+                  alt={exercise.name + " thumbnail"}
                 />
 
                 <Box
@@ -201,7 +166,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
                     noWrap
                     sx={{ width: "100%", fontWeight: 500 }}
                   >
-                    {exercise.title}
+                    {exercise.name}
                   </Typography>
                   <Typography component="span" variant="body2" noWrap>
                     Sets: {exercise.sets}
@@ -216,7 +181,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
                   </Typography>
                 </Box>
               </Box>
-              {index !== workoutExercises.length - 1 && (
+              {index !== workout.exercises.length - 1 && (
                 <Divider sx={{ mt: 1, mb: 1 }} />
               )}
             </Box>

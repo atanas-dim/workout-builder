@@ -1,142 +1,172 @@
-import React, { FC, useRef, useEffect, useState } from "react";
-import Truncate from "react-truncate";
+import React, { FC, useState, useEffect } from "react";
 
-import { Exercise } from "../../context/ExercisesContext";
+import { WorkoutExerciseEntry } from "../../context/WorkoutsContext";
 
-import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+import {
+  DraggableProvidedDragHandleProps,
+  DraggableProvidedDraggableProps,
+} from "react-beautiful-dnd";
 
-import { Card, CardMedia, Box, Typography, Grow, Fade } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material/";
-import ActionButton from "../buttons/ActionButton";
+import {
+  Box,
+  Card,
+  TextField,
+  IconButton,
+  // InputAdornment,
+} from "@mui/material";
+import {
+  Cancel as DeleteIcon,
+  DragIndicator as DragIcon,
+  // Search as SearchIcon,
+} from "@mui/icons-material/";
 
-import { makeStyles } from "@mui/styles";
-import { Theme } from "@mui/material/styles";
-
-export const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    width: "100%",
-    height: 110,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexShrink: 0,
-    padding: theme.spacing(1),
-    marginBottom: theme.spacing(2),
-    "&:last-of-type": {
-      marginBottom: 0,
-    },
-  },
-  exerciseDetails: {
-    flex: 1,
-    height: "100%",
-    padding: theme.spacing(1, 0, 0, 2),
-  },
-  smallButton: {
-    padding: theme.spacing(0.5, 1.5),
-    minHeight: "auto",
-    lineHeight: 1,
-    height: 32,
-    "& > .MuiButton-endIcon": {
-      marginLeft: theme.spacing(0.5),
-    },
-  },
-}));
+enum ExerciseProperties {
+  Name = "name",
+  Sets = "sets",
+  Reps = "reps",
+  VideoUrl = "videoUrl",
+}
 
 type Props = {
   index: number;
-  exercise: Exercise;
-  handleAddClick?: (exerciseId: string) => void;
-  onEditClick?: (exerciseId: string) => void;
+  exercise: WorkoutExerciseEntry;
+
+  updateExerciseProperty: (
+    position: number,
+    property: string,
+    value: number | string
+  ) => void;
+  removeExercise: (position: number) => void;
+
+  dragHandleProps: DraggableProvidedDragHandleProps | undefined;
+  draggableProps: DraggableProvidedDraggableProps;
+  draggableRef: any;
+  draggableStyle: any;
 };
 
-export const ExerciseCard: FC<Props> = ({
-  index,
+const ExerciseCard: FC<Props> = ({
+  index: position,
   exercise,
-  handleAddClick,
-  onEditClick,
+  updateExerciseProperty,
+  removeExercise,
+  dragHandleProps,
+  draggableProps,
+  draggableRef,
+  draggableStyle,
 }) => {
-  const classes = useStyles();
-  const { id, title, youTubeUrl } = exercise;
-  const textRef = useRef<HTMLDivElement>(null);
-  const [textContainerWidth, setTextContainerWidth] = useState(60);
-  const [show, setShow] = useState(false);
+  const [name, setName] = useState("");
+  const [reps, setReps] = useState("");
+  const [sets, setSets] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
 
   useEffect(() => {
-    const transitionTimer = setTimeout(() => {
-      setShow(true);
-    }, index * 60);
+    if (!exercise) return;
 
-    return () => {
-      clearTimeout(transitionTimer);
-    };
-  }, []);
+    setName(exercise.name);
+    setSets(exercise.sets);
+    setReps(exercise.reps);
+    setVideoUrl(exercise.videoUrl);
+  }, [exercise]);
 
-  useEffect(() => {
-    if (textRef?.current?.clientWidth)
-      setTextContainerWidth(textRef.current.clientWidth);
-  }, [textRef.current]);
+  const handleNameChange = (value: string) => {
+    setName(value);
+    updateExerciseProperty(position, ExerciseProperties.Name, value);
+  };
+
+  const handleRepsChange = (value: string) => {
+    setReps(value);
+    updateExerciseProperty(position, ExerciseProperties.Reps, value);
+  };
+
+  const handleSetsChange = (value: string) => {
+    setSets(value);
+    updateExerciseProperty(position, ExerciseProperties.Sets, value);
+  };
+
+  const handleVideoUrlChange = (value: string) => {
+    setVideoUrl(value);
+    updateExerciseProperty(position, ExerciseProperties.VideoUrl, value);
+  };
 
   return (
-    <Grow in={show} appear={true} timeout={600}>
-      <Card className={classes.root} variant="outlined">
-        {
-          <CardMedia
-            component="img"
-            sx={{
-              width: { xs: "45%", sm: "35%" },
-              maxWidth: { xs: 160, sm: 175 },
-              minHeight: 88,
-              height: "100%",
-              borderRadius: 1 / 2,
-            }}
-            image={
-              youTubeUrl
-                ? getYouTubeVideoThumbUrl(youTubeUrl, "mq")
-                : "/images/exercise-placeholder.jpg"
-            }
-            alt={`${title} video thumbnail`}
-          />
-        }
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          alignItems="flex-start"
-          className={classes.exerciseDetails}
-          ref={textRef}
-        >
-          <Typography component="h2" variant="body1" sx={{ fontWeight: 500 }}>
-            <Truncate lines={2} trimWhitespace width={textContainerWidth - 40}>
-              {title}
-            </Truncate>
-          </Typography>
-
-          <Box display="flex" justifyContent="flex-end" sx={{ width: "100%" }}>
-            {handleAddClick && (
-              <ActionButton
-                label="Add"
-                size="small"
-                variant="text"
-                onClick={() => handleAddClick(id)}
-                endIcon={<AddIcon />}
-                className={classes.smallButton}
-                color="primary"
-              />
-            )}
-            {onEditClick && (
-              <ActionButton
-                size="small"
-                label="Edit"
-                variant="text"
-                onClick={() => onEditClick(id)}
-                className={classes.smallButton}
-                color="primary"
-              />
-            )}
-          </Box>
+    <Card
+      variant="outlined"
+      sx={{ width: "100%", mb: 2, p: 1 }}
+      ref={draggableRef}
+      {...draggableProps}
+      style={draggableStyle}
+    >
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
+        <Box sx={{ flex: 1 }} {...dragHandleProps}>
+          <IconButton>
+            <DragIcon />
+          </IconButton>
         </Box>
-      </Card>
-    </Grow>
+
+        <IconButton onClick={() => removeExercise(position)}>
+          <DeleteIcon />
+        </IconButton>
+      </Box>
+
+      <Box sx={{ m: 1 }}>
+        <TextField
+          id={`${exercise.id}-name`}
+          type="text"
+          label="Name"
+          variant="outlined"
+          size="small"
+          fullWidth
+          sx={{ mb: 2 }}
+          value={name}
+          onChange={(e) => handleNameChange(e.target.value)}
+        />
+        <Box display="flex" sx={{ mb: 2 }}>
+          <TextField
+            id={`${exercise.id}-sets`}
+            type="text"
+            label="Sets"
+            variant="outlined"
+            size="small"
+            fullWidth
+            sx={{ mr: 2 }}
+            value={sets}
+            onChange={(e) => handleSetsChange(e.target.value)}
+          />
+          <TextField
+            id={`${exercise.id}-reps`}
+            type="text"
+            label="Reps"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={reps}
+            onChange={(e) => handleRepsChange(e.target.value)}
+          />
+        </Box>
+
+        <TextField
+          id={`${exercise.id}-video-url`}
+          type="text"
+          label="YouTube Video URL"
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={videoUrl}
+          onChange={(e) => handleVideoUrlChange(e.target.value)}
+          // InputProps={{
+          //   startAdornment: (
+          //     <InputAdornment position="start" sx={{ opacity: 0.5 }}>
+          //       <SearchIcon />
+          //     </InputAdornment>
+          //   ),
+          // }}
+        />
+      </Box>
+    </Card>
   );
 };
 

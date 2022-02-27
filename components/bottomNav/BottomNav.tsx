@@ -8,10 +8,15 @@ import {
   BottomNavigationAction,
   Paper,
   ButtonBase,
+  // Box,
+  // Zoom,
+  // Fab,
 } from "@mui/material/";
 import {
   ListAlt as WorkoutsIcon,
-  FitnessCenter as ExercisesIcon,
+  // Add as AddIcon,
+  // PlayCircle as PlayIcon,
+  // FitnessCenter as ExercisesIcon,
 } from "@mui/icons-material";
 import ArmFlexIcon from "../icons/ArmFlexIcon";
 
@@ -33,7 +38,7 @@ import { RouterPath, ROUTE_VALUES } from "../../pages/_app";
 export default function BottomNav() {
   const classes = useStyles();
   const [isStandalone, setIsStandalone] = useState(false);
-  const router = useRouter();
+  const { pathname, push } = useRouter();
   const [bottomNavValue, setBottomNavValue] = useState<number | undefined>(0);
 
   useEffect(() => {
@@ -41,16 +46,17 @@ export default function BottomNav() {
   }, []);
 
   useEffect(() => {
-    if (ROUTE_VALUES[router.pathname as RouterPath]?.bottomNavValue)
-      setBottomNavValue(
-        ROUTE_VALUES[router.pathname as RouterPath].bottomNavValue
-      );
-  }, [router.pathname]);
+    if (ROUTE_VALUES[pathname as RouterPath]?.bottomNavValue)
+      setBottomNavValue(ROUTE_VALUES[pathname as RouterPath].bottomNavValue);
+  }, [pathname]);
 
   const onBottomNavClick = (e: any, path: string) => {
-    e.preventDefault();
-    router.push(path);
+    push(path);
   };
+
+  // const onAddWorkoutClick = () => {
+  //   push(RouterPath.WorkoutEditor);
+  // };
 
   return (
     <Paper square elevation={0} className={classes.root}>
@@ -62,6 +68,7 @@ export default function BottomNav() {
         }}
       >
         <BottomNavigation
+          id="bottom-nav"
           showLabels
           sx={{ backgroundColor: "transparent", width: "100%" }}
           value={bottomNavValue}
@@ -74,30 +81,55 @@ export default function BottomNav() {
             label="Training"
             icon={<ArmFlexIcon />}
             component="a"
+            // sx={{ mr: "28px" }}
             onClick={(e: MouseEvent) =>
               onBottomNavClick(e, RouterPath.Training)
             }
           />
+
           <BottomNavigationAction
             disableRipple
             label="Workouts"
             icon={<WorkoutsIcon />}
             component="a"
+            // sx={{ ml: "28px" }}
             onClick={(e: MouseEvent) =>
               onBottomNavClick(e, RouterPath.Workouts)
             }
           />
-          <BottomNavigationAction
-            disableRipple
-            label="Exercises"
-            icon={<ExercisesIcon />}
-            component="a"
-            onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPath.Exercises)
-            }
-          />
         </BottomNavigation>
       </ButtonBase>
+      {/* <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: "50%",
+          width: 64,
+          height: 64,
+          mt: "-32px",
+          transform: "translateX(-50%)",
+          zIndex: 100,
+        }}
+      >
+        <Zoom in={pathname === RouterPath.Training} timeout={200} unmountOnExit>
+          <Fab
+            color="primary"
+            onClick={() => {}}
+            sx={{ position: "absolute", width: 64, height: 64 }}
+          >
+            <PlayIcon />
+          </Fab>
+        </Zoom>
+        <Zoom in={pathname === RouterPath.Workouts} timeout={200} unmountOnExit>
+          <Fab
+            color="primary"
+            onClick={onAddWorkoutClick}
+            sx={{ position: "absolute", width: 64, height: 64 }}
+          >
+            <AddIcon />
+          </Fab>
+        </Zoom>
+      </Box> */}
     </Paper>
   );
 }

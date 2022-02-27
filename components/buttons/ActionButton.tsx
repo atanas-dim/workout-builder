@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 import { alpha } from "@mui/system";
 import { styled } from "@mui/system";
@@ -69,7 +69,9 @@ const ActionButton: FC<Props> = ({
           className={className}
           disabled={disabled}
         >
-          {label}
+          <Typography component="span" variant="button" noWrap>
+            {label}
+          </Typography>
         </StyledButton>
       </Link>
     );
@@ -86,7 +88,9 @@ const ActionButton: FC<Props> = ({
       className={className}
       disabled={disabled}
     >
-      {label}
+      <Typography component="span" variant="button" noWrap>
+        {label}
+      </Typography>
     </StyledButton>
   );
 };

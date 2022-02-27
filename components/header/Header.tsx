@@ -69,6 +69,12 @@ export default function Header() {
   const [showInstallButton, setShowInstallButton] = useState<boolean>(false);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
 
+  const onBackClick = () => {
+    if (router.pathname === RouterPath.WorkoutEditor)
+      router.push(RouterPath.Workouts);
+    else router.back();
+  };
+
   // INSTALL PROMPT FOR PWA
   useEffect(() => {
     // First check if it's standalone
@@ -150,7 +156,6 @@ export default function Header() {
 
   const getScrollDirection = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop;
-    // console.log({ scrollTop, previousScrollTop });
 
     if (scrollTop > previousScrollTop) {
       setHasScrolledUp(true);
@@ -174,11 +179,11 @@ export default function Header() {
         elevation={0}
         sx={{ height: hasScrolledUp ? 40 : 56 }}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar id="header-toolbar" className={classes.toolbar}>
           {router.pathname === RouterPath.WorkoutEditor && (
             <IconButton
               sx={{ position: "absolute", left: 24 }}
-              onClick={() => router.back()}
+              onClick={onBackClick}
             >
               <BackIcon fontSize="small" />
             </IconButton>

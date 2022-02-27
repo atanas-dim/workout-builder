@@ -6,16 +6,10 @@ import { Typography } from "@mui/material/";
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
 
-import { signOutUser } from "../firebase/config";
-
 import { useAuth } from "../hooks/useAuth";
 
 const Home: NextPage = () => {
-  const { user } = useAuth();
-
-  const handleSignOut = () => {
-    signOutUser();
-  };
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -27,13 +21,13 @@ const Home: NextPage = () => {
 
       <MainContentWrapper>
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-          Welcome {user?.displayName}
+          Hi {user?.displayName} 💪
         </Typography>
 
         <ActionButton
           label="Sign out"
           variant="outlined"
-          onClick={handleSignOut}
+          onClick={() => signOut()}
         />
       </MainContentWrapper>
     </>
