@@ -60,6 +60,20 @@ const theme = createTheme({
         },
       },
     },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "&.smallInput": {
+            "& label": {
+              left: 8,
+            },
+            "& legend": {
+              marginLeft: 8,
+            },
+          },
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

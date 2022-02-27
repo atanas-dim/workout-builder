@@ -73,15 +73,11 @@ const WorkoutEditor: NextPage = () => {
   const existingWorkoutId = router.query.workoutId;
   const { createWorkout, getWorkoutById, updateWorkout, deleteWorkout } =
     useWorkouts();
-  const { user } = useAuth();
 
   const [isStandalone, setIsStandalone] = useState(false);
-  const [appBarElement, setAppBarElement] = useState<HTMLElement | null>();
 
   useEffect(() => {
     if (isStandaloneOnMobileSafari()) setIsStandalone(true);
-    const appBar = document.getElementById("app-bar");
-    setAppBarElement(appBar);
   }, []);
 
   useEffect(() => {
@@ -134,13 +130,6 @@ const WorkoutEditor: NextPage = () => {
       workoutTitle,
       workoutExerciseEntries
     ).then(() => router.push(RouterPath.Workouts));
-  };
-
-  const onDeleteClick = () => {
-    if (!existingWorkoutId) return;
-    deleteWorkout(existingWorkoutId as string).then(() =>
-      router.push(RouterPath.Workouts)
-    );
   };
 
   // Sortable functions
