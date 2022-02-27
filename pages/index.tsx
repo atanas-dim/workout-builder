@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
-import React, { useEffect } from "react";
+import React from "react";
 import Head from "next/head";
+
+import { withAuth } from "../context/AuthContext";
 
 import { Typography } from "@mui/material/";
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
@@ -34,4 +36,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default withAuth(Home);

@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
-import { RouterPath } from "../../pages/_app";
+import { RouterPath } from "../../resources/routes";
 
 import { Workout } from "../../context/WorkoutsContext";
 

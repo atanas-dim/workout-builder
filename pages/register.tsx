@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { RouterPath } from "../pages/_app";
+import { RouterPath } from "../resources/routes";
 
 import SignUp from "../components/auth/SignUp";
 import { useAuth } from "../hooks/useAuth";

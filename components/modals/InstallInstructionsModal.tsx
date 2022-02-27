@@ -10,7 +10,7 @@ import {
   Cancel as CloseIcon,
 } from "@mui/icons-material/";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",

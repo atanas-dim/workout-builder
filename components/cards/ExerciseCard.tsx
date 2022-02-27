@@ -1,4 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
+import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material/styles";
 
 import { WorkoutExerciseEntry } from "../../context/WorkoutsContext";
 
@@ -19,6 +21,17 @@ import {
   DragIndicator as DragIcon,
   // Search as SearchIcon,
 } from "@mui/icons-material/";
+
+const useStyles = makeStyles((theme: Theme) => ({
+  smallInput: {
+    "& label": {
+      left: 8,
+    },
+    "& legend": {
+      marginLeft: 8,
+    },
+  },
+}));
 
 enum ExerciseProperties {
   Name = "name",
@@ -54,6 +67,7 @@ const ExerciseCard: FC<Props> = ({
   draggableRef,
   draggableStyle,
 }) => {
+  const classes = useStyles();
   const [name, setName] = useState("");
   const [reps, setReps] = useState("");
   const [sets, setSets] = useState("");
@@ -95,17 +109,16 @@ const ExerciseCard: FC<Props> = ({
       ref={draggableRef}
       {...draggableProps}
       style={draggableStyle}
+      {...dragHandleProps}
     >
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="flex-start"
       >
-        <Box sx={{ flex: 1 }} {...dragHandleProps}>
-          <IconButton>
-            <DragIcon />
-          </IconButton>
-        </Box>
+        <IconButton>
+          <DragIcon />
+        </IconButton>
 
         <IconButton onClick={() => removeExercise(position)}>
           <DeleteIcon />
@@ -119,6 +132,7 @@ const ExerciseCard: FC<Props> = ({
           label="Name"
           variant="outlined"
           size="small"
+          className={classes.smallInput}
           fullWidth
           sx={{ mb: 2 }}
           value={name}
@@ -131,6 +145,7 @@ const ExerciseCard: FC<Props> = ({
             label="Sets"
             variant="outlined"
             size="small"
+            className={classes.smallInput}
             fullWidth
             sx={{ mr: 2 }}
             value={sets}
@@ -142,6 +157,7 @@ const ExerciseCard: FC<Props> = ({
             label="Reps"
             variant="outlined"
             size="small"
+            className={classes.smallInput}
             fullWidth
             value={reps}
             onChange={(e) => handleRepsChange(e.target.value)}
@@ -154,6 +170,7 @@ const ExerciseCard: FC<Props> = ({
           label="YouTube Video URL"
           variant="outlined"
           size="small"
+          className={classes.smallInput}
           fullWidth
           value={videoUrl}
           onChange={(e) => handleVideoUrlChange(e.target.value)}

@@ -19,7 +19,7 @@ export default function SignIn() {
   };
 
   return (
-    <>
+    <form onSubmit={handleSignUp}>
       <TextField
         id="display-name"
         type="text"
@@ -57,6 +57,6 @@ export default function SignIn() {
         fullWidth
         onClick={handleSignUp}
       />
-    </>
+    </form>
   );
 }

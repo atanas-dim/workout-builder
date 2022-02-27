@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
 import React from "react";
 
-import { RouterPath } from "./_app";
+import { RouterPath } from "../resources/routes";
+
+import { withAuth } from "../context/AuthContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 
@@ -49,4 +51,4 @@ const Workouts: NextPage = () => {
   );
 };
 
-export default Workouts;
+export default withAuth(Workouts);

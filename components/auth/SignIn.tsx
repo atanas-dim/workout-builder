@@ -10,13 +10,14 @@ export default function SignIn() {
 
   const { signIn, error } = useAuth();
 
-  const handleSignIn = () => {
+  const handleSignIn = (e: any) => {
+    e.preventDefault();
     if (!email || !password) return;
     signIn(email, password);
   };
 
   return (
-    <>
+    <form onSubmit={handleSignIn}>
       <TextField
         id="email"
         type="email"
@@ -43,11 +44,11 @@ export default function SignIn() {
         </Typography>
       )}
       <ActionButton
+        type="submit"
         label="Sign In"
         variant="contained"
         fullWidth
-        onClick={handleSignIn}
       />
-    </>
+    </form>
   );
 }

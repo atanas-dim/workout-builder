@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { cyan, yellow, blueGrey, pink, lime } from "@mui/material/colors";
+import { cyan, blueGrey, pink, lime } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -18,9 +18,6 @@ const theme = createTheme({
     background: {
       default: "#121214",
       paper: "#191a1f",
-    },
-    text: {
-      // primary: cyan[100],
     },
   },
   shape: {
@@ -67,13 +64,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 999,
-          // paddingLeft: 0,
           input: {
-            paddingLeft: "16.5px",
-            paddingRight: "16.5px",
+            paddingLeft: 18,
+            paddingRight: 18,
           },
+
           "& legend": {
-            marginLeft: 4,
+            marginLeft: 16,
           },
         },
       },
@@ -81,15 +78,7 @@ const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          left: 4,
-        },
-      },
-    },
-    MuiInputAdornment: {
-      styleOverrides: {
-        positionStart: {
-          // position: "absolute",
-          // left: 24,
+          left: 16,
         },
       },
     },

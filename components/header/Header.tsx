@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import { useRouter } from "next/router";
-import { ROUTE_VALUES, RouterPath } from "../../pages/_app";
+import { RouterPath, ROUTE_SETTINGS } from "../../resources/routes";
 
 import { isChrome, isMobileSafari } from "react-device-detect";
 import {
@@ -189,7 +189,7 @@ export default function Header() {
             </IconButton>
           )}
           <Typography variant="h6" component="h1">
-            {ROUTE_VALUES[router.pathname as RouterPath]?.title}
+            {ROUTE_SETTINGS[router.pathname as RouterPath]?.title}
           </Typography>
 
           {router.pathname !== RouterPath.WorkoutEditor && showInstallButton && (

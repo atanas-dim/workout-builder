@@ -3,7 +3,9 @@ import React, { useState, useEffect, createContext } from "react";
 import { auth } from "../firebase/config";
 import { User } from "firebase/auth";
 import { useRouter } from "next/router";
-import { RouterPath, ROUTE_VALUES } from "../pages/_app";
+import { RouterPath } from "../resources/routes";
+import { useAuth } from "../hooks/useAuth";
+import { Box, CircularProgress } from "@mui/material";
 
 export const AuthContext = createContext<{ user: User | null }>({
   user: null,
@@ -12,12 +14,6 @@ export const AuthContext = createContext<{ user: User | null }>({
 // Code example - https://colinhacks.com/essays/nextjs-firebase-authentication
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
-  const { push, pathname } = useRouter();
-
-  useEffect(() => {
-    if (!user && ROUTE_VALUES[pathname as RouterPath].private)
-      push({ pathname: RouterPath.Login, query: { from: pathname } });
-  }, [pathname]);
 
   useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
@@ -48,3 +44,33 @@ export function AuthProvider({ children }: any) {
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }
+
+// The HOC can wrap a page component on private routes
+export const withAuth = (Component: any) => {
+  const WithAuth = (props: any) => {
+    const { user } = useAuth();
+
+    const { push, pathname } = useRouter();
+
+    useEffect(() => {
+      if (!user)
+        push({ pathname: RouterPath.Login, query: { from: pathname } });
+    }, [pathname, user]);
+
+    if (!user)
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ width: "100vw", height: "100vh" }}
+        >
+          <CircularProgress />
+        </Box>
+      );
+
+    return <Component {...props} />;
+  };
+  WithAuth.displayName = "withAuth";
+  return WithAuth;
+};

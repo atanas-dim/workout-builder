@@ -23,7 +23,7 @@ import ArmFlexIcon from "../icons/ArmFlexIcon";
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: "fixed",
     bottom: 0,
@@ -33,21 +33,21 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-import { RouterPath, ROUTE_VALUES } from "../../pages/_app";
+import { RouterPath, ROUTE_SETTINGS } from "../../resources/routes";
 
 export default function BottomNav() {
   const classes = useStyles();
   const [isStandalone, setIsStandalone] = useState(false);
   const { pathname, push } = useRouter();
-  const [bottomNavValue, setBottomNavValue] = useState<number | undefined>(0);
+  const [bottomNavValue, setBottomNavValue] = useState<number>();
 
   useEffect(() => {
     if (isStandaloneOnMobileSafari()) setIsStandalone(true);
   }, []);
 
   useEffect(() => {
-    if (ROUTE_VALUES[pathname as RouterPath]?.bottomNavValue)
-      setBottomNavValue(ROUTE_VALUES[pathname as RouterPath].bottomNavValue);
+    if (ROUTE_SETTINGS[pathname as RouterPath]?.bottomNavValue)
+      setBottomNavValue(ROUTE_SETTINGS[pathname as RouterPath].bottomNavValue);
   }, [pathname]);
 
   const onBottomNavClick = (e: any, path: string) => {

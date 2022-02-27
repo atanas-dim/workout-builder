@@ -6,9 +6,10 @@ import { cloneDeep } from "lodash";
 import { useRouter } from "next/router";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-import { RouterPath } from "./_app";
+import { RouterPath } from "../resources/routes";
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
+import { withAuth } from "../context/AuthContext";
 import { WorkoutExerciseEntry } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
@@ -261,7 +262,7 @@ const WorkoutEditor: NextPage = () => {
   );
 };
 
-export default WorkoutEditor;
+export default withAuth(WorkoutEditor);
 
 const DeleteButton = () => {
   const [headerToolbarElement, setHeaderToolbarElement] =

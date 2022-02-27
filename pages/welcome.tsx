@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
+import { withAuth } from "../context/AuthContext";
 
 function Welcome() {
   return (
@@ -12,4 +13,4 @@ function Welcome() {
   );
 }
 
-export default Welcome;
+export default withAuth(Welcome);

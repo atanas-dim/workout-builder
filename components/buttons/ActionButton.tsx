@@ -41,6 +41,7 @@ type Props = {
   size?: "small" | "medium" | "large" | undefined;
   className?: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset" | undefined;
 };
 
 const ActionButton: FC<Props> = ({
@@ -55,6 +56,7 @@ const ActionButton: FC<Props> = ({
   size = "medium",
   className,
   disabled,
+  type,
 }) => {
   if (href)
     return (
@@ -78,6 +80,7 @@ const ActionButton: FC<Props> = ({
 
   return (
     <StyledButton
+      type={type}
       size={size}
       variant={variant}
       color={color}
