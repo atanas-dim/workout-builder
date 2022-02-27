@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Typography } from "@mui/material/";
+import { TextField, Typography, Box } from "@mui/material/";
 import ActionButton from "../buttons/ActionButton";
 
 import { useAuth } from "../../hooks/useAuth";
@@ -17,7 +17,7 @@ export default function SignIn() {
   };
 
   return (
-    <form onSubmit={handleSignIn}>
+    <Box component="form" sx={{ width: "100%" }} onSubmit={handleSignIn}>
       <TextField
         id="email"
         type="email"
@@ -49,6 +49,6 @@ export default function SignIn() {
         variant="contained"
         fullWidth
       />
-    </form>
+    </Box>
   );
 }

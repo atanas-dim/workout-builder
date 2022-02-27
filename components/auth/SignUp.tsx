@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import router from "next/router";
-import { TextField } from "@mui/material/";
+import { TextField, Box } from "@mui/material/";
 import ActionButton from "../buttons/ActionButton";
 
 import { useAuth } from "../../hooks/useAuth";
@@ -19,7 +19,7 @@ export default function SignIn() {
   };
 
   return (
-    <form onSubmit={handleSignUp}>
+    <Box component="form" sx={{ width: "100%" }} onSubmit={handleSignUp}>
       <TextField
         id="display-name"
         type="text"
@@ -57,6 +57,6 @@ export default function SignIn() {
         fullWidth
         onClick={handleSignUp}
       />
-    </form>
+    </Box>
   );
 }
