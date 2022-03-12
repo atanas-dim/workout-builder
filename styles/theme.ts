@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { cyan, blueGrey, pink, lime } from "@mui/material/colors";
+import { blueGrey, pink, lime, blue, cyan } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -16,8 +16,10 @@ const theme = createTheme({
       main: pink[500],
     },
     background: {
+      // default: "#010b14",
+      // paper: "#071927",
       default: "#121214",
-      paper: "#191a1f",
+      paper: "#1c1c22",
     },
   },
   shape: {

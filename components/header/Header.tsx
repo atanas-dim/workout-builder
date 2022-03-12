@@ -13,7 +13,7 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { alpha } from "@mui/system";
 
-import { AppBar, Toolbar, Typography, IconButton } from "@mui/material/";
+import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material/";
 import {
   DownloadForOffline as DownloadIcon,
   ArrowBackIosNew as BackIcon,
@@ -25,10 +25,25 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     alignItems: "center",
     justifyContent: "center",
-    borderBottom: `solid 1px ${theme.palette.divider}`,
+    boxShadow: theme.shadows[3],
+    borderRadius: 999,
+    top: 8,
+    left: 16,
+    right: 16,
+    margin: "auto",
+    width: "calc(100% - 32px)",
+    maxWidth: theme.breakpoints.values.md,
     transition: theme.transitions.create(["height"], {
       duration: theme.transitions.duration.short,
     }),
+  },
+  headerBg: {
+    background: `linear-gradient(${theme.palette.background.default} 30%, transparent)`,
+    position: "fixed",
+    top: 0,
+    width: "100%",
+    height: 48,
+    zIndex: theme.zIndex.appBar,
   },
   toolbar: {
     minHeight: "initial !important",
@@ -174,9 +189,10 @@ export default function Header() {
 
   return (
     <>
+      <Box className={classes.headerBg} />
       <AppBar
         className={classes.root}
-        elevation={0}
+        elevation={1}
         sx={{ height: hasScrolledUp ? 40 : 56 }}
       >
         <Toolbar id="header-toolbar" className={classes.toolbar}>

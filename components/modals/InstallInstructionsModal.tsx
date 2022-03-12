@@ -39,7 +39,7 @@ const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
 
   return (
     <Modal open={showModal} onClose={hideModal} className={classes.root}>
-      <Card className={classes.card} variant="outlined">
+      <Card className={classes.card} elevation={1}>
         <IconButton
           sx={{ position: "absolute", top: 16, right: 16 }}
           onClick={hideModal}

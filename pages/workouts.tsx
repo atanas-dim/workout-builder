@@ -37,6 +37,7 @@ const Workouts: NextPage = () => {
             <CircularProgress />
           </Box>
         )}
+
         {workoutsData?.map((workout, index) => {
           return (
             <WorkoutCard

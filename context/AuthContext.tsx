@@ -5,7 +5,7 @@ import { User } from "firebase/auth";
 import { useRouter } from "next/router";
 import { RouterPath } from "../resources/routes";
 import { useAuth } from "../hooks/useAuth";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 
 export const AuthContext = createContext<{ user: User | null }>({
   user: null,
@@ -49,6 +49,7 @@ export function AuthProvider({ children }: any) {
 export const withAuth = (Component: any) => {
   const WithAuth = (props: any) => {
     const { user } = useAuth();
+    const theme = useTheme();
 
     const { push, pathname } = useRouter();
 
@@ -63,7 +64,13 @@ export const withAuth = (Component: any) => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ width: "100vw", height: "100vh" }}
+          sx={{
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: theme.palette.background.default,
+            zIndex: theme.zIndex.modal,
+            position: "fixed",
+          }}
         >
           <CircularProgress />
         </Box>

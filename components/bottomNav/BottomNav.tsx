@@ -8,14 +8,9 @@ import {
   BottomNavigationAction,
   Paper,
   ButtonBase,
-  // Box,
-  // Zoom,
-  // Fab,
 } from "@mui/material/";
 import {
   ListAlt as WorkoutsIcon,
-  // Add as AddIcon,
-  // PlayCircle as PlayIcon,
   // FitnessCenter as ExercisesIcon,
 } from "@mui/icons-material";
 import ArmFlexIcon from "../icons/ArmFlexIcon";
@@ -26,10 +21,12 @@ import { Theme } from "@mui/material/styles";
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     position: "fixed",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderTop: `solid 1px ${theme.palette.divider}`,
+    left: 16,
+    right: 16,
+    // bottom: 16,
+    borderRadius: 999,
+    width: "max-content",
+    margin: "auto",
   },
 }));
 
@@ -54,17 +51,20 @@ export default function BottomNav() {
     push(path);
   };
 
-  // const onAddWorkoutClick = () => {
-  //   push(RouterPath.WorkoutEditor);
-  // };
-
   return (
-    <Paper square elevation={0} className={classes.root}>
+    <Paper
+      square
+      elevation={1}
+      className={classes.root}
+      sx={{ bottom: isStandalone ? 24 : 16 }}
+    >
       <ButtonBase
         sx={{
           width: "100%",
           height: "100%",
-          pb: isStandalone ? 3.5 : undefined,
+          borderRadius: 999,
+          pl: 1,
+          pr: 1,
         }}
       >
         <BottomNavigation
@@ -81,7 +81,7 @@ export default function BottomNav() {
             label="Training"
             icon={<ArmFlexIcon />}
             component="a"
-            // sx={{ mr: "28px" }}
+            sx={{ m: "0 8px", width: 60 }}
             onClick={(e: MouseEvent) =>
               onBottomNavClick(e, RouterPath.Training)
             }
@@ -92,44 +92,13 @@ export default function BottomNav() {
             label="Workouts"
             icon={<WorkoutsIcon />}
             component="a"
-            // sx={{ ml: "28px" }}
+            sx={{ m: "0 8px", width: 60 }}
             onClick={(e: MouseEvent) =>
               onBottomNavClick(e, RouterPath.Workouts)
             }
           />
         </BottomNavigation>
       </ButtonBase>
-      {/* <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: "50%",
-          width: 64,
-          height: 64,
-          mt: "-32px",
-          transform: "translateX(-50%)",
-          zIndex: 100,
-        }}
-      >
-        <Zoom in={pathname === RouterPath.Training} timeout={200} unmountOnExit>
-          <Fab
-            color="primary"
-            onClick={() => {}}
-            sx={{ position: "absolute", width: 64, height: 64 }}
-          >
-            <PlayIcon />
-          </Fab>
-        </Zoom>
-        <Zoom in={pathname === RouterPath.Workouts} timeout={200} unmountOnExit>
-          <Fab
-            color="primary"
-            onClick={onAddWorkoutClick}
-            sx={{ position: "absolute", width: 64, height: 64 }}
-          >
-            <AddIcon />
-          </Fab>
-        </Zoom>
-      </Box> */}
     </Paper>
   );
 }

@@ -19,7 +19,7 @@ export default class MyDocument extends Document {
           />
           <link rel="apple-touch-icon" href="/icon.png"></link>
 
-          <meta name="theme-color" content="#191a1f" />
+          <meta name="theme-color" content="#121214" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
           {/* Favicon Links */}

@@ -83,7 +83,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
 
   return (
     <Grow in={show} appear={true} timeout={600}>
-      <Card variant="outlined" className={classes.root}>
+      <Card elevation={0} className={classes.root}>
         <Box
           display="flex"
           justifyContent="space-between"
