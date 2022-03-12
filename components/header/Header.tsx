@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { alpha } from "@mui/system";
+import { useScrollTrigger } from "@mui/material/";
 
 import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material/";
 import {
@@ -166,26 +167,9 @@ export default function Header() {
   };
 
   // SCROLL EFFECT ON HEADER HEIGHT
-  const [hasScrolledUp, setHasScrolledUp] = useState(false);
-  const [previousScrollTop, setPreviousScrollTop] = useState(0);
-
-  const getScrollDirection = useCallback(() => {
-    const scrollTop = document.documentElement.scrollTop;
-
-    if (scrollTop > previousScrollTop) {
-      setHasScrolledUp(true);
-    } else {
-      setHasScrolledUp(false);
-    }
-
-    setPreviousScrollTop(scrollTop <= 0 ? 0 : scrollTop);
-  }, [previousScrollTop]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", getScrollDirection);
-
-    return () => window.removeEventListener("scroll", getScrollDirection);
-  }, [previousScrollTop, getScrollDirection]);
+  const scrollTrigger = useScrollTrigger({
+    threshold: 1,
+  });
 
   return (
     <>
@@ -193,7 +177,7 @@ export default function Header() {
       <AppBar
         className={classes.root}
         elevation={1}
-        sx={{ height: hasScrolledUp ? 40 : 56 }}
+        sx={{ height: scrollTrigger ? 40 : 56 }}
       >
         <Toolbar id="header-toolbar" className={classes.toolbar}>
           {router.pathname === RouterPath.WorkoutEditor && (
