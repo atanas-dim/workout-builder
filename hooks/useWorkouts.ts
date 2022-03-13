@@ -1,11 +1,7 @@
 import { useContext } from "react";
 
 import { AuthContext } from "../context/AuthContext";
-import {
-  WorkoutsContext,
-  WorkoutExerciseEntry,
-  Workout,
-} from "../context/WorkoutsContext";
+import { WorkoutsContext, Workout } from "../context/WorkoutsContext";
 
 import {
   addDoc,

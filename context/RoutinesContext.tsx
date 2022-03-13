@@ -45,7 +45,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updating  routines data");
+    console.log("updating  routines data", { routinesData });
   }, [routinesData]);
 
   useEffect(() => {
@@ -59,7 +59,10 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   const subscribeToRoutinesData = async () => {
     if (!routinesCollectionRef) return;
 
-    const routinesQuery = query(routinesCollectionRef, orderBy("title"));
+    const routinesQuery = query(
+      routinesCollectionRef,
+      orderBy("updated", "desc")
+    );
 
     onSnapshot(
       routinesQuery,

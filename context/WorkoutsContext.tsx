@@ -5,7 +5,6 @@ import React, {
   createContext,
   Dispatch,
   SetStateAction,
-  useCallback,
 } from "react";
 
 import {
@@ -35,7 +34,7 @@ export type Workout = {
   title: string;
   exercises: WorkoutExerciseEntry[];
   created: Timestamp;
-  updated?: Timestamp;
+  updated: Timestamp;
 };
 
 type WorkoutsContextValue = {
@@ -64,7 +63,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updating  workouts data");
+    console.log("updating  workouts data", { workoutsData });
   }, [workoutsData]);
 
   useEffect(() => {
@@ -85,7 +84,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
           orderBy("routineId", "desc"),
           orderBy("indexInRoutine")
         )
-      : workoutsCollectionRef;
+      : query(workoutsCollectionRef, orderBy("title"));
 
     onSnapshot(
       workoutsQuery,

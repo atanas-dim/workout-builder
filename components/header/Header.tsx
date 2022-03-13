@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: "100%",
     width: "100%",
     maxWidth: theme.breakpoints.values.md,
-    padding: theme.spacing(0, 3),
+    padding: theme.spacing(0, 2),
     justifyContent: "space-between",
     position: "relative",
     transition: theme.transitions.create(["height"], {
@@ -59,8 +59,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     }),
   },
   installButton: {
-    // position: "absolute",
-    // right: 24,
     animation: `$pulse 12s ${theme.transitions.easing.easeInOut} infinite `,
   },
   "@keyframes pulse": {
@@ -183,12 +181,14 @@ export default function Header() {
         sx={{ height: scrollTrigger ? 40 : 56 }}
       >
         <Toolbar id="header-toolbar" className={classes.toolbar}>
-          <Box id="left-controls">
+          <Box
+            id="left-controls"
+            display="flex"
+            justifyContent="flex-start"
+            sx={{ flex: 1 }}
+          >
             {showBackButton && (
-              <IconButton
-                // sx={{ position: "absolute", left: 16 }}
-                onClick={onBackClick}
-              >
+              <IconButton onClick={onBackClick}>
                 <BackIcon fontSize="small" />
               </IconButton>
             )}
@@ -197,21 +197,29 @@ export default function Header() {
             {ROUTE_SETTINGS[pathname as RouterPath]?.title}
           </Typography>
 
-          <Box id="right-controls">
-            {pathname !== RouterPath.WorkoutEditor && showInstallButton && (
-              <>
-                <IconButton
-                  onClick={onInstallClick}
-                  className={classes.installButton}
-                >
-                  <DownloadIcon />
-                </IconButton>
-                <InstallInstructionsModal
-                  showModal={showInstallModal}
-                  hideModal={() => setShowInstallModal(false)}
-                />
-              </>
-            )}
+          <Box
+            id="right-controls"
+            display="flex"
+            justifyContent="flex-end"
+            sx={{ flex: 1 }}
+          >
+            {/* Make condition a variable*/}
+            {pathname !== RouterPath.WorkoutEditor &&
+              pathname !== RouterPath.RoutineEditor &&
+              showInstallButton && (
+                <>
+                  <IconButton
+                    onClick={onInstallClick}
+                    className={classes.installButton}
+                  >
+                    <DownloadIcon />
+                  </IconButton>
+                  <InstallInstructionsModal
+                    showModal={showInstallModal}
+                    hideModal={() => setShowInstallModal(false)}
+                  />
+                </>
+              )}
           </Box>
         </Toolbar>
       </AppBar>
