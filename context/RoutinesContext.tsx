@@ -59,10 +59,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   const subscribeToRoutinesData = async () => {
     if (!routinesCollectionRef) return;
 
-    const routinesQuery = query(
-      routinesCollectionRef,
-      orderBy("updated", "desc")
-    );
+    const routinesQuery = query(routinesCollectionRef);
 
     onSnapshot(
       routinesQuery,

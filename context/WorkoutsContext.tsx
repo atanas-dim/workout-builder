@@ -63,7 +63,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updating  workouts data", { workoutsData });
+    console.log("updating  workouts data");
   }, [workoutsData]);
 
   useEffect(() => {

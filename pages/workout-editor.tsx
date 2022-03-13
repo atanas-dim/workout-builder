@@ -134,6 +134,7 @@ const WorkoutEditor: NextPage = () => {
   const onNewRoutineSubmit = async (e: any) => {
     e.preventDefault();
     await createRoutine(routineTitle).then((id) => {
+      console.log({ id });
       setSelectedRoutineId(id || "");
       setShowNewRoutineDialog(false);
     });
