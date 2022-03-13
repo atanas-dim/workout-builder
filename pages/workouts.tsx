@@ -31,6 +31,7 @@ import {
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 
 import WorkoutCard from "../components/cards/WorkoutCard";
+
 import { Timestamp } from "firebase/firestore";
 
 type RoutineGroup = {
@@ -85,6 +86,7 @@ const Workouts: NextPage = () => {
         routineGroups.unsorted.workouts.push(workout);
       }
     });
+    console.log({ routineGroups });
 
     return routineGroups;
   };
@@ -101,7 +103,7 @@ const Workouts: NextPage = () => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ mb: 1, width: "100%" }}
+          sx={{ mb: 2, width: "100%" }}
         >
           <Typography
             component="span"

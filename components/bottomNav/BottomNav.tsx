@@ -8,6 +8,7 @@ import {
   BottomNavigationAction,
   Paper,
   ButtonBase,
+  Box,
 } from "@mui/material/";
 import {
   ListAlt as WorkoutsIcon,
@@ -16,6 +17,7 @@ import {
 import ArmFlexIcon from "../icons/ArmFlexIcon";
 
 import { makeStyles } from "@mui/styles";
+import { alpha } from "@mui/material/styles";
 import { Theme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -23,10 +25,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: "fixed",
     left: 16,
     right: 16,
-    // bottom: 16,
     borderRadius: 999,
     width: "max-content",
     margin: "auto",
+    zIndex: theme.zIndex.appBar,
+  },
+  bottomNavBg: {
+    background: `linear-gradient(transparent, ${alpha(
+      theme.palette.background.default,
+      0.8
+    )})`,
+    position: "fixed",
+    bottom: 0,
+    width: "100%",
+    height: 64,
+    zIndex: theme.zIndex.appBar,
   },
 }));
 
@@ -52,53 +65,56 @@ export default function BottomNav() {
   };
 
   return (
-    <Paper
-      square
-      elevation={1}
-      className={classes.root}
-      sx={{ bottom: isStandalone ? 24 : 16 }}
-    >
-      <ButtonBase
-        sx={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 999,
-          pl: 1,
-          pr: 1,
-        }}
+    <>
+      <Box className={classes.bottomNavBg} role="presentation" />
+      <Paper
+        square
+        elevation={1}
+        className={classes.root}
+        sx={{ bottom: isStandalone ? 24 : 16 }}
       >
-        <BottomNavigation
-          id="bottom-nav"
-          showLabels
-          sx={{ backgroundColor: "transparent", width: "100%" }}
-          value={bottomNavValue}
-          onChange={(event, newValue) => {
-            setBottomNavValue(newValue);
+        <ButtonBase
+          sx={{
+            width: "100%",
+            height: "100%",
+            borderRadius: 999,
+            pl: 1,
+            pr: 1,
           }}
         >
-          <BottomNavigationAction
-            disableRipple
-            label="Training"
-            icon={<ArmFlexIcon />}
-            component="a"
-            sx={{ m: "0 8px", width: 60 }}
-            onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPath.Training)
-            }
-          />
+          <BottomNavigation
+            id="bottom-nav"
+            showLabels
+            sx={{ backgroundColor: "transparent", width: "100%" }}
+            value={bottomNavValue}
+            onChange={(event, newValue) => {
+              setBottomNavValue(newValue);
+            }}
+          >
+            <BottomNavigationAction
+              disableRipple
+              label="Training"
+              icon={<ArmFlexIcon />}
+              component="a"
+              sx={{ m: "0 8px", width: 60 }}
+              onClick={(e: MouseEvent) =>
+                onBottomNavClick(e, RouterPath.Training)
+              }
+            />
 
-          <BottomNavigationAction
-            disableRipple
-            label="Workouts"
-            icon={<WorkoutsIcon />}
-            component="a"
-            sx={{ m: "0 8px", width: 60 }}
-            onClick={(e: MouseEvent) =>
-              onBottomNavClick(e, RouterPath.Workouts)
-            }
-          />
-        </BottomNavigation>
-      </ButtonBase>
-    </Paper>
+            <BottomNavigationAction
+              disableRipple
+              label="Workouts"
+              icon={<WorkoutsIcon />}
+              component="a"
+              sx={{ m: "0 8px", width: 60 }}
+              onClick={(e: MouseEvent) =>
+                onBottomNavClick(e, RouterPath.Workouts)
+              }
+            />
+          </BottomNavigation>
+        </ButtonBase>
+      </Paper>
+    </>
   );
 }

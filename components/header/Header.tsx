@@ -174,7 +174,7 @@ export default function Header() {
 
   return (
     <>
-      <Box className={classes.headerBg} />
+      <Box className={classes.headerBg} role="presentation" />
       <AppBar
         className={classes.root}
         elevation={1}
