@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import React, { ReactNode, useState, useCallback } from "react";
+import React, { ReactNode, useState } from "react";
 import { useRouter } from "next/router";
 
 import { RouterPath } from "../resources/routes";
@@ -16,6 +16,8 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import { Add as AddIcon, MoreHoriz as MoreIcon } from "@mui/icons-material";
 
@@ -24,7 +26,7 @@ import ActionButton from "../components/buttons/ActionButton";
 import WorkoutCard from "../components/cards/WorkoutCard";
 
 const Workouts: NextPage = () => {
-  const { workoutsData, isLoading } = useWorkouts();
+  const { workoutsData, isLoading, isSorted, setIsSorted } = useWorkouts();
   const { routinesData } = useRoutines();
   const { push } = useRouter();
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
@@ -59,7 +61,10 @@ const Workouts: NextPage = () => {
 
       const routineTitle = createRoutineTitle(currentRoutineId);
 
-      if (currentRoutineId !== prevRoutineId || index === 0) {
+      const showRoutineLabelAndMoreButton =
+        isSorted && (currentRoutineId !== prevRoutineId || index === 0);
+
+      if (showRoutineLabelAndMoreButton) {
         items.push(
           <Box
             key={"routine-label-" + index}
@@ -129,13 +134,30 @@ const Workouts: NextPage = () => {
   return (
     <>
       <MainContentWrapper>
-        <ActionButton
-          label="Create new workout"
-          href={RouterPath.WorkoutEditor}
-          sx={{ mb: 2 }}
-          fullWidth
-          endIcon={<AddIcon />}
-        />
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ width: "100%", mb: 2 }}
+        >
+          <ActionButton
+            label="Create new workout"
+            href={RouterPath.WorkoutEditor}
+            fullWidth
+            endIcon={<AddIcon />}
+          />
+
+          <FormControlLabel
+            sx={{ width: "100%", flex: 1, ml: 2 }}
+            control={
+              <Switch
+                checked={isSorted}
+                onChange={() => setIsSorted((prev) => !prev)}
+              />
+            }
+            label="Sort"
+          />
+        </Box>
         {isLoading && (
           <Box
             display="flex"

@@ -5,6 +5,7 @@ import React, {
   createContext,
   Dispatch,
   SetStateAction,
+  useCallback,
 } from "react";
 
 import {
@@ -41,18 +42,23 @@ type WorkoutsContextValue = {
   workoutsData: Workout[];
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  isSorted: boolean;
+  setIsSorted: Dispatch<SetStateAction<boolean>>;
 };
 
 const INITIAL_STATE = {
   workoutsData: [],
   isLoading: false,
   setIsLoading: () => {},
+  isSorted: true,
+  setIsSorted: () => {},
 };
 
 export const WorkoutsContext =
   createContext<WorkoutsContextValue>(INITIAL_STATE);
 
 export const WorkoutsProvider: FC = ({ children }: any) => {
+  const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
   const [workoutsData, setWorkoutsData] = useState<Workout[]>([]);
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -62,8 +68,9 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   }, [workoutsData]);
 
   useEffect(() => {
-    if (user) subscribeToWorkoutsData();
-  }, [user]);
+    if (!user) return;
+    subscribeToWorkoutsData();
+  }, [user, isSorted]);
 
   const workoutsCollectionRef = user
     ? collection(firestore, "users", user.uid, "workouts")
@@ -72,11 +79,13 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const subscribeToWorkoutsData = async () => {
     if (!workoutsCollectionRef) return;
 
-    const workoutsQuery = query(
-      workoutsCollectionRef,
-      orderBy("routineId", "desc"),
-      orderBy("indexInRoutine")
-    );
+    const workoutsQuery = isSorted
+      ? query(
+          workoutsCollectionRef,
+          orderBy("routineId", "desc"),
+          orderBy("indexInRoutine")
+        )
+      : workoutsCollectionRef;
 
     onSnapshot(
       workoutsQuery,
@@ -121,6 +130,8 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         workoutsData,
         isLoading,
         setIsLoading,
+        isSorted,
+        setIsSorted,
       }}
     >
       {children}

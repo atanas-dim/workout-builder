@@ -108,26 +108,26 @@ const WorkoutEditor: NextPage = () => {
     useWorkouts();
 
   useEffect(() => {
-    if (existingWorkoutId) {
-      getWorkoutById(existingWorkoutId as string).then((data) => {
-        if (!data) return;
-        setWorkoutTitle(data.title || "");
-        setWorkoutExerciseEntries(data.exercises || []);
+    if (!existingWorkoutId) return;
 
-        const routineId =
-          routinesData?.find((routine) => routine.id === data.routineId)?.id ||
-          "";
-        setSelectedRoutineId(routineId);
+    getWorkoutById(existingWorkoutId as string).then((data) => {
+      if (!data) return;
+      setWorkoutTitle(data.title || "");
+      setWorkoutExerciseEntries(data.exercises || []);
 
-        const routineTitle =
-          routinesData?.find((routine) => routine.id === data.routineId)
-            ?.title || "";
-        setRoutineTitle(routineTitle);
+      const routineId =
+        routinesData?.find((routine) => routine.id === data.routineId)?.id ||
+        "";
+      setSelectedRoutineId(routineId);
 
-        setIndexInRoutine(data.indexInRoutine);
-      });
-    }
-  }, [router]);
+      const routineTitle =
+        routinesData?.find((routine) => routine.id === data.routineId)?.title ||
+        "";
+      setRoutineTitle(routineTitle);
+
+      setIndexInRoutine(data.indexInRoutine);
+    });
+  }, [existingWorkoutId]);
 
   // ROUTINE ----------------------
 
@@ -180,6 +180,7 @@ const WorkoutEditor: NextPage = () => {
   };
 
   // EXERCISES ----------------------
+
   const onAddExerciseClick = () => {
     const newExercise = {
       id: generateExerciseId(),

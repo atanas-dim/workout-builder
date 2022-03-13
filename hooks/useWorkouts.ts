@@ -24,7 +24,8 @@ import {
 import { firestore } from "../firebase/config";
 
 export default function useWorkouts() {
-  const { workoutsData, isLoading, setIsLoading } = useContext(WorkoutsContext);
+  const { workoutsData, isLoading, setIsLoading, isSorted, setIsSorted } =
+    useContext(WorkoutsContext);
   const { user } = useContext(AuthContext);
 
   const workoutsCollectionRef = user
@@ -151,5 +152,7 @@ export default function useWorkouts() {
     workoutsData,
     getWorkoutById,
     getWorkoutsByRoutineId,
+    isSorted,
+    setIsSorted,
   };
 }
