@@ -7,13 +7,7 @@ import React, {
   SetStateAction,
 } from "react";
 
-import {
-  Timestamp,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
+import { Timestamp, collection, query, onSnapshot } from "firebase/firestore";
 
 import { firestore } from "../firebase/config";
 
@@ -24,7 +18,7 @@ export type Routine = {
   title: string;
   created: Timestamp;
   updated: Timestamp;
-  workouts: string[];
+  workouts?: string[];
 };
 type RoutinesContextValue = {
   routinesData: Routine[];

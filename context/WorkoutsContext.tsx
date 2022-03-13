@@ -152,7 +152,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         id: routine.id,
         title: routine.title,
         workouts: [],
-        workoutsOrder: routine.workouts,
+        workoutsOrder: routine?.workouts || [],
         updated: routine.updated || routine.created,
       };
 
@@ -169,7 +169,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     workoutsData.forEach((workout) => {
       let existsInRoutine = false;
       Object.keys(routineGroups).forEach((key) => {
-        if (routineGroups[key].workoutsOrder.includes(workout.id)) {
+        if (routineGroups?.[key]?.workoutsOrder?.includes(workout.id)) {
           existsInRoutine = true;
           return;
         }
