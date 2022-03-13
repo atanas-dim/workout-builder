@@ -18,6 +18,15 @@ const StyledButton = styled(Button, {
     "&:focus, &:active, &:hover": {
       borderColor: variant === "outlined" ? themeColor : "",
     },
+    ...(size === "small" && {
+      padding: theme.spacing(0.5, 1.5),
+      minHeight: "auto",
+      lineHeight: 1,
+      height: 32,
+      "& > .MuiButton-endIcon": {
+        marginLeft: theme.spacing(0.5),
+      },
+    }),
   };
 });
 

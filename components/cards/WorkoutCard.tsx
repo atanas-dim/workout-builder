@@ -41,15 +41,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
       marginBottom: 0,
     },
   },
-  smallButton: {
-    padding: theme.spacing(0.5, 1.5),
-    minHeight: "auto",
-    lineHeight: 1,
-    height: 32,
-    "& > .MuiButton-endIcon": {
-      marginLeft: theme.spacing(0.5),
-    },
-  },
+  // smallButton: {
+  //   padding: theme.spacing(0.5, 1.5),
+  //   minHeight: "auto",
+  //   lineHeight: 1,
+  //   height: 32,
+  //   "& > .MuiButton-endIcon": {
+  //     marginLeft: theme.spacing(0.5),
+  //   },
+  // },
 }));
 
 type Props = {
@@ -105,7 +105,6 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
                 label="Edit"
                 variant="text"
                 onClick={onEditClick}
-                className={classes.smallButton}
                 color="primary"
                 sx={{ ml: 1 }}
               />

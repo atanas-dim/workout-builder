@@ -2,6 +2,7 @@ export enum RouterPath {
   Training = "/",
   Workouts = "/workouts",
   WorkoutEditor = "/workout-editor",
+  RoutineEditor = "/routine-editor",
   Welcome = "/welcome",
   Login = "/login",
   Register = "/register",
@@ -30,6 +31,10 @@ export const ROUTE_SETTINGS: {
   },
   [RouterPath.WorkoutEditor]: {
     title: "Workout Editor",
+    appBar: true,
+  },
+  [RouterPath.RoutineEditor]: {
+    title: "Routine Editor",
     appBar: true,
   },
 };

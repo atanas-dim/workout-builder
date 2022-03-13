@@ -7,6 +7,7 @@ import { AppProps } from "next/app";
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 
 import { AuthProvider } from "../context/AuthContext";
+import { RoutinesProvider } from "../context/RoutinesContext";
 import { WorkoutsProvider } from "../context/WorkoutsContext";
 
 import { CssBaseline } from "@mui/material/";
@@ -27,14 +28,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           <CssBaseline />
 
           <AuthProvider>
-            <WorkoutsProvider>
-              {ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar && (
-                <Header />
-              )}
-              <Component {...pageProps} />
-              {ROUTE_SETTINGS[router.pathname as RouterPath]?.bottomNavValue !==
-                undefined && <BottomNav />}
-            </WorkoutsProvider>
+            <RoutinesProvider>
+              <WorkoutsProvider>
+                {ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar && (
+                  <Header />
+                )}
+                <Component {...pageProps} />
+                {ROUTE_SETTINGS[router.pathname as RouterPath]
+                  ?.bottomNavValue !== undefined && <BottomNav />}
+              </WorkoutsProvider>
+            </RoutinesProvider>
           </AuthProvider>
         </ThemeProvider>
       </StyledEngineProvider>

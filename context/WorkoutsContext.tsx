@@ -29,10 +29,14 @@ export type WorkoutExerciseEntry = {
 
 export type Workout = {
   id: string;
+  routineId: string;
+  indexInRoutine: string;
   title: string;
   exercises: WorkoutExerciseEntry[];
   created: Timestamp;
+  updated?: Timestamp;
 };
+
 type WorkoutsContextValue = {
   workoutsData: Workout[];
   isLoading: boolean;
@@ -68,7 +72,11 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const subscribeToWorkoutsData = async () => {
     if (!workoutsCollectionRef) return;
 
-    const workoutsQuery = query(workoutsCollectionRef, orderBy("title"));
+    const workoutsQuery = query(
+      workoutsCollectionRef,
+      orderBy("routineId", "desc"),
+      orderBy("indexInRoutine")
+    );
 
     onSnapshot(
       workoutsQuery,
@@ -79,8 +87,23 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         querySnapshot.forEach((doc) => {
           const id = doc.id;
           const data = doc.data();
-          const { title, exercises, created } = data;
-          workouts.push({ id, title, exercises, created });
+          const {
+            title,
+            exercises,
+            created,
+            updated,
+            routineId,
+            indexInRoutine,
+          } = data;
+          workouts.push({
+            id,
+            title,
+            exercises,
+            created,
+            updated,
+            routineId,
+            indexInRoutine,
+          });
         });
 
         setWorkoutsData(workouts);

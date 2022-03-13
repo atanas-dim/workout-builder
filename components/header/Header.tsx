@@ -52,15 +52,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     maxWidth: theme.breakpoints.values.md,
     padding: theme.spacing(0, 3),
-    justifyContent: "center",
+    justifyContent: "space-between",
     position: "relative",
     transition: theme.transitions.create(["height"], {
       duration: theme.transitions.duration.short,
     }),
   },
   installButton: {
-    position: "absolute",
-    right: 24,
+    // position: "absolute",
+    // right: 24,
     animation: `$pulse 12s ${theme.transitions.easing.easeInOut} infinite `,
   },
   "@keyframes pulse": {
@@ -78,17 +78,20 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Header() {
   const classes = useStyles();
-  const router = useRouter();
+  const { push, pathname, back } = useRouter();
 
   const [deferredPrompt, setDeferredPrompt] = useState<any>();
   const [isStandalone, setIsStandalone] = useState<boolean>(false);
   const [showInstallButton, setShowInstallButton] = useState<boolean>(false);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
 
+  const showBackButton =
+    pathname === RouterPath.WorkoutEditor ||
+    pathname === RouterPath.RoutineEditor;
+
   const onBackClick = () => {
-    if (router.pathname === RouterPath.WorkoutEditor)
-      router.push(RouterPath.Workouts);
-    else router.back();
+    if (pathname === RouterPath.WorkoutEditor) push(RouterPath.Workouts);
+    else back();
   };
 
   // INSTALL PROMPT FOR PWA
@@ -180,32 +183,36 @@ export default function Header() {
         sx={{ height: scrollTrigger ? 40 : 56 }}
       >
         <Toolbar id="header-toolbar" className={classes.toolbar}>
-          {router.pathname === RouterPath.WorkoutEditor && (
-            <IconButton
-              sx={{ position: "absolute", left: 24 }}
-              onClick={onBackClick}
-            >
-              <BackIcon fontSize="small" />
-            </IconButton>
-          )}
-          <Typography variant="h6" component="h1">
-            {ROUTE_SETTINGS[router.pathname as RouterPath]?.title}
+          <Box id="left-controls">
+            {showBackButton && (
+              <IconButton
+                // sx={{ position: "absolute", left: 16 }}
+                onClick={onBackClick}
+              >
+                <BackIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Box>
+          <Typography variant="h6" component="h1" noWrap>
+            {ROUTE_SETTINGS[pathname as RouterPath]?.title}
           </Typography>
 
-          {router.pathname !== RouterPath.WorkoutEditor && showInstallButton && (
-            <>
-              <IconButton
-                onClick={onInstallClick}
-                className={classes.installButton}
-              >
-                <DownloadIcon />
-              </IconButton>
-              <InstallInstructionsModal
-                showModal={showInstallModal}
-                hideModal={() => setShowInstallModal(false)}
-              />
-            </>
-          )}
+          <Box id="right-controls">
+            {pathname !== RouterPath.WorkoutEditor && showInstallButton && (
+              <>
+                <IconButton
+                  onClick={onInstallClick}
+                  className={classes.installButton}
+                >
+                  <DownloadIcon />
+                </IconButton>
+                <InstallInstructionsModal
+                  showModal={showInstallModal}
+                  hideModal={() => setShowInstallModal(false)}
+                />
+              </>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
     </>
