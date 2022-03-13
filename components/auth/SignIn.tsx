@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextField, Typography, Box } from "@mui/material/";
 import ActionButton from "../buttons/ActionButton";
 
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

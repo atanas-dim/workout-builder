@@ -8,9 +8,8 @@ import { useRouter } from "next/router";
 import { RouterPath } from "../resources/routes";
 
 import { withAuth } from "../context/AuthContext";
-import { Workout } from "../context/WorkoutsContext";
+import { RoutineGroup } from "../context/WorkoutsContext";
 
-import useRoutines from "../hooks/useRoutines";
 import useWorkouts from "../hooks/useWorkouts";
 
 import {
@@ -32,68 +31,10 @@ import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 
 import WorkoutCard from "../components/cards/WorkoutCard";
 
-import { Timestamp } from "firebase/firestore";
-
-type RoutineGroup = {
-  id?: string;
-  title: string;
-  workouts: Workout[];
-  updated: Timestamp;
-};
-
 // ToDo: Simplify and separate the code on this file
 const Workouts: NextPage = () => {
-  const { workoutsData, isLoading, isSorted, setIsSorted } = useWorkouts();
-  const { routinesData } = useRoutines();
-  const [sortedData, setSortedData] = useState<{
-    [key: string]: RoutineGroup;
-  }>();
-
-  const getSortedWorkoutsByRoutine = () => {
-    const routineGroups: {
-      [key: string]: RoutineGroup;
-    } = {
-      unsorted: {
-        id: undefined,
-        title: "Unsorted",
-        workouts: [],
-        updated: Timestamp.fromDate(new Date(0, 0, 0)),
-      },
-    };
-
-    routinesData.forEach((routine) => {
-      routineGroups[routine.id] = {
-        id: routine.id,
-        title: routine.title,
-        workouts: [],
-        updated: routine.created,
-      };
-    });
-
-    workoutsData.forEach((workout) => {
-      if (routineGroups?.[workout.routineId]) {
-        routineGroups[workout.routineId].workouts.push(workout);
-        if (routineGroups[workout.routineId].updated < workout.updated)
-          routineGroups[workout.routineId].updated = workout.updated;
-      } else if (workout.routineId && !routineGroups?.[workout.routineId]) {
-        routineGroups[workout.routineId] = {
-          id: workout.routineId,
-          title: "Missing routine",
-          workouts: [workout],
-          updated: workout.updated || workout.created,
-        };
-      } else if (!workout.routineId) {
-        routineGroups.unsorted.workouts.push(workout);
-      }
-    });
-    console.log({ routineGroups });
-
-    return routineGroups;
-  };
-
-  useEffect(() => {
-    setSortedData(getSortedWorkoutsByRoutine());
-  }, [routinesData, workoutsData]);
+  const { workoutsData, isLoading, isSorted, setIsSorted, sortedWorkoutsData } =
+    useWorkouts();
 
   return (
     <>
@@ -155,16 +96,22 @@ const Workouts: NextPage = () => {
         )}
 
         {isSorted &&
-          sortedData &&
-          Object.keys(sortedData)
+          sortedWorkoutsData &&
+          Object.keys(sortedWorkoutsData)
             .sort((a, b) =>
-              sortedData[a].updated < sortedData[b].updated ? 1 : -1
+              sortedWorkoutsData[a].title < sortedWorkoutsData[b].title ? 1 : -1
             )
+            .sort((a, b) =>
+              sortedWorkoutsData[a].updated < sortedWorkoutsData[b].updated
+                ? 1
+                : -1
+            )
+
             .map((key) => {
               return (
                 <RoutineContainer
                   key={"routine-" + key}
-                  data={sortedData[key]}
+                  data={sortedWorkoutsData[key]}
                 />
               );
             })}
@@ -173,7 +120,7 @@ const Workouts: NextPage = () => {
           workoutsData.map((workout, index) => {
             return (
               <WorkoutCard
-                key={"workout-" + workout.id}
+                key={"workout-card-" + index}
                 index={index}
                 workout={workout}
               />
@@ -224,36 +171,40 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
         >
           {data.title}
         </Typography>
-        <IconButton
-          id={"more-button-" + data.id}
-          data-routine-id={data.id}
-          onClick={() => handleMoreClick("more-button-" + data.id)}
-        >
-          <MoreIcon />
-        </IconButton>
-        <Menu
-          id="menu-appbar"
-          anchorEl={menuAnchorEl}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          keepMounted
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          open={Boolean(menuAnchorEl)}
-          onClose={() => setMenuAnchorEl(null)}
-        >
-          <MenuItem onClick={onEditRoutineClick}>Edit routine</MenuItem>
-        </Menu>
+        {data.id && (
+          <>
+            <IconButton
+              id={"more-button-" + data.id}
+              data-routine-id={data.id}
+              onClick={() => handleMoreClick("more-button-" + data.id)}
+            >
+              <MoreIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={menuAnchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(menuAnchorEl)}
+              onClose={() => setMenuAnchorEl(null)}
+            >
+              <MenuItem onClick={onEditRoutineClick}>Edit routine</MenuItem>
+            </Menu>
+          </>
+        )}
       </Box>
       {data.workouts.length ? (
         data.workouts.map((workout, index) => {
           return (
             <WorkoutCard
-              key={"workout-" + workout.id}
+              key={"workout-" + data.id + index}
               index={index}
               workout={workout}
             />
@@ -262,7 +213,13 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
       ) : (
         <Card
           elevation={0}
-          sx={{ p: 2, width: "100%", opacity: 0.65, textAlign: "center" }}
+          sx={{
+            p: 2,
+            mb: 2,
+            width: "100%",
+            opacity: 0.65,
+            textAlign: "center",
+          }}
         >
           Empty
         </Card>

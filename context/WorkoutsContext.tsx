@@ -17,7 +17,8 @@ import {
 
 import { firestore } from "../firebase/config";
 
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
+import useRoutines from "../hooks/useRoutines";
 
 export type WorkoutExerciseEntry = {
   id: string;
@@ -29,12 +30,22 @@ export type WorkoutExerciseEntry = {
 
 export type Workout = {
   id: string;
-  routineId: string;
-  indexInRoutine: string;
   title: string;
   exercises: WorkoutExerciseEntry[];
   created: Timestamp;
   updated: Timestamp;
+};
+
+export type RoutineGroup = {
+  id?: string;
+  title: string;
+  workoutsOrder: string[];
+  workouts: Workout[];
+  updated: Timestamp;
+};
+
+type RoutineGroups = {
+  [key: string]: RoutineGroup;
 };
 
 type WorkoutsContextValue = {
@@ -43,6 +54,8 @@ type WorkoutsContextValue = {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
   setIsSorted: Dispatch<SetStateAction<boolean>>;
+  sortedWorkoutsData: RoutineGroups;
+  setSortedWorkoutsData: Dispatch<SetStateAction<RoutineGroups>>;
 };
 
 const INITIAL_STATE = {
@@ -51,6 +64,8 @@ const INITIAL_STATE = {
   setIsLoading: () => {},
   isSorted: true,
   setIsSorted: () => {},
+  sortedWorkoutsData: {},
+  setSortedWorkoutsData: () => {},
 };
 
 export const WorkoutsContext =
@@ -59,8 +74,13 @@ export const WorkoutsContext =
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
   const [workoutsData, setWorkoutsData] = useState<Workout[]>([]);
+  const [sortedWorkoutsData, setSortedWorkoutsData] = useState<RoutineGroups>(
+    INITIAL_STATE.sortedWorkoutsData
+  );
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { routinesData } = useRoutines();
 
   useEffect(() => {
     console.log("updating  workouts data");
@@ -75,15 +95,13 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     ? collection(firestore, "users", user.uid, "workouts")
     : undefined;
 
+  // FETCH FROM FIRESTORE --------------------------
+
   const subscribeToWorkoutsData = async () => {
     if (!workoutsCollectionRef) return;
 
     const workoutsQuery = isSorted
-      ? query(
-          workoutsCollectionRef,
-          orderBy("routineId", "desc"),
-          orderBy("indexInRoutine")
-        )
+      ? query(workoutsCollectionRef)
       : query(workoutsCollectionRef, orderBy("title"));
 
     onSnapshot(
@@ -95,22 +113,13 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         querySnapshot.forEach((doc) => {
           const id = doc.id;
           const data = doc.data();
-          const {
-            title,
-            exercises,
-            created,
-            updated,
-            routineId,
-            indexInRoutine,
-          } = data;
+          const { title, exercises, created, updated } = data;
           workouts.push({
             id,
             title,
             exercises,
             created,
             updated,
-            routineId,
-            indexInRoutine,
           });
         });
 
@@ -123,6 +132,58 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     );
   };
 
+  // SORT WORKOUTS DATA --------------------------
+
+  const getSortedWorkoutsByRoutine = () => {
+    const routineGroups: {
+      [key: string]: RoutineGroup;
+    } = {
+      unsorted: {
+        id: undefined,
+        title: "Unsorted",
+        workouts: [],
+        workoutsOrder: [],
+        updated: Timestamp.fromDate(new Date(0, 0, 0)),
+      },
+    };
+
+    routinesData.forEach((routine) => {
+      const newGroup: RoutineGroup = {
+        id: routine.id,
+        title: routine.title,
+        workouts: [],
+        workoutsOrder: routine.workouts,
+        updated: routine.updated || routine.created,
+      };
+
+      routine?.workouts?.forEach((workoutOrderId) => {
+        const foundWorkout = workoutsData.find(
+          (workout) => workout.id === workoutOrderId
+        );
+        if (foundWorkout) newGroup.workouts.push(foundWorkout);
+      });
+
+      routineGroups[routine.id] = newGroup;
+    });
+
+    workoutsData.forEach((workout) => {
+      let existsInRoutine = false;
+      Object.keys(routineGroups).forEach((key) => {
+        if (routineGroups[key].workoutsOrder.includes(workout.id)) {
+          existsInRoutine = true;
+          return;
+        }
+      });
+      if (!existsInRoutine) routineGroups.unsorted.workouts.push(workout);
+    });
+
+    return routineGroups;
+  };
+
+  useEffect(() => {
+    setSortedWorkoutsData(getSortedWorkoutsByRoutine());
+  }, [routinesData, workoutsData]);
+
   return (
     <WorkoutsContext.Provider
       value={{
@@ -131,6 +192,8 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         setIsLoading,
         isSorted,
         setIsSorted,
+        sortedWorkoutsData,
+        setSortedWorkoutsData,
       }}
     >
       {children}

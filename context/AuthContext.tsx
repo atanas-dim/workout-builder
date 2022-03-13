@@ -4,7 +4,7 @@ import { auth } from "../firebase/config";
 import { User } from "firebase/auth";
 import { useRouter } from "next/router";
 import { RouterPath } from "../resources/routes";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 import { Box, CircularProgress, useTheme } from "@mui/material";
 
 export const AuthContext = createContext<{ user: User | null }>({

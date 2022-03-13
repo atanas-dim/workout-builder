@@ -1,8 +1,7 @@
 import { NextPage } from "next";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-import { cloneDeep } from "lodash";
 import { useRouter } from "next/router";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -10,7 +9,6 @@ import { RouterPath } from "../resources/routes";
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
 import { withAuth } from "../context/AuthContext";
-import { Routine } from "../context/RoutinesContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 import useRoutines from "../hooks/useRoutines";
@@ -25,14 +23,17 @@ import {
   Button,
   IconButton,
   Card,
+  Modal,
 } from "@mui/material";
 
 import {
-  // Add as AddIcon,
+  Add as AddIcon,
   DeleteOutline as DeleteIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
+import ActionButton from "../components/buttons/ActionButton";
+
 import { Workout } from "../context/WorkoutsContext";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -77,8 +78,10 @@ const RoutineEditor: NextPage = () => {
   const [routineTitle, setRoutineTitle] = useState("");
   const [routineWorkouts, setRoutineWorkouts] = useState<Workout[]>([]);
 
+  const [routineOrderArray, setRoutineOrderArray] = useState<string[]>([]);
+
   // WORKOUTS ----------------------
-  const { workoutsData, updateWorkout, getWorkoutsByRoutineId } = useWorkouts();
+  const { workoutsData } = useWorkouts();
 
   useEffect(() => {
     if (!existingRoutineId) router.push(RouterPath.Workouts);
@@ -89,11 +92,32 @@ const RoutineEditor: NextPage = () => {
 
     if (title) setRoutineTitle(title);
 
-    getWorkoutsByRoutineId(existingRoutineId as string).then((data) => {
-      if (!data) return;
-      setRoutineWorkouts(data);
-    });
+    const workoutsOrderArray =
+      routinesData.find((routine) => routine.id === existingRoutineId)
+        ?.workouts || [];
+    setRoutineOrderArray([...workoutsOrderArray]);
   }, [existingRoutineId]);
+
+  useEffect(() => {
+    const foundWorkouts = getRoutineWorkouts(routineOrderArray);
+
+    setRoutineWorkouts(foundWorkouts);
+  }, [routineOrderArray]);
+
+  const getRoutineWorkouts = (routineOrderArray: string[]) => {
+    const foundWorkouts: any[] = [];
+
+    routineOrderArray.forEach((entryId) => {
+      const foundWorkout = workoutsData.find(
+        (workout) => workout.id === entryId
+      );
+
+      foundWorkouts.push(foundWorkout);
+    });
+    return foundWorkouts;
+  };
+
+  // -------------------
 
   const onUpdateClick = async () => {
     if (!existingRoutineId) return;
@@ -101,20 +125,10 @@ const RoutineEditor: NextPage = () => {
     await updateRoutine({
       id: existingRoutineId as string,
       title: routineTitle,
+      workouts: routineOrderArray,
+    }).then(() => {
+      router.push(RouterPath.Workouts);
     });
-
-    let index: number = 0;
-    for (const workout of routineWorkouts) {
-      await updateWorkout({
-        id: workout.id,
-        routineId: existingRoutineId as string,
-        indexInRoutine: index.toString(),
-      }).then(() => {
-        if (index === routineWorkouts.length - 1)
-          router.push(RouterPath.Workouts);
-        else index++;
-      });
-    }
   };
 
   // Sortable functions
@@ -141,13 +155,19 @@ const RoutineEditor: NextPage = () => {
       return;
     }
 
-    const sortedWorkouts = reorder(
-      routineWorkouts,
+    const sortedWorkoutsArray = reorder(
+      routineOrderArray,
       result.source.index,
       result.destination.index
     );
 
-    setRoutineWorkouts(sortedWorkouts);
+    setRoutineOrderArray(sortedWorkoutsArray);
+  };
+
+  // -------------
+  const [showWorkoutsModal, setShowWorkoutsModal] = useState(false);
+  const onAddWorkoutClick = () => {
+    setShowWorkoutsModal(true);
   };
 
   return (
@@ -175,7 +195,7 @@ const RoutineEditor: NextPage = () => {
               >
                 {routineWorkouts.map((workout, index) => (
                   <Draggable
-                    key={workout.id}
+                    key={workout.id + index}
                     draggableId={workout.id}
                     index={index}
                   >
@@ -193,6 +213,17 @@ const RoutineEditor: NextPage = () => {
                         {...provided.dragHandleProps}
                       >
                         <Typography>{workout.title}</Typography>
+                        <Button
+                          onClick={() => {
+                            setRoutineOrderArray((prev) =>
+                              prev.filter(
+                                (item, itemIndex) => itemIndex !== index
+                              )
+                            );
+                          }}
+                        >
+                          remove
+                        </Button>
                       </Card>
                     )}
                   </Draggable>
@@ -202,6 +233,40 @@ const RoutineEditor: NextPage = () => {
             )}
           </Droppable>
         </DragDropContext>
+
+        <ActionButton
+          label="Add workout"
+          onClick={onAddWorkoutClick}
+          sx={{ mb: 2 }}
+          fullWidth
+          endIcon={<AddIcon />}
+        />
+        {
+          <Modal
+            open={showWorkoutsModal}
+            onClose={() => setShowWorkoutsModal(false)}
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <Card sx={{ m: 2, p: 2, width: "100%" }}>
+              workouts
+              <Box>
+                {workoutsData.map((workout) => {
+                  return (
+                    <Button
+                      key={"workout-button-" + workout.id}
+                      sx={{ border: "solid 1px lightgrey" }}
+                      onClick={() =>
+                        setRoutineOrderArray((prev) => [...prev, workout.id])
+                      }
+                    >
+                      {workout.title}
+                    </Button>
+                  );
+                })}
+              </Box>
+            </Card>
+          </Modal>
+        }
 
         <Paper square elevation={0} className={classes.saveButtonContainer}>
           <Button

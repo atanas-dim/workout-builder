@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { RouterPath } from "../resources/routes";
 
 import SignUp from "../components/auth/SignUp";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 import { Box, Container, Typography } from "@mui/material";
 import ActionButton from "../components/buttons/ActionButton";

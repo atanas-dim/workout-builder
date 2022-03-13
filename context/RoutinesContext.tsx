@@ -17,12 +17,14 @@ import {
 
 import { firestore } from "../firebase/config";
 
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 export type Routine = {
   id: string;
   title: string;
   created: Timestamp;
+  updated: Timestamp;
+  workouts: string[];
 };
 type RoutinesContextValue = {
   routinesData: Routine[];
@@ -70,8 +72,8 @@ export const RoutinesProvider: FC = ({ children }: any) => {
         querySnapshot.forEach((doc) => {
           const id = doc.id;
           const data = doc.data();
-          const { title, created } = data;
-          routines.push({ id, title, created });
+          const { title, created, updated, workouts } = data;
+          routines.push({ id, title, created, workouts, updated });
         });
 
         setRoutinesData(routines);

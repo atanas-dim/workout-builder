@@ -8,38 +8,34 @@ import {
   Timestamp,
   collection,
   doc,
-  getDocs,
   getDoc,
   updateDoc,
   deleteDoc,
-  query,
-  where,
-  orderBy,
 } from "firebase/firestore";
 
 import { firestore } from "../firebase/config";
 
 export default function useWorkouts() {
-  const { workoutsData, isLoading, setIsLoading, isSorted, setIsSorted } =
-    useContext(WorkoutsContext);
+  const {
+    workoutsData,
+    isLoading,
+    setIsLoading,
+    isSorted,
+    setIsSorted,
+    sortedWorkoutsData,
+  } = useContext(WorkoutsContext);
   const { user } = useContext(AuthContext);
 
   const workoutsCollectionRef = user
     ? collection(firestore, "users", user.uid, "workouts")
     : undefined;
 
-  const createWorkout = async ({
-    title,
-    routineId,
-    exercises,
-  }: Partial<Workout>) => {
+  const createWorkout = async ({ title, exercises }: Partial<Workout>) => {
     if (!title || !workoutsCollectionRef) return;
 
     try {
       const { id } = await addDoc(workoutsCollectionRef, {
         title,
-        routineId,
-        indexInRoutine: "",
         exercises,
         created: Timestamp.fromDate(new Date()),
       });
@@ -57,7 +53,6 @@ export default function useWorkouts() {
 
       await updateDoc(docRef, {
         ...data,
-        indexInRoutine: data.routineId ? data.indexInRoutine : "",
         updated: Timestamp.fromDate(new Date()),
       });
     } catch (error) {
@@ -95,51 +90,6 @@ export default function useWorkouts() {
     }
   };
 
-  const getWorkoutsByRoutineId = async (routineId: string) => {
-    if (!workoutsCollectionRef || !routineId) return;
-
-    setIsLoading(true);
-
-    try {
-      const workouts: Workout[] = [];
-
-      const workoutsByRoutineQuery = query(
-        workoutsCollectionRef,
-        where("routineId", "==", routineId),
-        orderBy("indexInRoutine", "asc")
-      );
-
-      await getDocs(workoutsByRoutineQuery).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const id = doc.id;
-          const data = doc.data();
-          const {
-            title,
-            exercises,
-            created,
-            updated,
-            routineId,
-            indexInRoutine,
-          } = data;
-          workouts.push({
-            id,
-            title,
-            exercises,
-            created,
-            updated,
-            routineId,
-            indexInRoutine,
-          });
-        });
-      });
-
-      setIsLoading(false);
-      return workouts;
-    } catch (error) {
-      console.error("Error loading data: ", error);
-    }
-  };
-
   return {
     isLoading,
     createWorkout,
@@ -147,8 +97,9 @@ export default function useWorkouts() {
     deleteWorkout,
     workoutsData,
     getWorkoutById,
-    getWorkoutsByRoutineId,
+
     isSorted,
     setIsSorted,
+    sortedWorkoutsData,
   };
 }

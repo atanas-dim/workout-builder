@@ -8,7 +8,7 @@ import { Typography } from "@mui/material/";
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
 
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 const Home: NextPage = () => {
   const { user, signOut } = useAuth();

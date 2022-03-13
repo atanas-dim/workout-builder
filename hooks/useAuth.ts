@@ -13,7 +13,7 @@ import { auth } from "../firebase/config";
 import useUserProfile from "./useUserProfile";
 import { RouterPath } from "../resources/routes";
 
-export const useAuth = () => {
+const useAuth = () => {
   const { user } = useContext(AuthContext);
   const [error, setError] = useState("");
   const { createUserDataInFirestore } = useUserProfile();
@@ -82,3 +82,5 @@ export const useAuth = () => {
 
   return { user, error, signUp, signIn, signOut };
 };
+
+export default useAuth;
