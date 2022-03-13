@@ -45,21 +45,20 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   }, [routinesData]);
 
   useEffect(() => {
-    if (user) subscribeToRoutinesData();
-  }, [user]);
+    if (!user) return;
 
-  const routinesCollectionRef = user
-    ? collection(firestore, "users", user.uid, "routines")
-    : undefined;
-
-  const subscribeToRoutinesData = async () => {
-    if (!routinesCollectionRef) return;
+    const routinesCollectionRef = collection(
+      firestore,
+      "users",
+      user.uid,
+      "routines"
+    );
 
     const routinesQuery = query(routinesCollectionRef);
 
-    onSnapshot(
+    const unsubscribe = onSnapshot(
       routinesQuery,
-      async (querySnapshot) => {
+      (querySnapshot) => {
         setIsLoading(true);
         const routines: Routine[] = [];
 
@@ -77,7 +76,8 @@ export const RoutinesProvider: FC = ({ children }: any) => {
         console.error("Error loading data: ", error);
       }
     );
-  };
+    return () => unsubscribe();
+  }, [user]);
 
   return (
     <RoutinesContext.Provider

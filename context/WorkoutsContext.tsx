@@ -86,27 +86,22 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     console.log("updating  workouts data");
   }, [workoutsData]);
 
+  // FETCH FROM FIRESTORE --------------------------
   useEffect(() => {
     if (!user) return;
-    subscribeToWorkoutsData();
-  }, [user, isSorted]);
 
-  const workoutsCollectionRef = user
-    ? collection(firestore, "users", user.uid, "workouts")
-    : undefined;
+    const workoutsCollectionRef = collection(
+      firestore,
+      "users",
+      user.uid,
+      "workouts"
+    );
 
-  // FETCH FROM FIRESTORE --------------------------
+    const workoutsQuery = query(workoutsCollectionRef, orderBy("title"));
 
-  const subscribeToWorkoutsData = async () => {
-    if (!workoutsCollectionRef) return;
-
-    const workoutsQuery = isSorted
-      ? query(workoutsCollectionRef)
-      : query(workoutsCollectionRef, orderBy("title"));
-
-    onSnapshot(
+    const unsubscribe = onSnapshot(
       workoutsQuery,
-      async (querySnapshot) => {
+      (querySnapshot) => {
         setIsLoading(true);
         const workouts: Workout[] = [];
 
@@ -130,7 +125,9 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         console.error("Error loading data: ", error);
       }
     );
-  };
+
+    return () => unsubscribe();
+  }, [user]);
 
   // SORT WORKOUTS DATA --------------------------
 
