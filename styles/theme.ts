@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import { blueGrey, pink, lime, blue, cyan } from "@mui/material/colors";
+import { isMobile } from "react-device-detect";
 
 const theme = createTheme({
   palette: {
@@ -95,6 +96,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           left: 16,
+        },
+      },
+    },
+    MuiSnackbar: {
+      styleOverrides: {
+        root: {
+          ...(isMobile && { bottom: "24px !important" }),
+          margin: "auto 16px",
         },
       },
     },

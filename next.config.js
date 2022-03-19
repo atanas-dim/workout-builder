@@ -6,19 +6,10 @@ module.exports = withPWA({
   pwa: {
     dest: "public",
     runtimeCaching,
-    register: true,
+    register: false,
+    skipWaiting: false,
     disable: process.env.NODE_ENV === "development",
     sw: "/sw.js",
     dynamicStartUrlRedirect: "/login",
   },
-  // target: "serverless",
-  // async rewrites() {
-  //   return [
-  //     // Rewrite everything to `pages/index`
-  //     {
-  //       source: "/:any*",
-  //       destination: "/",
-  //     },
-  //   ];
-  // },
 });

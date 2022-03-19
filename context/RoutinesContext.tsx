@@ -41,7 +41,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updating  routines data", { routinesData });
+    console.log("updating  routines data");
   }, [routinesData]);
 
   useEffect(() => {

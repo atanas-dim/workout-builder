@@ -1,4 +1,5 @@
 import React from "react";
+
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheets } from "@mui/styles";
 
@@ -11,22 +12,8 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          {/* PWA  */}
-          <link rel="manifest" href="/manifest.json" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
-          />
-          <link rel="apple-touch-icon" href="/icon.png"></link>
-
-          <meta name="theme-color" content="#121214" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-
-          {/* Favicon Links */}
-          <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-          <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-          <link rel="icon" type="image/png" href="/icons/icon-72.png" />
         </Head>
+
         <body>
           <Main />
           <NextScript />
