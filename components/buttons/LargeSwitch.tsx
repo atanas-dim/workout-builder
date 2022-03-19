@@ -20,7 +20,7 @@ const LargeSwitch: FC<Props> = ({ checked, onChange }) => {
           borderRadius: 999,
           opacity: "0.3 !important",
         },
-        ".MuiSwitch-thumb": { color: "secondary.main" },
+        ".MuiSwitch-thumb": { color: "primary.main" },
       })}
       checked={checked}
       onChange={onChange}
