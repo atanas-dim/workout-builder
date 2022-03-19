@@ -54,8 +54,12 @@ const IconButtonWithMenu: FC<Props> = ({ id, icon, menuTitle, menuItems }) => {
             {menuTitle}
           </Typography>
         )}
-        {menuItems?.map((item) => (
-          <MenuItem onClick={item.onClick} sx={{ minWidth: 120 }}>
+        {menuItems?.map((item, index) => (
+          <MenuItem
+            key={"menu-item-" + id + index}
+            onClick={item.onClick}
+            sx={{ minWidth: 120 }}
+          >
             {item.label}
           </MenuItem>
         ))}
