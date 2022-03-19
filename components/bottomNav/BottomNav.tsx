@@ -3,22 +3,23 @@ import { useRouter } from "next/router";
 
 import { isStandaloneOnMobileSafari } from "../../utilities/pwaHelpers/checkStandaloneMode";
 
+import { makeStyles } from "@mui/styles";
+import { alpha, Theme } from "@mui/material/styles";
+
 import {
   BottomNavigation,
   BottomNavigationAction,
   Paper,
   ButtonBase,
   Box,
+  useScrollTrigger,
 } from "@mui/material/";
+
 import {
   ListAlt as WorkoutsIcon,
   // FitnessCenter as ExercisesIcon,
 } from "@mui/icons-material";
 import ArmFlexIcon from "../icons/ArmFlexIcon";
-
-import { makeStyles } from "@mui/styles";
-import { alpha } from "@mui/material/styles";
-import { Theme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: "max-content",
     margin: "auto",
     zIndex: theme.zIndex.appBar,
+    transition: "transform 0.3s ease-in-out",
   },
   bottomNavBg: {
     background: `linear-gradient(transparent, ${alpha(
@@ -64,6 +66,11 @@ export default function BottomNav() {
     push(path);
   };
 
+  // SHOW/HIDE bottom nav on scroll
+  const scrollTrigger = useScrollTrigger({
+    threshold: 100,
+  });
+
   return (
     <>
       <Box className={classes.bottomNavBg} role="presentation" />
@@ -71,7 +78,10 @@ export default function BottomNav() {
         square
         elevation={1}
         className={classes.root}
-        sx={{ bottom: isStandalone ? 24 : 16 }}
+        sx={{
+          bottom: isStandalone ? 24 : 16,
+          transform: scrollTrigger ? "translateY(150%)" : "translateY(0)",
+        }}
       >
         <ButtonBase
           sx={{

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import Link from "next/link";
+
 import React, { FC, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
@@ -12,33 +12,24 @@ import { RoutineGroup } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 
-import {
-  CircularProgress,
-  Box,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
-  Switch,
-  Card,
-} from "@mui/material";
+import { CircularProgress, Box, Typography, Card } from "@mui/material";
 import {
   AddCircleOutline as AddIcon,
   MoreHoriz as MoreIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-
 import WorkoutCard from "../components/cards/WorkoutCard";
+import IconButtonWithMenu from "../components/buttons/IconButtonWithMenu";
+import LargeSwitch from "../components/buttons/LargeSwitch";
 
-// ToDo: Simplify and separate the code on this file
 const Workouts: NextPage = () => {
   const { workoutsData, isLoading, isSorted, setIsSorted, sortedWorkoutsData } =
     useWorkouts();
 
   return (
     <>
-      <AddWorkoutButton />
+      <CreateButton />
       <MainContentWrapper>
         <Box
           display="flex"
@@ -55,24 +46,12 @@ const Workouts: NextPage = () => {
           >
             by Title
           </Typography>
-          <Switch
-            sx={(theme) => ({
-              width: 64,
-              height: 32,
-              m: theme.spacing(0, 1),
-              p: 0,
-              ".MuiSwitch-switchBase": { p: "6px" },
-              ".Mui-checked": { transform: "translateX(32px) !important" },
-              ".MuiSwitch-track": {
-                bgcolor: `${theme.palette.grey[600]} !important`,
-                borderRadius: 999,
-                opacity: "0.3 !important",
-              },
-              ".MuiSwitch-thumb": { color: "primary.main" },
-            })}
+
+          <LargeSwitch
             checked={isSorted}
             onChange={() => setIsSorted((prev) => !prev)}
           />
+
           <Typography
             component="span"
             variant="overline"
@@ -106,7 +85,6 @@ const Workouts: NextPage = () => {
                 ? 1
                 : -1
             )
-
             .map((key) => {
               return (
                 <RoutineContainer
@@ -131,22 +109,16 @@ const Workouts: NextPage = () => {
   );
 };
 
+// ROUTINE GROUP -----------------------------------
+
 type RoutineContainerProps = {
   data: RoutineGroup;
 };
+
 const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
   const { push } = useRouter();
 
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-
-  const handleMoreClick = (anchorId: string) => {
-    setMenuAnchorEl(document.getElementById(anchorId));
-  };
-
-  const onEditRoutineClick = (event: React.MouseEvent<HTMLElement>) => {
-    //@ts-ignore
-    const routineId = menuAnchorEl?.attributes?.["data-routine-id"]?.value;
-
+  const onEditRoutineClick = (routineId?: string) => {
     if (!routineId) return;
     push({ pathname: RouterPath.RoutineEditor, query: { routineId } });
   };
@@ -171,40 +143,27 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
         >
           {data.title}
         </Typography>
+
         {data.id && (
-          <>
-            <IconButton
-              id={"more-button-" + data.id}
-              data-routine-id={data.id}
-              onClick={() => handleMoreClick("more-button-" + data.id)}
-            >
-              <MoreIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={menuAnchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(menuAnchorEl)}
-              onClose={() => setMenuAnchorEl(null)}
-            >
-              <MenuItem onClick={onEditRoutineClick}>Edit routine</MenuItem>
-            </Menu>
-          </>
+          <IconButtonWithMenu
+            id={data.id}
+            icon={<MoreIcon fontSize="small" />}
+            menuTitle="Routine"
+            menuItems={[
+              {
+                label: "Edit",
+                onClick: () => onEditRoutineClick(data.id),
+              },
+            ]}
+          />
         )}
       </Box>
+
       {data.workouts.length ? (
         data.workouts.map((workout, index) => {
           return (
             <WorkoutCard
-              key={"workout-" + data.id + index}
+              key={"workout-" + data.id + workout.id}
               index={index}
               workout={workout}
             />
@@ -228,7 +187,10 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
   );
 };
 
-const AddWorkoutButton = () => {
+// CREATE BUTTON ON HEADER -----------------------------------
+
+const CreateButton = () => {
+  const { push } = useRouter();
   const [headerToolbarElement, setHeaderToolbarElement] =
     useState<HTMLElement | null>();
 
@@ -237,13 +199,23 @@ const AddWorkoutButton = () => {
     setHeaderToolbarElement(headerToolbar);
   }, []);
 
+  const onCreateWorkoutClick = () => {
+    push(RouterPath.WorkoutEditor);
+  };
+
   return headerToolbarElement
     ? ReactDOM.createPortal(
-        <Link href={RouterPath.WorkoutEditor} passHref>
-          <IconButton>
-            <AddIcon />
-          </IconButton>
-        </Link>,
+        <IconButtonWithMenu
+          id="create-new"
+          icon={<AddIcon />}
+          menuTitle="Create"
+          menuItems={[
+            {
+              label: "Workout",
+              onClick: onCreateWorkoutClick,
+            },
+          ]}
+        />,
         headerToolbarElement
       )
     : null;

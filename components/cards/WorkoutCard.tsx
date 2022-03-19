@@ -1,11 +1,13 @@
 import React, { FC, useState, useEffect } from "react";
 
 import { useRouter } from "next/router";
+
 import { RouterPath } from "../../resources/routes";
 
-import { Workout } from "../../context/WorkoutsContext";
-
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+import { generateRandomId } from "../../utilities/general/helpers";
+
+import { Workout } from "../../context/WorkoutsContext";
 
 import {
   Card,
@@ -20,12 +22,13 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
+  MoreHoriz as MoreIcon,
 } from "@mui/icons-material/";
-
-import ActionButton from "../buttons/ActionButton";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
+
+import IconButtonWithMenu from "../buttons/IconButtonWithMenu";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -41,15 +44,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
       marginBottom: 0,
     },
   },
-  // smallButton: {
-  //   padding: theme.spacing(0.5, 1.5),
-  //   minHeight: "auto",
-  //   lineHeight: 1,
-  //   height: 32,
-  //   "& > .MuiButton-endIcon": {
-  //     marginLeft: theme.spacing(0.5),
-  //   },
-  // },
 }));
 
 type Props = {
@@ -74,7 +68,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
     };
   }, []);
 
-  const onEditClick = () => {
+  const onEditWorkoutClick = () => {
     router.push({
       pathname: RouterPath.WorkoutEditor,
       query: { workoutId: workout.id },
@@ -94,21 +88,17 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
             component="h2"
             variant="body1"
             noWrap
-            sx={{ fontWeight: 500, width: "calc(100% - 20px)" }}
+            sx={{
+              fontWeight: 500,
+              width: "calc(100% - 20px)",
+              lineHeight: "36px",
+            }}
+            onClick={() => setExpanded((prev) => !prev)}
           >
             {workout.title}
           </Typography>
+
           <Box display="flex" justifyContent="flex-end" alignItems="center">
-            {expanded && (
-              <ActionButton
-                size="small"
-                label="Edit"
-                variant="text"
-                onClick={onEditClick}
-                color="primary"
-                sx={{ ml: 1 }}
-              />
-            )}
             <IconButton
               onClick={() => setExpanded((prev) => !prev)}
               size="small"
@@ -117,8 +107,21 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
             >
               {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
+
+            <IconButtonWithMenu
+              id={generateRandomId()}
+              icon={<MoreIcon fontSize="small" />}
+              menuTitle="Workout"
+              menuItems={[
+                {
+                  label: "Edit",
+                  onClick: onEditWorkoutClick,
+                },
+              ]}
+            />
           </Box>
         </Box>
+
         <Collapse
           in={expanded}
           timeout={workout.exercises.length * 100}

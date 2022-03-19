@@ -169,7 +169,7 @@ export default function Header() {
 
   // SCROLL EFFECT ON HEADER HEIGHT
   const scrollTrigger = useScrollTrigger({
-    threshold: 1,
+    threshold: 10,
   });
 
   return (

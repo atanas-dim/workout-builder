@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { RouterPath } from "../resources/routes";
+
+import { generateRandomId } from "../utilities/general/helpers";
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
 import { withAuth } from "../context/AuthContext";
@@ -63,10 +65,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const generateExerciseId = (prefix: string = "") => {
-  return Math.random().toString(36).replace("0.", prefix);
-};
-
 const WorkoutEditor: NextPage = () => {
   const classes = useStyles();
   const router = useRouter();
@@ -103,7 +101,7 @@ const WorkoutEditor: NextPage = () => {
 
   const onAddExerciseClick = () => {
     const newExercise = {
-      id: generateExerciseId(),
+      id: generateRandomId(),
       name: "",
       reps: "",
       sets: "",
