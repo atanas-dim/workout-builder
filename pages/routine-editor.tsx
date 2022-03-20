@@ -122,7 +122,6 @@ const RoutineEditor: NextPage = () => {
   };
 
   const removeWorkout = (index: number) => {
-    console.log({ index });
     setRoutineOrderArray((prev) =>
       prev.filter((item, itemIndex) => itemIndex !== index)
     );

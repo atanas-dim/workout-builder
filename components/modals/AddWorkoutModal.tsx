@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { alpha } from "@mui/system";
@@ -52,10 +52,6 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
     if (!value || !value.id) setSelectedWorkout(undefined);
     else setSelectedWorkout(value);
   };
-
-  useEffect(() => {
-    console.log({ selectedWorkoutId: selectedWorkout });
-  }, [selectedWorkout]);
 
   const options = workoutsData.map((workout) => ({
     label: workout.title,
