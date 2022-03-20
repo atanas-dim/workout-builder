@@ -26,11 +26,7 @@ const Home: NextPage = () => {
           Hi {user?.displayName} 💪
         </Typography>
 
-        <ActionButton
-          label="Sign out"
-          variant="outlined"
-          onClick={() => signOut()}
-        />
+        <ActionButton label="Sign out" onClick={() => signOut()} />
       </MainContentWrapper>
     </>
   );

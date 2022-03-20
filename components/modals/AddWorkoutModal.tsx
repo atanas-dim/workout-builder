@@ -9,6 +9,7 @@ import {
   Typography,
   TextField,
   Autocomplete,
+  Paper,
 } from "@mui/material";
 
 import useWorkouts from "../../hooks/useWorkouts";
@@ -81,6 +82,9 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
           options={options}
           onChange={onAutoCompleteChange}
           fullWidth
+          PaperComponent={(props) => {
+            return <Paper elevation={3} {...props} />;
+          }}
           renderInput={(params) => <TextField {...params} label="Workouts" />}
           isOptionEqualToValue={(option: any, value: any) =>
             option.label === value.label && option.id === value.id
@@ -89,6 +93,7 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
         />
         <ActionButton
           label="Add"
+          variant="contained"
           disabled={!selectedWorkout}
           onClick={handleAddClick}
         />

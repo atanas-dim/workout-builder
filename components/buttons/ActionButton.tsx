@@ -27,6 +27,13 @@ const StyledButton = styled(Button, {
         marginLeft: theme.spacing(0.5),
       },
     }),
+
+    ...(variant === "text" && {
+      backgroundColor: alpha(themeColor, 0.08),
+      "&:hover": {
+        backgroundColor: alpha(themeColor, 0.16),
+      },
+    }),
   };
 });
 
@@ -54,7 +61,7 @@ type Props = {
 };
 
 const ActionButton: FC<Props> = ({
-  variant = "outlined",
+  variant = "text",
   color = "primary",
   label,
   onClick,

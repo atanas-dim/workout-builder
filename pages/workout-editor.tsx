@@ -41,8 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    borderTop: `solid 1px ${theme.palette.divider}`,
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: "transparent",
     zIndex: 1100,
   },
   saveButton: {
@@ -229,9 +228,10 @@ const WorkoutEditor: NextPage = () => {
           endIcon={<AddIcon />}
         />
 
-        <Paper square elevation={0} className={classes.saveButtonContainer}>
+        <Paper square elevation={3} className={classes.saveButtonContainer}>
           <Button
             variant="contained"
+            disableElevation
             className={classes.saveButton}
             sx={{
               p: 0,

@@ -1,12 +1,12 @@
 import { createTheme } from "@mui/material/styles";
-import { blueGrey, pink, lime, blue, cyan } from "@mui/material/colors";
+import { blueGrey, pink, lime, cyan } from "@mui/material/colors";
 import { isMobile } from "react-device-detect";
 
 const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: cyan[200],
+      main: cyan[300],
       light: cyan[100],
     },
     secondary: {
@@ -17,8 +17,8 @@ const theme = createTheme({
       main: pink[500],
     },
     background: {
-      // default: "#010b14",
-      // paper: "#071927",
+      // default: "#021b27",
+      // paper: "#0a2e43",
       default: "#121214",
       paper: "#25252d",
     },
