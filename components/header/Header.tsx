@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     left: 16,
     right: 16,
     margin: "auto",
+    padding: "0 !important",
     width: "calc(100% - 32px)",
     maxWidth: theme.breakpoints.values.md,
     transition: theme.transitions.create(["height"], {

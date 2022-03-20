@@ -29,10 +29,13 @@ import {
 import {
   Add as AddIcon,
   DeleteOutline as DeleteIcon,
+  Cancel as RemoveIcon,
+  DragIndicator as DragIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
+import AddWorkoutModal from "../components/modals/AddWorkoutModal";
 
 import { Workout } from "../context/WorkoutsContext";
 
@@ -64,6 +67,7 @@ const RoutineEditor: NextPage = () => {
   const router = useRouter();
 
   const existingRoutineId = router.query.routineId;
+  const isExistingRoutine = !!existingRoutineId;
 
   const [isStandalone, setIsStandalone] = useState(false);
 
@@ -73,7 +77,7 @@ const RoutineEditor: NextPage = () => {
 
   // ROUTINE ----------------------
 
-  const { routinesData, updateRoutine } = useRoutines();
+  const { routinesData, createRoutine, updateRoutine } = useRoutines();
 
   const [routineTitle, setRoutineTitle] = useState("");
   const [routineWorkouts, setRoutineWorkouts] = useState<Workout[]>([]);
@@ -84,7 +88,7 @@ const RoutineEditor: NextPage = () => {
   const { workoutsData } = useWorkouts();
 
   useEffect(() => {
-    if (!existingRoutineId) router.push(RouterPath.Workouts);
+    if (!existingRoutineId) return;
 
     const title = routinesData.filter(
       (routine) => routine.id === existingRoutineId
@@ -117,7 +121,20 @@ const RoutineEditor: NextPage = () => {
     return foundWorkouts;
   };
 
+  const removeWorkout = (index: number) => {
+    console.log({ index });
+    setRoutineOrderArray((prev) =>
+      prev.filter((item, itemIndex) => itemIndex !== index)
+    );
+  };
+
   // -------------------
+  const onSaveClick = async () => {
+    await createRoutine({
+      title: routineTitle,
+      workouts: routineOrderArray,
+    }).then(() => router.push(RouterPath.Workouts));
+  };
 
   const onUpdateClick = async () => {
     if (!existingRoutineId) return;
@@ -166,8 +183,14 @@ const RoutineEditor: NextPage = () => {
 
   // -------------
   const [showWorkoutsModal, setShowWorkoutsModal] = useState(false);
+
   const onAddWorkoutClick = () => {
     setShowWorkoutsModal(true);
+  };
+
+  const onAddWorkoutToRoutineClick = (workoutId: string) => {
+    if (!workoutId) return;
+    setRoutineOrderArray((prev) => [...prev, workoutId]);
   };
 
   return (
@@ -196,13 +219,20 @@ const RoutineEditor: NextPage = () => {
                 {routineWorkouts.map((workout, index) => (
                   <Draggable
                     key={workout.id + index}
-                    draggableId={workout.id}
+                    draggableId={workout.id + index}
                     index={index}
                   >
                     {(provided, snapshot) => (
                       <Card
                         key={"workout-" + index}
-                        sx={{ height: 100, mb: 2 }}
+                        sx={{
+                          height: 80,
+                          mb: 2,
+                          p: 2,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                         elevation={0}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -212,18 +242,16 @@ const RoutineEditor: NextPage = () => {
                         )}
                         {...provided.dragHandleProps}
                       >
-                        <Typography>{workout.title}</Typography>
-                        <Button
-                          onClick={() => {
-                            setRoutineOrderArray((prev) =>
-                              prev.filter(
-                                (item, itemIndex) => itemIndex !== index
-                              )
-                            );
-                          }}
-                        >
-                          remove
-                        </Button>
+                        <IconButton>
+                          <DragIcon />
+                        </IconButton>
+                        <Typography noWrap sx={{ fontWeight: 500, flex: 1 }}>
+                          {workout.title}
+                        </Typography>
+
+                        <IconButton onClick={() => removeWorkout(index)}>
+                          <RemoveIcon />
+                        </IconButton>
                       </Card>
                     )}
                   </Draggable>
@@ -242,30 +270,11 @@ const RoutineEditor: NextPage = () => {
           endIcon={<AddIcon />}
         />
         {
-          <Modal
-            open={showWorkoutsModal}
-            onClose={() => setShowWorkoutsModal(false)}
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            <Card sx={{ m: 2, p: 2, width: "100%" }}>
-              workouts
-              <Box>
-                {workoutsData.map((workout) => {
-                  return (
-                    <Button
-                      key={"workout-button-" + workout.id}
-                      sx={{ border: "solid 1px lightgrey" }}
-                      onClick={() =>
-                        setRoutineOrderArray((prev) => [...prev, workout.id])
-                      }
-                    >
-                      {workout.title}
-                    </Button>
-                  );
-                })}
-              </Box>
-            </Card>
-          </Modal>
+          <AddWorkoutModal
+            show={showWorkoutsModal}
+            hide={() => setShowWorkoutsModal(false)}
+            onAddClick={onAddWorkoutToRoutineClick}
+          />
         }
 
         <Paper square elevation={0} className={classes.saveButtonContainer}>
@@ -277,14 +286,14 @@ const RoutineEditor: NextPage = () => {
               pb: isStandalone ? 3.5 : undefined,
             }}
             disabled={!routineTitle}
-            onClick={onUpdateClick}
+            onClick={isExistingRoutine ? onUpdateClick : onSaveClick}
           >
             <Typography
               component="span"
               variant="button"
               className={classes.saveButtonLabel}
             >
-              {"Update"} Routine
+              {isExistingRoutine ? "Update" : "Create"} Routine
             </Typography>
           </Button>
         </Paper>

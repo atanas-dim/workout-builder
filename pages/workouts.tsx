@@ -203,6 +203,10 @@ const CreateButton = () => {
     push(RouterPath.WorkoutEditor);
   };
 
+  const onCreateRoutineClick = () => {
+    push(RouterPath.RoutineEditor);
+  };
+
   return headerToolbarElement
     ? ReactDOM.createPortal(
         <IconButtonWithMenu
@@ -213,6 +217,10 @@ const CreateButton = () => {
             {
               label: "Workout",
               onClick: onCreateWorkoutClick,
+            },
+            {
+              label: "Routine",
+              onClick: onCreateRoutineClick,
             },
           ]}
         />,

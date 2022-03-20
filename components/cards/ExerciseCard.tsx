@@ -15,7 +15,7 @@ import {
   // InputAdornment,
 } from "@mui/material";
 import {
-  Cancel as DeleteIcon,
+  Cancel as RemoveIcon,
   DragIndicator as DragIcon,
   // Search as SearchIcon,
 } from "@mui/icons-material/";
@@ -107,7 +107,7 @@ const ExerciseCard: FC<Props> = ({
         </IconButton>
 
         <IconButton onClick={() => removeExercise(position)}>
-          <DeleteIcon />
+          <RemoveIcon />
         </IconButton>
       </Box>
 
@@ -160,13 +160,6 @@ const ExerciseCard: FC<Props> = ({
           fullWidth
           value={videoUrl}
           onChange={(e) => handleVideoUrlChange(e.target.value)}
-          // InputProps={{
-          //   startAdornment: (
-          //     <InputAdornment position="start" sx={{ opacity: 0.5 }}>
-          //       <SearchIcon />
-          //     </InputAdornment>
-          //   ),
-          // }}
         />
       </Box>
     </Card>

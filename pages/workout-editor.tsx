@@ -21,16 +21,9 @@ import { Theme } from "@mui/material/styles";
 import {
   TextField,
   Paper,
-  // Box,
   Typography,
   Button,
   IconButton,
-  // Autocomplete,
-  // createFilterOptions,
-  // Dialog,
-  // DialogActions,
-  // DialogTitle,
-  // DialogContent,
 } from "@mui/material";
 
 import {
@@ -179,72 +172,6 @@ const WorkoutEditor: NextPage = () => {
     <>
       {!!existingWorkoutId && <DeleteButton />}
       <MainContentWrapper>
-        {/* <Autocomplete
-          value={routineTitle}
-          onChange={onRoutineChange}
-          filterOptions={(options, params) => {
-            const filtered = routinesFilter(options, params);
-            if (params.inputValue !== "") {
-              filtered.unshift({
-                inputValue: `Add "${params.inputValue}"`,
-                title: params.inputValue,
-              });
-            }
-            return filtered;
-          }}
-          id="routine-input"
-          options={createRoutineOptions()}
-          getOptionLabel={(option) => {
-            // e.g value selected with enter, right from the input
-            if (typeof option === "string") {
-              return option;
-            }
-            return option.inputValue;
-          }}
-          selectOnFocus
-          handleHomeEndKeys
-          renderOption={(props, option) => {
-            return <li {...props}>{option.inputValue}</li>;
-          }}
-          sx={{ mb: 2 }}
-          freeSolo
-          clearOnBlur
-          fullWidth
-          renderInput={(params) => <TextField {...params} label="Routine" />}
-        />
-
-        <Dialog
-          open={showNewRoutineDialog}
-          onClose={() => setShowNewRoutineDialog(false)}
-          sx={{ width: "100%" }}
-        >
-          <Box
-            component="form"
-            onSubmit={onNewRoutineSubmit}
-            sx={{ width: "100%" }}
-          >
-            <DialogTitle sx={{ textAlign: "center" }}>New Routine</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="new-routine-title"
-                value={routineTitle}
-                onChange={(event) => setRoutineTitle(event.target.value)}
-                label="Routine Title"
-                type="text"
-                variant="outlined"
-              />
-            </DialogContent>
-            <DialogActions sx={{ justifyContent: "space-between" }}>
-              <Button onClick={() => setShowNewRoutineDialog(false)}>
-                Cancel
-              </Button>
-              <Button type="submit">Add</Button>
-            </DialogActions>
-          </Box>
-        </Dialog> */}
-
         <TextField
           id="workout-title"
           type="text"

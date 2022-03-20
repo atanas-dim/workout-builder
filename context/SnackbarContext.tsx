@@ -4,6 +4,7 @@ import React, {
   createContext,
   Dispatch,
   SetStateAction,
+  useRef,
 } from "react";
 
 import { doc, onSnapshot } from "firebase/firestore";
@@ -27,6 +28,7 @@ export function SnackbarProvider({ children }: any) {
   const [showSnack, setShowSnack] = useState<boolean>(false);
 
   // FETCH APP VERSION DATA FROM FIRESTORE AND COMPARE --------------------------
+  const firstRender = useRef(true);
   useEffect(() => {
     if (!user) return;
 
@@ -37,14 +39,17 @@ export function SnackbarProvider({ children }: any) {
       (doc) => {
         if (!doc.data) return;
         if (showSnack) setShowSnack(false); // resetting
-        const currentVersion = doc.get("version");
-        const userVersion = window.localStorage.getItem("version");
 
-        if (!userVersion)
+        const currentVersion = doc.get("version");
+
+        if (firstRender.current) {
           window.localStorage.setItem("version", currentVersion);
-        else if (userVersion !== currentVersion) {
-          setShowSnack(true);
-          window.localStorage.setItem("version", currentVersion);
+          firstRender.current = false;
+        } else {
+          const userVersion = window.localStorage.getItem("version");
+          if (userVersion !== currentVersion) {
+            setShowSnack(true);
+          }
         }
       },
       (error) => {

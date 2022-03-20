@@ -23,12 +23,13 @@ export default function useRoutines() {
     ? collection(firestore, "users", user.uid, "routines")
     : undefined;
 
-  const createRoutine = async (routineTitle: string) => {
-    if (!routineTitle || !routinesCollectionRef) return;
+  const createRoutine = async ({ id, title, ...data }: Partial<Routine>) => {
+    if (!title || !routinesCollectionRef) return;
 
     try {
       const { id } = await addDoc(routinesCollectionRef, {
-        title: routineTitle,
+        title,
+        ...data,
         created: Timestamp.fromDate(new Date()),
       });
       return id;
