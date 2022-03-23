@@ -12,15 +12,12 @@ type Props = {
 };
 const IconButtonWithMenu: FC<Props> = ({ id, icon, menuTitle, menuItems }) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
-  const [showMenu, setShowMenu] = useState(false);
 
   const handleMoreClick = (anchorId: string) => {
     setMenuAnchorEl(document.getElementById(anchorId));
-    setShowMenu(true);
   };
 
   const handleClose = () => {
-    setShowMenu(false);
     setMenuAnchorEl(null);
   };
 
@@ -55,7 +52,7 @@ const IconButtonWithMenu: FC<Props> = ({ id, icon, menuTitle, menuItems }) => {
               variant="overline"
               sx={(theme) => ({
                 width: "100%",
-                color: theme.palette.grey[400],
+                opacity: 0.7,
                 m: 2,
               })}
             >

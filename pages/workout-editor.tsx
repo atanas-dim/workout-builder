@@ -27,8 +27,8 @@ import {
 } from "@mui/material";
 
 import {
-  Add as AddIcon,
-  DeleteOutline as DeleteIcon,
+  AddRounded as AddIcon,
+  DeleteOutlineRounded as DeleteIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";

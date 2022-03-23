@@ -16,7 +16,7 @@ import {
 } from "@mui/material/";
 
 import {
-  ListAlt as WorkoutsIcon,
+  ListAltRounded as WorkoutsIcon,
   // FitnessCenter as ExercisesIcon,
 } from "@mui/icons-material";
 import ArmFlexIcon from "../icons/ArmFlexIcon";
@@ -58,7 +58,7 @@ export default function BottomNav() {
   }, []);
 
   useEffect(() => {
-    if (ROUTE_SETTINGS[pathname as RouterPath]?.bottomNavValue)
+    if (ROUTE_SETTINGS[pathname as RouterPath].bottomNavValue !== undefined)
       setBottomNavValue(ROUTE_SETTINGS[pathname as RouterPath].bottomNavValue);
   }, [pathname]);
 

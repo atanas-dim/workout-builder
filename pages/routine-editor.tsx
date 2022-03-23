@@ -27,10 +27,10 @@ import {
 } from "@mui/material";
 
 import {
-  Add as AddIcon,
-  DeleteOutline as DeleteIcon,
-  Cancel as RemoveIcon,
-  DragIndicator as DragIcon,
+  AddRounded as AddIcon,
+  DeleteOutlineRounded as DeleteIcon,
+  CancelRounded as RemoveIcon,
+  DragIndicatorRounded as DragIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";

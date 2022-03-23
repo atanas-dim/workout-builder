@@ -5,9 +5,9 @@ import { alpha } from "@mui/system";
 
 import { Modal, Card, Typography, IconButton } from "@mui/material";
 import {
-  IosShare as ShareIcon,
-  AddBoxOutlined as AddIcon,
-  Cancel as CloseIcon,
+  IosShareRounded as ShareIcon,
+  AddBoxRounded as AddIcon,
+  CancelRounded as CloseIcon,
 } from "@mui/icons-material/";
 
 const useStyles = makeStyles((theme: Theme) => ({

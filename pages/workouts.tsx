@@ -14,8 +14,8 @@ import useWorkouts from "../hooks/useWorkouts";
 
 import { CircularProgress, Box, Typography, Card } from "@mui/material";
 import {
-  AddCircleOutline as AddIcon,
-  MoreHoriz as MoreIcon,
+  AddCircleOutlineRounded as AddIcon,
+  MoreHorizRounded as MoreIcon,
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
@@ -137,7 +137,7 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
           variant="overline"
           sx={(theme) => ({
             width: "100%",
-            color: theme.palette.grey[400],
+            opacity: 0.7,
             ml: 1,
           })}
         >

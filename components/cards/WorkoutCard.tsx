@@ -14,15 +14,16 @@ import {
   Box,
   Typography,
   IconButton,
+  ButtonBase,
   Collapse,
   Divider,
   CardMedia,
   Grow,
 } from "@mui/material";
 import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
-  MoreHoriz as MoreIcon,
+  ExpandMoreRounded as ExpandMoreIcon,
+  ExpandLessRounded as ExpandLessIcon,
+  MoreHorizRounded as MoreIcon,
 } from "@mui/icons-material/";
 
 import { makeStyles } from "@mui/styles";
@@ -84,19 +85,29 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
           alignItems="center"
           sx={{ width: "100%" }}
         >
-          <Typography
-            component="h2"
-            variant="body1"
-            noWrap
+          <ButtonBase
             sx={{
-              fontWeight: 500,
-              width: "calc(100% - 20px)",
-              lineHeight: "36px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              borderRadius: "6px",
             }}
+            disableRipple
             onClick={() => setExpanded((prev) => !prev)}
           >
-            {workout.title}
-          </Typography>
+            <Typography
+              component="h2"
+              variant="body1"
+              noWrap
+              sx={{
+                fontWeight: 500,
+                lineHeight: "36px",
+              }}
+            >
+              {workout.title}
+            </Typography>
+          </ButtonBase>
 
           <Box display="flex" justifyContent="flex-end" alignItems="center">
             <IconButton

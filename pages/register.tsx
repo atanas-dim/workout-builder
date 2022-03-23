@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import type { NextPage } from "next";
+
 import { useRouter } from "next/router";
 
 import { RouterPath } from "../resources/routes";
@@ -9,7 +11,7 @@ import useAuth from "../hooks/useAuth";
 import { Box, Container, Typography } from "@mui/material";
 import ActionButton from "../components/buttons/ActionButton";
 
-export default function Register() {
+const Register: NextPage = () => {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -25,7 +27,7 @@ export default function Register() {
       sx={{
         width: "100vw",
         height: "100vh",
-        backgroundColor: "background.paper",
+        backgroundColor: "background.default",
       }}
     >
       <Container
@@ -43,11 +45,12 @@ export default function Register() {
         </Typography>
         <ActionButton
           label="Use existing account"
-          variant="outlined"
           fullWidth
           href={RouterPath.Login}
         />
       </Container>
     </Box>
   );
-}
+};
+
+export default Register;

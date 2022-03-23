@@ -2,7 +2,7 @@
   "name": "Workout Builder",
   "short_name": "WB",
   "theme_color": "#80deea",
-  "background_color": "rgb(25 26 31)",
+  "background_color": "#000",
   "display": "fullscreen",
   "orientation": "portrait",
   "scope": "/",

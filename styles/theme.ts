@@ -1,13 +1,21 @@
 import { createTheme } from "@mui/material/styles";
-import { blueGrey, pink, lime, cyan } from "@mui/material/colors";
+import {
+  blueGrey,
+  pink,
+  lime,
+  blue,
+  lightBlue,
+  cyan,
+} from "@mui/material/colors";
+import { alpha } from "@mui/system";
 import { isMobile } from "react-device-detect";
 
 const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: cyan[300],
-      light: cyan[100],
+      main: lightBlue[300],
+      light: lightBlue[100],
     },
     secondary: {
       main: lime[300],
@@ -17,15 +25,23 @@ const theme = createTheme({
       main: pink[500],
     },
     background: {
-      // default: "#021b27",
-      // paper: "#0a2e43",
-      default: "#121214",
-      paper: "#25252d",
+      // default: "#121214",
+      // paper: "#25252d",
+
+      default: "#000",
+      paper: "#19191f",
     },
   },
+
   shape: {
     borderRadius: 12,
   },
+
+  typography: {
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
+  },
+
   components: {
     MuiCssBaseline: {
       styleOverrides: {

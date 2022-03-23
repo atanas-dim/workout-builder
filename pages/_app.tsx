@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <link rel="apple-touch-icon" href="/icon.png"></link>
 
-        <meta name="theme-color" content="#141212" />
+        <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
         {/* Favicon Links */}

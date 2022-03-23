@@ -15,8 +15,8 @@ import {
   // InputAdornment,
 } from "@mui/material";
 import {
-  Cancel as RemoveIcon,
-  DragIndicator as DragIcon,
+  CancelRounded as RemoveIcon,
+  DragIndicatorRounded as DragIcon,
   // Search as SearchIcon,
 } from "@mui/icons-material/";
 

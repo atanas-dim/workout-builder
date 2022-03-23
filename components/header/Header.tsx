@@ -16,8 +16,8 @@ import { useScrollTrigger } from "@mui/material/";
 
 import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material/";
 import {
-  DownloadForOffline as DownloadIcon,
-  ArrowBackIosNew as BackIcon,
+  DownloadForOfflineRounded as DownloadIcon,
+  ArrowBackIosNewRounded as BackIcon,
 } from "@mui/icons-material";
 
 import InstallInstructionsModal from "../modals/InstallInstructionsModal";
