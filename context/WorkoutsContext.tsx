@@ -144,7 +144,10 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
       },
     };
 
-    routinesData.forEach((routine) => {
+    const addedToRoutines: string[] = [];
+
+    for (var rIndex = 0; rIndex < routinesData.length; rIndex++) {
+      const routine = routinesData[rIndex];
       const newGroup: RoutineGroup = {
         id: routine.id,
         title: routine.title,
@@ -153,26 +156,32 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         updated: routine.updated || routine.created,
       };
 
-      routine?.workouts?.forEach((workoutOrderId) => {
-        const foundWorkout = workoutsData.find(
-          (workout) => workout.id === workoutOrderId
-        );
-        if (foundWorkout) newGroup.workouts.push(foundWorkout);
-      });
+      for (var wIndex = workoutsData.length - 1; wIndex >= 0; wIndex--) {
+        const workout = workoutsData[wIndex];
+
+        if (newGroup.workoutsOrder.includes(workout.id)) {
+          newGroup.workouts.push(workout);
+          addedToRoutines.push(workout.id);
+        }
+      }
+
+      // Sort workouts objects by order of workout IDs from routine data
+      newGroup.workouts.sort(
+        (a, b) =>
+          newGroup.workoutsOrder.indexOf(a.id) -
+          newGroup.workoutsOrder.indexOf(b.id)
+      );
 
       routineGroups[routine.id] = newGroup;
-    });
+    }
 
-    workoutsData.forEach((workout) => {
-      let existsInRoutine = false;
-      Object.keys(routineGroups).forEach((key) => {
-        if (routineGroups?.[key]?.workoutsOrder?.includes(workout.id)) {
-          existsInRoutine = true;
-          return;
-        }
-      });
-      if (!existsInRoutine) routineGroups.unsorted.workouts.push(workout);
-    });
+    for (var wIndex = workoutsData.length - 1; wIndex >= 0; wIndex--) {
+      const workout = workoutsData[wIndex];
+
+      if (!addedToRoutines.includes(workout.id)) {
+        routineGroups.unsorted.workouts.unshift(workout);
+      }
+    }
 
     return routineGroups;
   };

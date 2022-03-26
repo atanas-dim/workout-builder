@@ -77,9 +77,9 @@ const Workouts: NextPage = () => {
         {isSorted &&
           sortedWorkoutsData &&
           Object.keys(sortedWorkoutsData)
-            .sort((a, b) =>
-              sortedWorkoutsData[a].title < sortedWorkoutsData[b].title ? 1 : -1
-            )
+            // .sort((a, b) =>
+            //   sortedWorkoutsData[a].title < sortedWorkoutsData[b].title ? 1 : -1
+            // )
             .sort((a, b) =>
               sortedWorkoutsData[a].updated < sortedWorkoutsData[b].updated
                 ? 1
