@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    borderTop: `solid 1px ${theme.palette.divider}`,
     backgroundColor: theme.palette.background.default,
     zIndex: 1100,
   },

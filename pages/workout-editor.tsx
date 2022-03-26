@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "transparent",
+    backgroundColor: theme.palette.background.default,
     zIndex: 1100,
   },
   saveButton: {

@@ -46,8 +46,10 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
 
   const { workoutsData } = useWorkouts();
 
-  const [selectedWorkout, setSelectedWorkout] =
-    useState<{ label: string; id: string }>();
+  const [selectedWorkout, setSelectedWorkout] = useState<{
+    label: string;
+    id: string;
+  }>();
 
   const onAutoCompleteChange = (event: React.SyntheticEvent, value: any) => {
     if (!value || !value.id) setSelectedWorkout(undefined);
@@ -62,6 +64,7 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
   const handleAddClick = () => {
     if (!selectedWorkout) return;
     onAddClick(selectedWorkout.id);
+    setSelectedWorkout(undefined);
     hide();
   };
 

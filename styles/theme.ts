@@ -1,13 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import {
-  blueGrey,
-  pink,
-  lime,
-  blue,
-  lightBlue,
-  cyan,
-} from "@mui/material/colors";
-import { alpha } from "@mui/system";
+import { blueGrey, pink, lime, lightBlue } from "@mui/material/colors";
 import { isMobile } from "react-device-detect";
 
 const theme = createTheme({
