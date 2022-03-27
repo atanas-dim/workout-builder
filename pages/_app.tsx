@@ -1,14 +1,13 @@
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import Head from "next/head";
-import { useEffect } from "react";
-
 import { useRouter } from "next/router";
-
 import { AppProps } from "next/app";
 
 import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 
+import { OnlineStatusProvider } from "../context/OnlineStatusContext";
 import { AuthProvider } from "../context/AuthContext";
 import { SnackbarProvider } from "../context/SnackbarContext";
 import { RoutinesProvider } from "../context/RoutinesContext";
@@ -48,20 +47,22 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          <AuthProvider>
-            <SnackbarProvider>
-              <RoutinesProvider>
-                <WorkoutsProvider>
-                  {ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar && (
-                    <Header />
-                  )}
-                  <Component {...pageProps} />
-                  {ROUTE_SETTINGS[router.pathname as RouterPath]
-                    ?.bottomNavValue !== undefined && <BottomNav />}
-                </WorkoutsProvider>
-              </RoutinesProvider>
-            </SnackbarProvider>
-          </AuthProvider>
+          <OnlineStatusProvider>
+            <AuthProvider>
+              <SnackbarProvider>
+                <RoutinesProvider>
+                  <WorkoutsProvider>
+                    {ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar && (
+                      <Header />
+                    )}
+                    <Component {...pageProps} />
+                    {ROUTE_SETTINGS[router.pathname as RouterPath]
+                      ?.bottomNavValue !== undefined && <BottomNav />}
+                  </WorkoutsProvider>
+                </RoutinesProvider>
+              </SnackbarProvider>
+            </AuthProvider>
+          </OnlineStatusProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </>

@@ -75,6 +75,7 @@ export default function BottomNav() {
     <>
       <Box className={classes.bottomNavBg} role="presentation" />
       <Paper
+        id="bottom-nav-paper"
         square
         elevation={1}
         className={classes.root}
