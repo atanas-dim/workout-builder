@@ -46,5 +46,5 @@ export default async function appVersionUpdate(
       updated: Timestamp.fromDate(new Date()).seconds,
     });
   }
-  res.status(200);
+  return res.status(200);
 }
