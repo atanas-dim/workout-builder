@@ -7,41 +7,45 @@ import useAuth from "../hooks/useAuth";
 
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
-import {
-  Timestamp,
-  collection,
-  query,
-  onSnapshot,
-  doc,
-} from "firebase/firestore";
+import { onSnapshot, doc } from "firebase/firestore";
 import { firestore } from "../firebase/config";
 
 import { ButtonBase, Zoom } from "@mui/material";
-import { alpha } from "@mui/system";
 import { PriorityHighRounded as AttentionIcon } from "@mui/icons-material";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
+import { pink } from "@mui/material/colors";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  toast: {
-    "& .Toastify__toast-theme--colored.Toastify__toast--default": {
-      backgroundColor: theme.palette.primary.main,
-    },
-    "& .Toastify__toast-theme--colored.Toastify__toast--info": {
-      backgroundColor: theme.palette.info.main,
-    },
-    "& .Toastify__toast-theme--colored.Toastify__toast--success": {
-      backgroundColor: theme.palette.success.main,
-    },
-    "& .Toastify__toast-theme--colored.Toastify__toast--warning": {
-      backgroundColor: theme.palette.warning.main,
-    },
-    "& .Toastify__toast-theme--colored.Toastify__toast--error": {
-      backgroundColor: theme.palette.error.main,
-    },
-  },
-}));
+type StyleProps = {
+  isStandalone: boolean;
+};
+
+const useStyles = (props: StyleProps) =>
+  makeStyles((theme: Theme) => {
+    return {
+      toastContainer: {
+        "& .Toastify__toast-theme--colored.Toastify__toast--default": {
+          backgroundColor: theme.palette.primary.main,
+        },
+        "& .Toastify__toast-theme--colored.Toastify__toast--info": {
+          backgroundColor: theme.palette.info.main,
+        },
+        "& .Toastify__toast-theme--colored.Toastify__toast--success": {
+          backgroundColor: theme.palette.success.main,
+        },
+        "& .Toastify__toast-theme--colored.Toastify__toast--warning": {
+          backgroundColor: theme.palette.warning.main,
+        },
+        "& .Toastify__toast-theme--colored.Toastify__toast--error": {
+          backgroundColor: theme.palette.error.main,
+        },
+      },
+      toast: {
+        ...(props.isStandalone && { paddingBottom: 32 }),
+      },
+    };
+  });
 
 type SnackbarContextValue = {
   //
@@ -54,7 +58,8 @@ export const SnackbarContext =
   createContext<SnackbarContextValue>(INITIAL_STATE);
 
 export function SnackbarProvider({ children }: any) {
-  const classes = useStyles();
+  const isStandalone = isStandaloneOnMobileSafari();
+  const classes = useStyles({ isStandalone })();
   const { user } = useAuth();
 
   const { online } = useOnlineStatus();
@@ -127,8 +132,8 @@ export function SnackbarProvider({ children }: any) {
       <ToastContainer
         position={toast.POSITION.BOTTOM_LEFT}
         theme="colored"
-        style={{ marginBottom: isStandaloneOnMobileSafari() ? 24 : "auto" }}
-        className={classes.toast}
+        toastClassName={classes.toast}
+        className={classes.toastContainer}
       />
 
       {/* Make this a component */}
@@ -137,15 +142,15 @@ export function SnackbarProvider({ children }: any) {
           onClick={showOfflineNotification}
           sx={(theme) => ({
             position: "fixed",
-            bottom: isStandaloneOnMobileSafari() ? 42 : 27,
+            bottom: isStandalone ? "38px" : "27px",
             right: 32,
             zIndex: theme.zIndex.snackbar,
             padding: 0,
             width: 32,
             height: 32,
             minHeight: "auto",
-            backgroundColor: alpha(theme.palette.error.main, 0.2),
-            color: theme.palette.error.main,
+            backgroundColor: theme.palette.error.dark,
+            color: pink[100],
             borderRadius: 999,
           })}
         >
