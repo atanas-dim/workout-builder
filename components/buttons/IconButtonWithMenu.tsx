@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { IconButton, Menu, MenuItem, Typography, Fade } from "@mui/material";
 
 type Props = {
   id: string;
@@ -45,6 +45,7 @@ const IconButtonWithMenu: FC<Props> = ({ id, icon, menuTitle, menuItems }) => {
           open={Boolean(menuAnchorEl)}
           onClick={handleClose}
           onClose={handleClose}
+          TransitionComponent={Fade}
         >
           {!!menuTitle && (
             <Typography

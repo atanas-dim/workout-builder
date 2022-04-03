@@ -21,6 +21,7 @@ export default function SignIn() {
       <TextField
         id="email"
         type="email"
+        required
         label="Email"
         variant="outlined"
         fullWidth
@@ -31,6 +32,7 @@ export default function SignIn() {
       <TextField
         id="password"
         type="password"
+        required
         label="Password"
         variant="outlined"
         fullWidth

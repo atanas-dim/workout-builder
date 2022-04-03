@@ -12,7 +12,8 @@ export default function SignIn() {
 
   const { signUp } = useAuth();
 
-  const handleSignUp = () => {
+  const handleSignUp = (e: any) => {
+    e.preventDefault();
     if (!email || !password || !displayName) return;
     signUp(email, password, displayName);
     router.push("/welcome");
@@ -23,6 +24,7 @@ export default function SignIn() {
       <TextField
         id="display-name"
         type="text"
+        required
         label="Display name"
         variant="outlined"
         fullWidth
@@ -34,6 +36,7 @@ export default function SignIn() {
       <TextField
         id="email"
         type="email"
+        required
         label="Email"
         variant="outlined"
         fullWidth
@@ -44,6 +47,7 @@ export default function SignIn() {
       <TextField
         id="password"
         type="password"
+        required
         label="Password"
         variant="outlined"
         fullWidth
@@ -52,10 +56,10 @@ export default function SignIn() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <ActionButton
+        type="submit"
         label="Sign Up"
         variant="contained"
         fullWidth
-        onClick={handleSignUp}
       />
     </Box>
   );

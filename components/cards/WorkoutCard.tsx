@@ -18,7 +18,7 @@ import {
   Collapse,
   Divider,
   CardMedia,
-  Grow,
+  Fade,
 } from "@mui/material";
 import {
   ExpandMoreRounded as ExpandMoreIcon,
@@ -67,7 +67,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
     return () => {
       clearTimeout(transitionTimer);
     };
-  }, []);
+  }, [index]);
 
   const onEditWorkoutClick = () => {
     router.push({
@@ -77,7 +77,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
   };
 
   return (
-    <Grow in={show} appear={true} timeout={600}>
+    <Fade in={show} appear={show} timeout={600}>
       <Card elevation={0} className={classes.root}>
         <Box
           display="flex"
@@ -201,7 +201,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
           ))}
         </Collapse>
       </Card>
-    </Grow>
+    </Fade>
   );
 };
 
