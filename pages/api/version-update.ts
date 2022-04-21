@@ -1,29 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-import { Timestamp, doc, updateDoc } from "firebase/firestore";
-
-import { firestore } from "../../firebase/config";
-
 import crypto from "crypto";
 
-const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_VERSION_UPDATE_SECRET;
+import { Timestamp, doc, updateDoc } from "firebase/firestore";
+import { firestore } from "../../firebase/config";
 
-const SIG_HEADER_NAME = "X-Hub-Signature-256";
+const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_VERSION_UPDATE_SECRET;
+const SIG_HEADER_NAME = "x-hub-signature-256";
 const SIG_HASH_ALG = "sha256";
 
 function validateJsonWebhook(request: NextApiRequest) {
   if (!WEBHOOK_SECRET) return;
 
-  const signatureHeader = request.headers["x-hub-signature-256"];
+  const signatureHeader = request.headers[SIG_HEADER_NAME];
 
-  const sig =
-    "sha256=" +
+  const expectedSignature =
+    SIG_HASH_ALG +
+    "=" +
     crypto
-      .createHmac("sha256", WEBHOOK_SECRET)
+      .createHmac(SIG_HASH_ALG, WEBHOOK_SECRET)
       .update(JSON.stringify(request.body))
       .digest("hex");
 
-  if (signatureHeader === sig) return true;
+  if (signatureHeader === expectedSignature) return true;
 
   return false;
 }
