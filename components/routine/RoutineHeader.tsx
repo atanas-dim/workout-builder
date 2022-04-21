@@ -17,7 +17,7 @@ const RoutineHeader: FC<Props> = ({ onSelectClick }) => {
   const { sortedWorkouts } = useWorkouts();
 
   const currentRoutine = currentRoutineId
-    ? sortedWorkouts[currentRoutineId]
+    ? sortedWorkouts?.[currentRoutineId]
     : undefined;
 
   return (

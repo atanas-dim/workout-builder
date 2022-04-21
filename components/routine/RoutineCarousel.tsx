@@ -68,7 +68,7 @@ const RoutineCarousel: FC = () => {
               component="span"
               variant="h6"
               noWrap
-              sx={{ mb: 2, display: "block" }}
+              sx={{ mb: 2, display: "block", textTransform: "uppercase" }}
             >
               {workout.title}
             </Typography>

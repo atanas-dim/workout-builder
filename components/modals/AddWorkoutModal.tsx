@@ -88,7 +88,10 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
           onChange={onAutoCompleteChange}
           fullWidth
           PaperComponent={(props) => {
-            return <Paper elevation={3} sx={{ maxHeight: 200 }} {...props} />;
+            return <Paper {...props} elevation={3} />;
+          }}
+          ListboxProps={{
+            style: { maxHeight: "min(200px, 25vh)" },
           }}
           renderInput={(params) => <TextField {...params} label="Workouts" />}
           isOptionEqualToValue={(option: any, value: any) =>

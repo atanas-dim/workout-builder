@@ -8,21 +8,22 @@ import crypto from "crypto";
 
 const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_VERSION_UPDATE_SECRET;
 
+const SIG_HEADER_NAME = "X-Hub-Signature-256";
+const SIG_HASH_ALG = "sha256";
+
 function validateJsonWebhook(request: NextApiRequest) {
   if (!WEBHOOK_SECRET) return;
-  // calculate the signature
-  const expectedSignature =
-    "sha1=" +
+
+  const signatureHeader = request.headers["x-hub-signature-256"];
+
+  const sig =
+    "sha256=" +
     crypto
-      .createHmac("sha1", WEBHOOK_SECRET)
+      .createHmac("sha256", WEBHOOK_SECRET)
       .update(JSON.stringify(request.body))
       .digest("hex");
 
-  // compare the signature against the one in the request
-  const signature = request.headers["x-hub-signature-256"];
-  if (signature === expectedSignature) {
-    return true;
-  }
+  if (signatureHeader === sig) return true;
 
   return false;
 }
