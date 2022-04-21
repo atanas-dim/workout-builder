@@ -12,7 +12,7 @@ import { RoutineGroup } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 
-import { CircularProgress, Box, Typography, Card } from "@mui/material";
+import { CircularProgress, Box, Typography, Card, Fade } from "@mui/material";
 import {
   AddCircleOutlineRounded as AddIcon,
   MoreHorizRounded as MoreIcon,
@@ -24,7 +24,7 @@ import IconButtonWithMenu from "../components/buttons/IconButtonWithMenu";
 import LargeSwitch from "../components/buttons/LargeSwitch";
 
 const Workouts: NextPage = () => {
-  const { workoutsData, isLoading, isSorted, setIsSorted, sortedWorkoutsData } =
+  const { workouts, isLoading, isSorted, setIsSorted, sortedWorkouts } =
     useWorkouts();
 
   return (
@@ -75,27 +75,23 @@ const Workouts: NextPage = () => {
         )}
 
         {isSorted &&
-          sortedWorkoutsData &&
-          Object.keys(sortedWorkoutsData)
-            // .sort((a, b) =>
-            //   sortedWorkoutsData[a].title < sortedWorkoutsData[b].title ? 1 : -1
-            // )
+          sortedWorkouts &&
+          // TODO: Move this sorting to sorting helper functions
+          Object.keys(sortedWorkouts)
             .sort((a, b) =>
-              sortedWorkoutsData[a].updated < sortedWorkoutsData[b].updated
-                ? 1
-                : -1
+              sortedWorkouts[a].updated < sortedWorkouts[b].updated ? 1 : -1
             )
             .map((key) => {
               return (
                 <RoutineContainer
                   key={"routine-" + key}
-                  data={sortedWorkoutsData[key]}
+                  data={sortedWorkouts[key]}
                 />
               );
             })}
 
         {!isSorted &&
-          workoutsData.map((workout, index) => {
+          workouts.map((workout, index) => {
             return (
               <WorkoutCard
                 key={"workout-card-" + index}
@@ -170,18 +166,24 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
           );
         })
       ) : (
-        <Card
-          elevation={0}
-          sx={{
-            p: 2,
-            mb: 2,
-            width: "100%",
-            opacity: 0.65,
-            textAlign: "center",
-          }}
+        <Fade
+          in={!data.workouts.length}
+          appear={!data.workouts.length}
+          timeout={600}
         >
-          Empty
-        </Card>
+          <Card
+            elevation={0}
+            sx={{
+              p: 2,
+              mb: 2,
+              width: "100%",
+              opacity: 0.65,
+              textAlign: "center",
+            }}
+          >
+            Empty
+          </Card>
+        </Fade>
       )}
     </>
   );

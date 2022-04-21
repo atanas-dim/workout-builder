@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import "animate.css/animate.min.css";
 
 import Head from "next/head";
 import { useRouter } from "next/router";

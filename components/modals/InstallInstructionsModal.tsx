@@ -52,7 +52,7 @@ const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
           align="center"
           sx={{ mt: 0.5, mb: 4 }}
         >
-          Install the app
+          Add to Home Screen
         </Typography>
         <Typography paragraph>
           1. Tap the &#39;Share Button&#39;

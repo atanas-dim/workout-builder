@@ -7,7 +7,15 @@ import React, {
   SetStateAction,
 } from "react";
 
-import { Timestamp, collection, query, onSnapshot } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  query,
+  onSnapshot,
+  doc,
+  where,
+  documentId,
+} from "firebase/firestore";
 
 import { firestore } from "../firebase/config";
 
@@ -20,32 +28,40 @@ export type Routine = {
   updated: Timestamp;
   workouts?: string[];
 };
+
 type RoutinesContextValue = {
-  routinesData: Routine[];
+  routines: Routine[];
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  currentRoutineId?: string;
 };
 
 const INITIAL_STATE = {
-  routinesData: [],
+  routines: [],
   isLoading: false,
   setIsLoading: () => {},
+  currentRoutineId: undefined,
 };
 
 export const RoutinesContext =
   createContext<RoutinesContextValue>(INITIAL_STATE);
 
 export const RoutinesProvider: FC = ({ children }: any) => {
-  const [routinesData, setRoutinesData] = useState<Routine[]>([]);
+  const [routines, setRoutines] = useState<Routine[]>(INITIAL_STATE.routines);
+  const [currentRoutineId, setCurrentRoutineId] = useState<string | undefined>(
+    INITIAL_STATE.currentRoutineId
+  );
+
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("updating  routines data");
-  }, [routinesData]);
+    console.log("updating routines data");
+  }, [routines]);
 
   useEffect(() => {
     if (!user) return;
+    setIsLoading(true);
 
     const routinesCollectionRef = collection(
       firestore,
@@ -54,22 +70,25 @@ export const RoutinesProvider: FC = ({ children }: any) => {
       "routines"
     );
 
-    const routinesQuery = query(routinesCollectionRef);
+    const routinesQuery = query(
+      routinesCollectionRef,
+      where(documentId(), "!=", "current")
+    );
 
     const unsubscribe = onSnapshot(
       routinesQuery,
       (querySnapshot) => {
-        setIsLoading(true);
         const routines: Routine[] = [];
 
         querySnapshot.forEach((doc) => {
           const id = doc.id;
           const data = doc.data();
           const { title, created, updated, workouts } = data;
+
           routines.push({ id, title, created, workouts, updated });
         });
 
-        setRoutinesData(routines);
+        setRoutines(routines);
         setIsLoading(false);
       },
       (error) => {
@@ -79,12 +98,43 @@ export const RoutinesProvider: FC = ({ children }: any) => {
     return () => unsubscribe();
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+    setIsLoading(true);
+
+    const currentRoutineDocRef = doc(
+      firestore,
+      "users",
+      user.uid,
+      "routines",
+      "current"
+    );
+
+    const unsubscribe = onSnapshot(
+      currentRoutineDocRef,
+      (snapshot) => {
+        const data = snapshot.data();
+
+        const { id } = data || {};
+
+        setCurrentRoutineId(id);
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("Error loading data: ", error);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user]);
+
   return (
     <RoutinesContext.Provider
       value={{
-        routinesData,
+        routines,
         isLoading,
         setIsLoading,
+        currentRoutineId,
       }}
     >
       {children}

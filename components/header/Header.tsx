@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 import { RouterPath, ROUTE_SETTINGS } from "../../resources/routes";

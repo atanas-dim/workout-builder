@@ -20,6 +20,8 @@ import { firestore } from "../firebase/config";
 import useAuth from "../hooks/useAuth";
 import useRoutines from "../hooks/useRoutines";
 
+import { sortWorkoutsByRoutine } from "../utilities/workouts/sortWorkoutsByRoutine";
+
 export type WorkoutExerciseEntry = {
   id: string;
   name: string;
@@ -49,23 +51,21 @@ type RoutineGroups = {
 };
 
 type WorkoutsContextValue = {
-  workoutsData: Workout[];
+  workouts: Workout[];
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
   setIsSorted: Dispatch<SetStateAction<boolean>>;
-  sortedWorkoutsData: RoutineGroups;
-  setSortedWorkoutsData: Dispatch<SetStateAction<RoutineGroups>>;
+  sortedWorkouts: RoutineGroups;
 };
 
 const INITIAL_STATE = {
-  workoutsData: [],
+  workouts: [],
   isLoading: false,
   setIsLoading: () => {},
   isSorted: true,
   setIsSorted: () => {},
-  sortedWorkoutsData: {},
-  setSortedWorkoutsData: () => {},
+  sortedWorkouts: {},
 };
 
 export const WorkoutsContext =
@@ -73,22 +73,23 @@ export const WorkoutsContext =
 
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
-  const [workoutsData, setWorkoutsData] = useState<Workout[]>([]);
-  const [sortedWorkoutsData, setSortedWorkoutsData] = useState<RoutineGroups>(
-    INITIAL_STATE.sortedWorkoutsData
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [sortedWorkouts, setSortedWorkouts] = useState<RoutineGroups>(
+    INITIAL_STATE.sortedWorkouts
   );
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { routinesData } = useRoutines();
+  const { routines } = useRoutines();
 
   useEffect(() => {
     console.log("updating  workouts data");
-  }, [workoutsData]);
+  }, [workouts]);
 
   // FETCH FROM FIRESTORE --------------------------
   useEffect(() => {
     if (!user) return;
+    setIsLoading(true);
 
     const workoutsCollectionRef = collection(
       firestore,
@@ -102,7 +103,6 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     const unsubscribe = onSnapshot(
       workoutsQuery,
       (querySnapshot) => {
-        setIsLoading(true);
         const workouts: Workout[] = [];
 
         querySnapshot.forEach((doc) => {
@@ -118,7 +118,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
           });
         });
 
-        setWorkoutsData(workouts);
+        setWorkouts(workouts);
         setIsLoading(false);
       },
       (error) => {
@@ -130,76 +130,19 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   }, [user]);
 
   // SORT WORKOUTS DATA --------------------------
-
-  const getSortedWorkoutsByRoutine = () => {
-    const routineGroups: {
-      [key: string]: RoutineGroup;
-    } = {
-      unsorted: {
-        id: undefined,
-        title: "Unsorted",
-        workouts: [],
-        workoutsOrder: [],
-        updated: Timestamp.fromDate(new Date(0, 0, 0)),
-      },
-    };
-
-    const addedToRoutines: string[] = [];
-
-    for (var rIndex = 0; rIndex < routinesData.length; rIndex++) {
-      const routine = routinesData[rIndex];
-      const newGroup: RoutineGroup = {
-        id: routine.id,
-        title: routine.title,
-        workouts: [],
-        workoutsOrder: routine?.workouts || [],
-        updated: routine.updated || routine.created,
-      };
-
-      for (var wIndex = workoutsData.length - 1; wIndex >= 0; wIndex--) {
-        const workout = workoutsData[wIndex];
-
-        if (newGroup.workoutsOrder.includes(workout.id)) {
-          newGroup.workouts.push(workout);
-          addedToRoutines.push(workout.id);
-        }
-      }
-
-      // Sort workouts objects by order of workout IDs from routine data
-      newGroup.workouts.sort(
-        (a, b) =>
-          newGroup.workoutsOrder.indexOf(a.id) -
-          newGroup.workoutsOrder.indexOf(b.id)
-      );
-
-      routineGroups[routine.id] = newGroup;
-    }
-
-    for (var wIndex = workoutsData.length - 1; wIndex >= 0; wIndex--) {
-      const workout = workoutsData[wIndex];
-
-      if (!addedToRoutines.includes(workout.id)) {
-        routineGroups.unsorted.workouts.unshift(workout);
-      }
-    }
-
-    return routineGroups;
-  };
-
   useEffect(() => {
-    setSortedWorkoutsData(getSortedWorkoutsByRoutine());
-  }, [routinesData, workoutsData]);
+    setSortedWorkouts(sortWorkoutsByRoutine(routines, workouts));
+  }, [routines, workouts]);
 
   return (
     <WorkoutsContext.Provider
       value={{
-        workoutsData,
+        workouts,
         isLoading,
         setIsLoading,
         isSorted,
         setIsSorted,
-        sortedWorkoutsData,
-        setSortedWorkoutsData,
+        sortedWorkouts,
       }}
     >
       {children}

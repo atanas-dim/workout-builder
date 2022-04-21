@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useRef } from "react";
 
 import { auth } from "../firebase/config";
 import { User } from "firebase/auth";
@@ -19,6 +19,7 @@ export function AuthProvider({ children }: any) {
     return auth.onIdTokenChanged(async (user) => {
       // console.log({ user });
       console.log(`token changed!`);
+
       if (!user) {
         console.log(`no token found...`);
         setUser(null);
@@ -53,10 +54,31 @@ export const withAuth = (Component: any) => {
 
     const { push, pathname } = useRouter();
 
+    const [counter, setCounter] = useState(0);
+    const interval = useRef<NodeJS.Timeout>();
+
+    // Using counter to wait for firebase to return user on page load
+    // If after 3 sec there's still no user then redirect
+    // This fixes blinking of Login page when user is already logged in but auth.onIdTokenChanged hasn't returned the auth user yet
     useEffect(() => {
-      if (!user)
-        push({ pathname: RouterPath.Login, query: { from: pathname } });
-    }, [pathname, user]);
+      if (!user) {
+        startCountForRedirect();
+      }
+    }, [user]);
+
+    const startCountForRedirect = () => {
+      interval.current = setInterval(() => {
+        setCounter((prev) => prev + 1);
+      }, 1000);
+    };
+
+    useEffect(() => {
+      if (counter >= 3) {
+        if (interval.current) clearInterval(interval.current);
+        if (!user)
+          push({ pathname: RouterPath.Login, query: { from: pathname } });
+      }
+    }, [counter, user, interval, pathname, push]);
 
     if (!user)
       return (

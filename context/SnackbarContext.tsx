@@ -1,6 +1,6 @@
 import React, { useEffect, createContext, useRef } from "react";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast, cssTransition } from "react-toastify";
 
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import useAuth from "../hooks/useAuth";
@@ -17,6 +17,11 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { pink } from "@mui/material/colors";
 
+const bounce = cssTransition({
+  enter: "animate__animated animate__slideInUp",
+  exit: "animate__animated animate__slideOutDown",
+});
+
 type StyleProps = {
   isStandalone: boolean;
 };
@@ -25,6 +30,7 @@ const useStyles = (props: StyleProps) =>
   makeStyles((theme: Theme) => {
     return {
       toastContainer: {
+        "--animate-duration": "300ms",
         "& .Toastify__toast-theme--colored.Toastify__toast--default": {
           backgroundColor: theme.palette.primary.main,
         },
@@ -132,6 +138,7 @@ export function SnackbarProvider({ children }: any) {
       <ToastContainer
         position={toast.POSITION.BOTTOM_LEFT}
         theme="colored"
+        transition={bounce}
         toastClassName={classes.toast}
         className={classes.toastContainer}
       />

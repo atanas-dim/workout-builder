@@ -97,7 +97,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
             onClick={() => setExpanded((prev) => !prev)}
           >
             <Typography
-              component="h2"
+              component="span"
               variant="body1"
               noWrap
               sx={{
@@ -174,7 +174,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
                   }}
                 >
                   <Typography
-                    component="h3"
+                    component="span"
                     variant="body1"
                     noWrap
                     sx={{ width: "100%", fontWeight: 500 }}

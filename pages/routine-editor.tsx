@@ -18,12 +18,10 @@ import { Theme } from "@mui/material/styles";
 import {
   TextField,
   Paper,
-  Box,
   Typography,
   Button,
   IconButton,
   Card,
-  Modal,
 } from "@mui/material";
 
 import {
@@ -76,7 +74,7 @@ const RoutineEditor: NextPage = () => {
 
   // ROUTINE ----------------------
 
-  const { routinesData, createRoutine, updateRoutine } = useRoutines();
+  const { routines, createRoutine, updateRoutine } = useRoutines();
 
   const [routineTitle, setRoutineTitle] = useState("");
   const [routineWorkouts, setRoutineWorkouts] = useState<Workout[]>([]);
@@ -84,20 +82,20 @@ const RoutineEditor: NextPage = () => {
   const [routineOrderArray, setRoutineOrderArray] = useState<string[]>([]);
 
   // WORKOUTS ----------------------
-  const { workoutsData } = useWorkouts();
+  const { workouts } = useWorkouts();
 
   useEffect(() => {
     if (!existingRoutineId) return;
 
-    const title = routinesData.filter(
+    const title = routines.filter(
       (routine) => routine.id === existingRoutineId
     )?.[0]?.title;
 
     if (title) setRoutineTitle(title);
 
     const workoutsOrderArray =
-      routinesData.find((routine) => routine.id === existingRoutineId)
-        ?.workouts || [];
+      routines.find((routine) => routine.id === existingRoutineId)?.workouts ||
+      [];
     setRoutineOrderArray([...workoutsOrderArray]);
   }, [existingRoutineId]);
 
@@ -111,9 +109,7 @@ const RoutineEditor: NextPage = () => {
     const foundWorkouts: any[] = [];
 
     routineOrderArray.forEach((entryId) => {
-      const foundWorkout = workoutsData.find(
-        (workout) => workout.id === entryId
-      );
+      const foundWorkout = workouts.find((workout) => workout.id === entryId);
 
       foundWorkouts.push(foundWorkout);
     });
@@ -226,7 +222,7 @@ const RoutineEditor: NextPage = () => {
                         sx={{
                           height: 80,
                           mb: 2,
-                          p: 2,
+                          p: 1,
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
@@ -267,13 +263,12 @@ const RoutineEditor: NextPage = () => {
           fullWidth
           endIcon={<AddIcon />}
         />
-        {
-          <AddWorkoutModal
-            show={showWorkoutsModal}
-            hide={() => setShowWorkoutsModal(false)}
-            onAddClick={onAddWorkoutToRoutineClick}
-          />
-        }
+
+        <AddWorkoutModal
+          show={showWorkoutsModal}
+          hide={() => setShowWorkoutsModal(false)}
+          onAddClick={onAddWorkoutToRoutineClick}
+        />
 
         <Paper square elevation={0} className={classes.saveButtonContainer}>
           <Button

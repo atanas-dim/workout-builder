@@ -12,9 +12,7 @@ import {
   Paper,
 } from "@mui/material";
 
-import { AddRounded as AddIcon } from "@mui/icons-material";
-
-import useWorkouts from "../../hooks/useWorkouts";
+import useRoutines from "../../hooks/useRoutines";
 import ActionButton from "../buttons/ActionButton";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -40,33 +38,40 @@ const useStyles = makeStyles((theme: Theme) => ({
 type Props = {
   show: boolean;
   hide: () => any;
-  onAddClick: (workoutId: string) => void;
 };
 
-const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
+const SelectRoutineModal: FC<Props> = ({ show, hide }) => {
   const classes = useStyles();
 
-  const { workouts } = useWorkouts();
+  const {
+    routines,
+    currentRoutineId,
+    setCurrentRoutine,
+    updateCurrentRoutine,
+  } = useRoutines();
 
-  const [selectedWorkout, setSelectedWorkout] = useState<{
+  const [selectedRoutine, setSelectedRoutine] = useState<{
     label: string;
     id: string;
   }>();
 
   const onAutoCompleteChange = (event: React.SyntheticEvent, value: any) => {
-    if (!value || !value.id) setSelectedWorkout(undefined);
-    else setSelectedWorkout(value);
+    if (!value || !value.id) setSelectedRoutine(undefined);
+    else setSelectedRoutine(value);
   };
 
-  const options = workouts.map((workout) => ({
-    label: workout.title,
-    id: workout.id,
+  const options = routines.map((routine) => ({
+    label: routine.title,
+    id: routine.id,
   }));
 
-  const handleAddClick = () => {
-    if (!selectedWorkout) return;
-    onAddClick(selectedWorkout.id);
-    setSelectedWorkout(undefined);
+  const handleSelectClick = () => {
+    if (!selectedRoutine) return;
+
+    if (!currentRoutineId) setCurrentRoutine(selectedRoutine.id);
+    else updateCurrentRoutine(selectedRoutine.id);
+
+    setSelectedRoutine(undefined);
     hide();
   };
 
@@ -79,33 +84,32 @@ const AddWorkoutModal: FC<Props> = ({ show, hide, onAddClick }) => {
           align="center"
           sx={{ mt: 0.5, mb: 4 }}
         >
-          Add Workout
+          Select Routine
         </Typography>
         <Autocomplete
           disablePortal
-          id="add-workout-autocomplete"
+          id="select-routine-autocomplete"
           options={options}
           onChange={onAutoCompleteChange}
           fullWidth
           PaperComponent={(props) => {
             return <Paper elevation={3} sx={{ maxHeight: 200 }} {...props} />;
           }}
-          renderInput={(params) => <TextField {...params} label="Workouts" />}
+          renderInput={(params) => <TextField {...params} label="Routines" />}
           isOptionEqualToValue={(option: any, value: any) =>
             option.label === value.label && option.id === value.id
           }
           sx={{ mb: 4 }}
         />
         <ActionButton
-          label="Add"
+          label="Select"
           variant="contained"
-          endIcon={<AddIcon />}
-          disabled={!selectedWorkout}
-          onClick={handleAddClick}
+          disabled={!selectedRoutine}
+          onClick={handleSelectClick}
         />
       </Card>
     </Modal>
   );
 };
 
-export default AddWorkoutModal;
+export default SelectRoutineModal;

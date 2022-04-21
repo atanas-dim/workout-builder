@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+
+    // [theme.breakpoints.down("sm")]: {
+    //   paddingLeft: 8,
+    //   paddingRight: 8,
+    // },
   },
 }));
 

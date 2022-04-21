@@ -9,6 +9,7 @@ import {
   collection,
   doc,
   getDoc,
+  setDoc,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
@@ -16,7 +17,8 @@ import {
 import { firestore } from "../firebase/config";
 
 export default function useRoutines() {
-  const { routinesData, isLoading, setIsLoading } = useContext(RoutinesContext);
+  const { routines, isLoading, setIsLoading, currentRoutineId } =
+    useContext(RoutinesContext);
   const { user } = useContext(AuthContext);
 
   const routinesCollectionRef = user
@@ -84,12 +86,45 @@ export default function useRoutines() {
     }
   };
 
+  const setCurrentRoutine = async (id: string) => {
+    if (!routinesCollectionRef || !id) return;
+
+    try {
+      const docRef = doc(routinesCollectionRef, "current");
+
+      await setDoc(docRef, {
+        id,
+        updated: Timestamp.fromDate(new Date()),
+      });
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
+  const updateCurrentRoutine = async (id: string) => {
+    if (!routinesCollectionRef || !id) return;
+
+    try {
+      const docRef = doc(routinesCollectionRef, "current");
+
+      await updateDoc(docRef, {
+        id,
+        updated: Timestamp.fromDate(new Date()),
+      });
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
   return {
     isLoading,
     createRoutine,
     updateRoutine,
     deleteRoutine,
-    routinesData,
+    routines,
     getRoutineById,
+    currentRoutineId,
+    setCurrentRoutine,
+    updateCurrentRoutine,
   };
 }

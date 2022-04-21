@@ -17,12 +17,12 @@ import { firestore } from "../firebase/config";
 
 export default function useWorkouts() {
   const {
-    workoutsData,
+    workouts,
     isLoading,
     setIsLoading,
     isSorted,
     setIsSorted,
-    sortedWorkoutsData,
+    sortedWorkouts,
   } = useContext(WorkoutsContext);
   const { user } = useContext(AuthContext);
 
@@ -95,11 +95,11 @@ export default function useWorkouts() {
     createWorkout,
     updateWorkout,
     deleteWorkout,
-    workoutsData,
+    workouts,
     getWorkoutById,
 
     isSorted,
     setIsSorted,
-    sortedWorkoutsData,
+    sortedWorkouts,
   };
 }
