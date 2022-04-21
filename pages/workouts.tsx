@@ -1,8 +1,7 @@
-import type { NextPage } from "next";
-
 import React, { FC, useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { RouterPath } from "../resources/routes";
@@ -24,8 +23,12 @@ import IconButtonWithMenu from "../components/buttons/IconButtonWithMenu";
 import LargeSwitch from "../components/buttons/LargeSwitch";
 
 const Workouts: NextPage = () => {
-  const { workouts, isLoading, isSorted, setIsSorted, sortedWorkouts } =
+  const { workouts, isLoading, isSorted, setIsSorted, routineGroups } =
     useWorkouts();
+
+  const routineOrderByUpdated = Object.keys(routineGroups).sort((a, b) =>
+    routineGroups[a].updated < routineGroups[b].updated ? 1 : -1
+  );
 
   return (
     <>
@@ -75,20 +78,18 @@ const Workouts: NextPage = () => {
         )}
 
         {isSorted &&
-          sortedWorkouts &&
-          // TODO: Move this sorting to sorting helper functions
-          Object.keys(sortedWorkouts)
-            .sort((a, b) =>
-              sortedWorkouts[a].updated < sortedWorkouts[b].updated ? 1 : -1
-            )
-            .map((key) => {
+          routineGroups &&
+          routineOrderByUpdated.map((key) => {
+            if (key === "unsorted" && !routineGroups[key].workouts.length)
+              return;
+            else
               return (
                 <RoutineContainer
                   key={"routine-" + key}
-                  data={sortedWorkouts[key]}
+                  data={routineGroups[key]}
                 />
               );
-            })}
+          })}
 
         {!isSorted &&
           workouts.map((workout, index) => {

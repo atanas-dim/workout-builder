@@ -14,10 +14,10 @@ type Props = {
 
 const RoutineHeader: FC<Props> = ({ onSelectClick }) => {
   const { currentRoutineId } = useRoutines();
-  const { sortedWorkouts } = useWorkouts();
+  const { routineGroups } = useWorkouts();
 
   const currentRoutine = currentRoutineId
-    ? sortedWorkouts?.[currentRoutineId]
+    ? routineGroups?.[currentRoutineId]
     : undefined;
 
   return (

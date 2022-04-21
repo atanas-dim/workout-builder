@@ -56,7 +56,7 @@ type WorkoutsContextValue = {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
   setIsSorted: Dispatch<SetStateAction<boolean>>;
-  sortedWorkouts: RoutineGroups;
+  routineGroups: RoutineGroups;
 };
 
 const INITIAL_STATE = {
@@ -65,7 +65,7 @@ const INITIAL_STATE = {
   setIsLoading: () => {},
   isSorted: true,
   setIsSorted: () => {},
-  sortedWorkouts: {},
+  routineGroups: {},
 };
 
 export const WorkoutsContext =
@@ -74,8 +74,8 @@ export const WorkoutsContext =
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
-  const [sortedWorkouts, setSortedWorkouts] = useState<RoutineGroups>(
-    INITIAL_STATE.sortedWorkouts
+  const [routineGroups, setRoutineGroups] = useState<RoutineGroups>(
+    INITIAL_STATE.routineGroups
   );
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -131,7 +131,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
 
   // SORT WORKOUTS DATA --------------------------
   useEffect(() => {
-    setSortedWorkouts(sortWorkoutsByRoutine(routines, workouts));
+    setRoutineGroups(sortWorkoutsByRoutine(routines, workouts));
   }, [routines, workouts]);
 
   return (
@@ -142,7 +142,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
         setIsLoading,
         isSorted,
         setIsSorted,
-        sortedWorkouts,
+        routineGroups,
       }}
     >
       {children}

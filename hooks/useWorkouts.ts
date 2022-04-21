@@ -22,7 +22,7 @@ export default function useWorkouts() {
     setIsLoading,
     isSorted,
     setIsSorted,
-    sortedWorkouts,
+    routineGroups,
   } = useContext(WorkoutsContext);
   const { user } = useContext(AuthContext);
 
@@ -100,6 +100,6 @@ export default function useWorkouts() {
 
     isSorted,
     setIsSorted,
-    sortedWorkouts,
+    routineGroups,
   };
 }

@@ -87,10 +87,11 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
         >
           <ButtonBase
             sx={{
+              maxWidth: "calc(100% - 70px)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: "100%",
+              flex: 1,
               borderRadius: "6px",
             }}
             disableRipple
@@ -99,6 +100,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
             <Typography
               component="span"
               variant="body1"
+              align="left"
               noWrap
               sx={{
                 fontWeight: 500,

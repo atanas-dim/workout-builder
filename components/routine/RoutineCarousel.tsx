@@ -49,10 +49,10 @@ const CarouselCard = styled(Card)(({ theme }) => ({
 
 const RoutineCarousel: FC = () => {
   const { currentRoutineId } = useRoutines();
-  const { sortedWorkouts } = useWorkouts();
+  const { routineGroups } = useWorkouts();
 
   const currentRoutineWorkouts = currentRoutineId
-    ? sortedWorkouts?.[currentRoutineId].workouts
+    ? routineGroups?.[currentRoutineId]?.workouts
     : [];
 
   return (
