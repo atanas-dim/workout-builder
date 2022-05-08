@@ -2,7 +2,7 @@ import React from "react";
 import type { NextPage } from "next";
 
 import { Button } from "@mui/material";
-import { withAuth } from "../context/AuthContext";
+import { withPrivate } from "../context/AuthContext";
 
 const Welcome: NextPage = () => {
   return (
@@ -15,4 +15,4 @@ const Welcome: NextPage = () => {
   );
 };
 
-export default withAuth(Welcome);
+export default withPrivate(Welcome);

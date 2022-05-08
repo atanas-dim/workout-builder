@@ -47,8 +47,8 @@ export function AuthProvider({ children }: any) {
 }
 
 // The HOC can wrap a page component on private routes
-export const withAuth = (Component: any) => {
-  const WithAuth = (props: any) => {
+export const withPrivate = (Component: any) => {
+  const WithPrivate = (props: any) => {
     const { user } = useAuth();
     const theme = useTheme();
 
@@ -100,6 +100,6 @@ export const withAuth = (Component: any) => {
 
     return <Component {...props} />;
   };
-  WithAuth.displayName = "withAuth";
-  return WithAuth;
+  WithPrivate.displayName = "withPrivate";
+  return WithPrivate;
 };

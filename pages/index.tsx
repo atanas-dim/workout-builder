@@ -2,7 +2,7 @@ import React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { withAuth } from "../context/AuthContext";
+import { withPrivate } from "../context/AuthContext";
 import useAuth from "../hooks/useAuth";
 
 import { Typography } from "@mui/material/";
@@ -34,4 +34,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default withAuth(Home);
+export default withPrivate(Home);

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 
 import { RouterPath } from "../resources/routes";
 
-import { withAuth } from "../context/AuthContext";
+import { withPrivate } from "../context/AuthContext";
 import { RoutineGroup } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
@@ -232,4 +232,4 @@ const CreateButton = () => {
     : null;
 };
 
-export default withAuth(Workouts);
+export default withPrivate(Workouts);

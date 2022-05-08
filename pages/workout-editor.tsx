@@ -12,7 +12,7 @@ import { RouterPath } from "../resources/routes";
 import { generateRandomId } from "../utilities/general/helpers";
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
-import { withAuth } from "../context/AuthContext";
+import { withPrivate } from "../context/AuthContext";
 import { WorkoutExerciseEntry } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
@@ -255,7 +255,7 @@ const WorkoutEditor: NextPage = () => {
   );
 };
 
-export default withAuth(WorkoutEditor);
+export default withPrivate(WorkoutEditor);
 
 const DeleteButton = () => {
   const [headerToolbarElement, setHeaderToolbarElement] =

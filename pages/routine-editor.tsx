@@ -8,7 +8,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { RouterPath } from "../resources/routes";
 import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
 
-import { withAuth } from "../context/AuthContext";
+import { withPrivate } from "../context/AuthContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 import useRoutines from "../hooks/useRoutines";
@@ -295,7 +295,7 @@ const RoutineEditor: NextPage = () => {
   );
 };
 
-export default withAuth(RoutineEditor);
+export default withPrivate(RoutineEditor);
 
 const DeleteButton = () => {
   const [headerToolbarElement, setHeaderToolbarElement] =

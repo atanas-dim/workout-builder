@@ -115,9 +115,8 @@ export function SnackbarProvider({ children }: any) {
   useEffect(() => {
     if (!online) {
       offlineToast.current = showOfflineNotification();
-    } else if (offlineToast.current) {
+    } else {
       hideOfflineNotification();
-      toast.success("Connection restored");
     }
   }, [online]);
 
