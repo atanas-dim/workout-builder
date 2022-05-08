@@ -73,8 +73,6 @@ export default function useWorkouts() {
   const getWorkoutById = async (workoutId: string) => {
     if (!workoutsCollectionRef || !workoutId) return;
 
-    setIsLoading(true);
-
     try {
       let workoutData: any;
 
@@ -83,7 +81,6 @@ export default function useWorkouts() {
         workoutData = docSnap.data();
       });
 
-      setIsLoading(false);
       return workoutData;
     } catch (error) {
       console.error("Error loading data: ", error);

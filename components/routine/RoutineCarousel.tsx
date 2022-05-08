@@ -1,5 +1,5 @@
 import { FC } from "react";
-
+import Image from "next/image";
 import { styled } from "@mui/system";
 
 import useRoutines from "../../hooks/useRoutines";
@@ -78,7 +78,6 @@ const RoutineCarousel: FC = () => {
               sx={{
                 width: "100%",
                 height: "100%",
-
                 mb: 2,
                 borderRadius: 1 / 2,
               }}
@@ -89,6 +88,7 @@ const RoutineCarousel: FC = () => {
               }
               alt={workout.title + " cover image"}
             />
+
             <ActionButton
               label="Start"
               fullWidth

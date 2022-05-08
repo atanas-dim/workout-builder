@@ -60,7 +60,7 @@ const SelectRoutineModal: FC<Props> = ({ show, hide }) => {
     else setSelectedRoutine(value);
   };
 
-  const options = routines.map((routine) => ({
+  const options = routines?.map((routine) => ({
     label: routine.title,
     id: routine.id,
   }));
@@ -86,24 +86,26 @@ const SelectRoutineModal: FC<Props> = ({ show, hide }) => {
         >
           Select Routine
         </Typography>
-        <Autocomplete
-          disablePortal
-          id="select-routine-autocomplete"
-          options={options}
-          onChange={onAutoCompleteChange}
-          fullWidth
-          PaperComponent={(props) => {
-            return <Paper {...props} elevation={3} />;
-          }}
-          ListboxProps={{
-            style: { maxHeight: "min(200px, 25vh)" },
-          }}
-          renderInput={(params) => <TextField {...params} label="Routines" />}
-          isOptionEqualToValue={(option: any, value: any) =>
-            option.label === value.label && option.id === value.id
-          }
-          sx={{ mb: 4 }}
-        />
+        {options && (
+          <Autocomplete
+            disablePortal
+            id="select-routine-autocomplete"
+            options={options}
+            onChange={onAutoCompleteChange}
+            fullWidth
+            PaperComponent={(props) => {
+              return <Paper {...props} elevation={3} />;
+            }}
+            ListboxProps={{
+              style: { maxHeight: "min(200px, 25vh)" },
+            }}
+            renderInput={(params) => <TextField {...params} label="Routines" />}
+            isOptionEqualToValue={(option: any, value: any) =>
+              option.label === value.label && option.id === value.id
+            }
+            sx={{ mb: 4 }}
+          />
+        )}
         <ActionButton
           label="Select"
           variant="contained"

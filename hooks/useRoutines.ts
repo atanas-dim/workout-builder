@@ -17,8 +17,7 @@ import {
 import { firestore } from "../firebase/config";
 
 export default function useRoutines() {
-  const { routines, isLoading, setIsLoading, currentRoutineId } =
-    useContext(RoutinesContext);
+  const { routines, isLoading, currentRoutineId } = useContext(RoutinesContext);
   const { user } = useContext(AuthContext);
 
   const routinesCollectionRef = user
@@ -69,8 +68,6 @@ export default function useRoutines() {
   const getRoutineById = async (routineId: string) => {
     if (!routinesCollectionRef || !routineId) return;
 
-    setIsLoading(true);
-
     try {
       let routineData: any;
 
@@ -79,7 +76,6 @@ export default function useRoutines() {
         routineData = docSnap.data();
       });
 
-      setIsLoading(false);
       return routineData;
     } catch (error) {
       console.error("Error loading data: ", error);

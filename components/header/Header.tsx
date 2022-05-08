@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { useRouter } from "next/router";
 import { RouterPath, ROUTE_SETTINGS } from "../../resources/routes";
 
-import { isChrome, isMobileSafari } from "react-device-detect";
-import {
-  isStandaloneOnMobileSafari,
-  isStandaloneOnChrome,
-} from "../../utilities/pwaHelpers/checkStandaloneMode";
+import { usePWA } from "../../hooks/usePWA";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -20,7 +16,7 @@ import {
   ArrowBackIosNewRounded as BackIcon,
 } from "@mui/icons-material";
 
-import InstallInstructionsModal from "../modals/InstallInstructionsModal";
+import IOSInstallInstructionsModal from "../modals/IOSInstallInstructionsModal";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -79,10 +75,16 @@ export default function Header() {
   const classes = useStyles();
   const { push, pathname, back } = useRouter();
 
-  const [deferredPrompt, setDeferredPrompt] = useState<any>();
-  const [isStandalone, setIsStandalone] = useState<boolean>(false);
-  const [showInstallButton, setShowInstallButton] = useState<boolean>(false);
-  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const {
+    showInstallButton,
+    showIOSInstallModal,
+    hideIOSInstallModal,
+    onInstallClick,
+  } = usePWA();
+
+  const isPageWithInstallButton =
+    pathname !== RouterPath.WorkoutEditor &&
+    pathname !== RouterPath.RoutineEditor;
 
   const showBackButton =
     pathname === RouterPath.WorkoutEditor ||
@@ -91,81 +93,6 @@ export default function Header() {
   const onBackClick = () => {
     if (pathname === RouterPath.WorkoutEditor) push(RouterPath.Workouts);
     else back();
-  };
-
-  // INSTALL PROMPT FOR PWA
-  useEffect(() => {
-    // First check if it's standalone
-    if (isStandaloneOnChrome() || isStandaloneOnMobileSafari()) {
-      setIsStandalone(true);
-      return;
-    }
-
-    // Then save the install prompt to use it on Install Button onClick
-    window.addEventListener(
-      "beforeinstallprompt",
-      saveInstallPromptEvent as any
-    );
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        saveInstallPromptEvent as any
-      );
-    };
-  }, []);
-
-  const saveInstallPromptEvent = (e: any) => {
-    e.preventDefault();
-    setDeferredPrompt(e);
-  };
-
-  // CHECK WHEN TO SHOW THE INSTALL BUTTON
-  useEffect(() => {
-    // Currently we support install on Chrome and Mobile Safari only
-    if (!(isChrome || isMobileSafari)) {
-      setShowInstallButton(false);
-      return;
-    }
-
-    // If the app is already installed the deferredPrompt will be undefined
-    // This is workaround to not use getInstalledRelatedApps() API
-    if (isChrome && !deferredPrompt) {
-      setShowInstallButton(false);
-      return;
-    }
-
-    if (!isStandalone) setShowInstallButton(true);
-    else setShowInstallButton(false);
-  }, [isStandalone, deferredPrompt]);
-
-  // CHECK IF THE APP HAS BEEN SUCCESSFULLY INSTALLED IN CHROME
-  useEffect(() => {
-    window.addEventListener("appinstalled", checkInstallionHasFinished);
-
-    return () => {
-      window.removeEventListener("appinstalled", checkInstallionHasFinished);
-    };
-  }, []);
-
-  const checkInstallionHasFinished = (e: any) => {
-    e.preventDefault();
-    setShowInstallButton(false);
-  };
-
-  // ON INSTALL BUTTON CLICK FUNCTIONS
-  const onInstallClick = async () => {
-    if (isChrome) showChromeInstallPrompt();
-    if (isMobileSafari) setShowInstallModal(true);
-  };
-
-  const showChromeInstallPrompt = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        setDeferredPrompt(null);
-      }
-    }
   };
 
   // SCROLL EFFECT ON HEADER HEIGHT
@@ -204,23 +131,20 @@ export default function Header() {
             justifyContent="flex-end"
             sx={{ flex: 1 }}
           >
-            {/* Make condition a variable*/}
-            {pathname !== RouterPath.WorkoutEditor &&
-              pathname !== RouterPath.RoutineEditor &&
-              showInstallButton && (
-                <>
-                  <IconButton
-                    onClick={onInstallClick}
-                    className={classes.installButton}
-                  >
-                    <DownloadIcon />
-                  </IconButton>
-                  <InstallInstructionsModal
-                    showModal={showInstallModal}
-                    hideModal={() => setShowInstallModal(false)}
-                  />
-                </>
-              )}
+            {isPageWithInstallButton && showInstallButton && (
+              <>
+                <IconButton
+                  onClick={onInstallClick}
+                  className={classes.installButton}
+                >
+                  <DownloadIcon />
+                </IconButton>
+                <IOSInstallInstructionsModal
+                  show={showIOSInstallModal}
+                  hide={hideIOSInstallModal}
+                />
+              </>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

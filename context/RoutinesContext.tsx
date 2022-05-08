@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  createContext,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import React, { FC, useState, useEffect, createContext } from "react";
 
 import {
   Timestamp,
@@ -32,14 +25,12 @@ export type Routine = {
 type RoutinesContextValue = {
   routines: Routine[];
   isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
   currentRoutineId?: string;
 };
 
 const INITIAL_STATE = {
   routines: [],
-  isLoading: false,
-  setIsLoading: () => {},
+  isLoading: true,
   currentRoutineId: undefined,
 };
 
@@ -53,7 +44,12 @@ export const RoutinesProvider: FC = ({ children }: any) => {
   );
 
   const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [isLoadingRoutines, setIsLoadingRoutines] = useState<boolean>(true);
+  const [isLoadingCurrentRoutineId, setIsLoadingCurrentRoutineId] =
+    useState<boolean>(true);
+
+  const isLoading = isLoadingRoutines || isLoadingCurrentRoutineId;
 
   useEffect(() => {
     console.log("updating routines data");
@@ -61,7 +57,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
 
   useEffect(() => {
     if (!user) return;
-    setIsLoading(true);
+    setIsLoadingRoutines(true);
 
     const routinesCollectionRef = collection(
       firestore,
@@ -89,7 +85,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
         });
 
         setRoutines(routines);
-        setIsLoading(false);
+        setIsLoadingRoutines(false);
       },
       (error) => {
         console.error("Error loading data: ", error);
@@ -100,7 +96,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
 
   useEffect(() => {
     if (!user) return;
-    setIsLoading(true);
+    setIsLoadingCurrentRoutineId(true);
 
     const currentRoutineDocRef = doc(
       firestore,
@@ -118,7 +114,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
         const { id } = data || {};
 
         setCurrentRoutineId(id);
-        setIsLoading(false);
+        setIsLoadingCurrentRoutineId(false);
       },
       (error) => {
         console.error("Error loading data: ", error);
@@ -133,7 +129,6 @@ export const RoutinesProvider: FC = ({ children }: any) => {
       value={{
         routines,
         isLoading,
-        setIsLoading,
         currentRoutineId,
       }}
     >

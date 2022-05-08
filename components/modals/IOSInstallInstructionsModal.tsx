@@ -30,19 +30,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type Props = {
-  showModal: boolean;
-  hideModal: () => void;
+  show: boolean;
+  hide: () => void;
 };
 
-const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
+const IOSInstallInstructionsModal: FC<Props> = ({ show, hide }) => {
   const classes = useStyles();
 
   return (
-    <Modal open={showModal} onClose={hideModal} className={classes.root}>
+    <Modal open={show} onClose={hide} className={classes.root}>
       <Card className={classes.card} elevation={1}>
         <IconButton
           sx={{ position: "absolute", top: 16, right: 16 }}
-          onClick={hideModal}
+          onClick={hide}
         >
           <CloseIcon />
         </IconButton>
@@ -69,4 +69,4 @@ const InstallInstructionsModal: FC<Props> = ({ showModal, hideModal }) => {
   );
 };
 
-export default InstallInstructionsModal;
+export default IOSInstallInstructionsModal;

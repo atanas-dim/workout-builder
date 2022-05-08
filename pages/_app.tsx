@@ -13,6 +13,7 @@ import { AuthProvider } from "../context/AuthContext";
 import { SnackbarProvider } from "../context/SnackbarContext";
 import { RoutinesProvider } from "../context/RoutinesContext";
 import { WorkoutsProvider } from "../context/WorkoutsContext";
+import { PWAProvider } from "../context/PWAContext";
 
 import { CssBaseline } from "@mui/material/";
 import theme from "../styles/theme";
@@ -24,6 +25,10 @@ import { RouterPath, ROUTE_SETTINGS } from "../resources/routes";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
+  const showHeader = ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar;
+  const showBottomNav =
+    ROUTE_SETTINGS[router.pathname as RouterPath]?.bottomNavValue !== undefined;
 
   return (
     <>
@@ -48,22 +53,21 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
 
-          <OnlineStatusProvider>
-            <AuthProvider>
-              <SnackbarProvider>
-                <RoutinesProvider>
-                  <WorkoutsProvider>
-                    {ROUTE_SETTINGS[router.pathname as RouterPath]?.appBar && (
-                      <Header />
-                    )}
-                    <Component {...pageProps} />
-                    {ROUTE_SETTINGS[router.pathname as RouterPath]
-                      ?.bottomNavValue !== undefined && <BottomNav />}
-                  </WorkoutsProvider>
-                </RoutinesProvider>
-              </SnackbarProvider>
-            </AuthProvider>
-          </OnlineStatusProvider>
+          <PWAProvider>
+            <OnlineStatusProvider>
+              <AuthProvider>
+                <SnackbarProvider>
+                  <RoutinesProvider>
+                    <WorkoutsProvider>
+                      {showHeader && <Header />}
+                      <Component {...pageProps} />
+                      {showBottomNav && <BottomNav />}
+                    </WorkoutsProvider>
+                  </RoutinesProvider>
+                </SnackbarProvider>
+              </AuthProvider>
+            </OnlineStatusProvider>
+          </PWAProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </>

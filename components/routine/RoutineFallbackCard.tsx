@@ -48,7 +48,7 @@ const RoutineFallbackCard: FC<Props> = ({ onSelectClick }) => {
           </Typography>
           <ActionButton label="Create workout" onClick={onCreateWorkoutClick} />
         </>
-      ) : !routines.length ? (
+      ) : !routines?.length ? (
         <>
           <Typography component="span" variant="h6" sx={{ mb: 2 }}>
             Create your first routine

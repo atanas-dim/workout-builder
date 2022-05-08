@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 
 import useRoutines from "../../hooks/useRoutines";
 import useWorkouts from "../../hooks/useWorkouts";
@@ -14,19 +14,21 @@ const CurrentRoutine: FC = () => {
   const { currentRoutineId, isLoading: isLoadingRoutines } = useRoutines();
   const { isLoading: isLoadingWorkouts } = useWorkouts();
 
+  const showCarousel =
+    !!currentRoutineId && !isLoadingRoutines && !isLoadingWorkouts;
+
   const showFallbackCard =
     !currentRoutineId && !isLoadingRoutines && !isLoadingWorkouts;
 
   return (
     <>
       <RoutineHeader onSelectClick={() => setShowRoutineSelect(true)} />
-
-      {currentRoutineId && <RoutineCarousel />}
-
       <SelectRoutineModal
         show={showRoutineSelect}
         hide={() => setShowRoutineSelect(false)}
       />
+
+      {showCarousel && <RoutineCarousel />}
 
       {showFallbackCard && (
         <RoutineFallbackCard onSelectClick={() => setShowRoutineSelect(true)} />
