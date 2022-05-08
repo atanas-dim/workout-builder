@@ -97,31 +97,39 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
         {workout.title}
       </Typography>
 
-      {imgIsLoading && (
-        <Skeleton
-          width={"100%"}
-          variant="rectangular"
-          animation="wave"
-          sx={{ borderRadius: "6px", pt: "55%", mb: 2 }}
-        />
-      )}
+      <Box sx={{ position: "relative", pt: "55%", mb: 2 }}>
+        {imgIsLoading && (
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            sx={{
+              position: "absolute",
+              top: 0,
+              width: "100%",
+              height: "100%",
+              borderRadius: "6px",
+            }}
+          />
+        )}
 
-      <CardMedia
-        component="img"
-        onLoad={() => setImgIsLoading(false)}
-        sx={{
-          width: "100%",
-          height: "100%",
-          mb: 2,
-          borderRadius: 1 / 2,
-        }}
-        image={
-          thumbUrl
-            ? getYouTubeVideoThumbUrl(thumbUrl, "mq")
-            : "/images/exercise-placeholder.jpg"
-        }
-        alt={workout.title + " cover image"}
-      />
+        <CardMedia
+          component="img"
+          onLoad={() => setImgIsLoading(false)}
+          sx={{
+            position: "absolute",
+            top: 0,
+            width: "100%",
+            height: "100%",
+            borderRadius: 1 / 2,
+          }}
+          image={
+            thumbUrl
+              ? getYouTubeVideoThumbUrl(thumbUrl, "mq")
+              : "/images/exercise-placeholder.jpg"
+          }
+          alt={workout.title + " cover image"}
+        />
+      </Box>
 
       <ActionButton label="Start" fullWidth onClick={() => {}} href="/#" />
     </CarouselCard>

@@ -132,11 +132,11 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
         <Typography
           component="span"
           variant="overline"
-          sx={(theme) => ({
+          sx={{
             width: "100%",
             opacity: 0.7,
             ml: 1,
-          })}
+          }}
         >
           {data.title}
         </Typography>
