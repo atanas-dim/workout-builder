@@ -4,8 +4,7 @@ import { ToastContainer, toast, cssTransition } from "react-toastify";
 
 import { useOnlineStatus } from "../hooks/useOnlineStatus";
 import useAuth from "../hooks/useAuth";
-
-import { isStandaloneOnMobileSafari } from "../utilities/pwaHelpers/checkStandaloneMode";
+import { usePWA } from "../hooks/usePWA";
 
 import { onSnapshot, doc } from "firebase/firestore";
 import { firestore } from "../firebase/config";
@@ -16,6 +15,7 @@ import { PriorityHighRounded as AttentionIcon } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 import { pink } from "@mui/material/colors";
+import theme from "../styles/theme";
 
 const bounce = cssTransition({
   enter: "animate__animated animate__slideInUp",
@@ -64,10 +64,9 @@ export const SnackbarContext =
   createContext<SnackbarContextValue>(INITIAL_STATE);
 
 export function SnackbarProvider({ children }: any) {
-  const isStandalone = isStandaloneOnMobileSafari();
+  const { isStandalone } = usePWA();
   const classes = useStyles({ isStandalone })();
   const { user } = useAuth();
-
   const { online } = useOnlineStatus();
 
   // FETCH APP VERSION DATA FROM FIRESTORE AND COMPARE --------------------------
@@ -116,8 +115,9 @@ export function SnackbarProvider({ children }: any) {
   useEffect(() => {
     if (!online) {
       offlineToast.current = showOfflineNotification();
-    } else {
+    } else if (offlineToast.current) {
       hideOfflineNotification();
+      toast.success("Connection restored");
     }
   }, [online]);
 
@@ -143,11 +143,10 @@ export function SnackbarProvider({ children }: any) {
         className={classes.toastContainer}
       />
 
-      {/* Make this a component */}
       <Zoom in={!online}>
         <ButtonBase
           onClick={showOfflineNotification}
-          sx={(theme) => ({
+          sx={{
             position: "fixed",
             bottom: isStandalone ? "38px" : "27px",
             right: 32,
@@ -159,7 +158,7 @@ export function SnackbarProvider({ children }: any) {
             backgroundColor: theme.palette.error.dark,
             color: pink[100],
             borderRadius: 999,
-          })}
+          }}
         >
           <AttentionIcon />
         </ButtonBase>

@@ -28,7 +28,7 @@ const Home: NextPage = () => {
 
         <CurrentRoutine />
 
-        {/* <ActionButton label="Sign out" onClick={() => signOut()} /> */}
+        <ActionButton label="Sign out" onClick={() => signOut()} />
       </MainContentWrapper>
     </>
   );

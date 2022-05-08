@@ -1,11 +1,11 @@
-import { FC } from "react";
-import Image from "next/image";
+import { FC, useState } from "react";
 import { styled } from "@mui/system";
 
 import useRoutines from "../../hooks/useRoutines";
 import useWorkouts from "../../hooks/useWorkouts";
+import { Workout } from "../../context/WorkoutsContext";
 
-import { Box, Typography, CardMedia, Card } from "@mui/material";
+import { Box, Typography, CardMedia, Card, Skeleton } from "@mui/material";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 import ActionButton from "../buttons/ActionButton";
@@ -57,45 +57,9 @@ const RoutineCarousel: FC = () => {
 
   return (
     <CarouselContainer display="flex">
-      {currentRoutineWorkouts?.map((workout) => {
-        const thumbUrl = workout.exercises.find(
-          (exercise) => !!exercise.videoUrl
-        )?.videoUrl;
-
+      {currentRoutineWorkouts?.map((workout, index) => {
         return (
-          <CarouselCard key={workout.id} elevation={0}>
-            <Typography
-              component="span"
-              variant="h6"
-              noWrap
-              sx={{ mb: 2, display: "block", textTransform: "uppercase" }}
-            >
-              {workout.title}
-            </Typography>
-
-            <CardMedia
-              component="img"
-              sx={{
-                width: "100%",
-                height: "100%",
-                mb: 2,
-                borderRadius: 1 / 2,
-              }}
-              image={
-                thumbUrl
-                  ? getYouTubeVideoThumbUrl(thumbUrl, "mq")
-                  : "/images/exercise-placeholder.jpg"
-              }
-              alt={workout.title + " cover image"}
-            />
-
-            <ActionButton
-              label="Start"
-              fullWidth
-              onClick={() => {}}
-              href="/#"
-            />
-          </CarouselCard>
+          <CarouselItem key={"carousel-item-" + index} workout={workout} />
         );
       })}
       <div
@@ -110,3 +74,56 @@ const RoutineCarousel: FC = () => {
 };
 
 export default RoutineCarousel;
+
+type ItemProps = {
+  workout: Workout;
+};
+
+const CarouselItem: FC<ItemProps> = ({ workout }) => {
+  const thumbUrl = workout.exercises.find(
+    (exercise) => !!exercise.videoUrl
+  )?.videoUrl;
+
+  const [imgIsLoading, setImgIsLoading] = useState(true);
+
+  return (
+    <CarouselCard key={workout.id} elevation={0}>
+      <Typography
+        component="span"
+        variant="h6"
+        noWrap
+        sx={{ mb: 2, display: "block", textTransform: "uppercase" }}
+      >
+        {workout.title}
+      </Typography>
+
+      {imgIsLoading && (
+        <Skeleton
+          width={"100%"}
+          variant="rectangular"
+          animation="wave"
+          sx={{ borderRadius: "6px", pt: "55%", mb: 2 }}
+        />
+      )}
+
+      <CardMedia
+        component="img"
+        onLoad={() => setImgIsLoading(false)}
+        sx={{
+          width: "100%",
+          height: "100%",
+          mb: 2,
+          borderRadius: 1 / 2,
+        }}
+        image={
+          thumbUrl
+            ? getYouTubeVideoThumbUrl(thumbUrl, "mq")
+            : "/images/exercise-placeholder.jpg"
+        }
+        alt={workout.title + " cover image"}
+      />
+
+      <ActionButton label="Start" fullWidth onClick={() => {}} href="/#" />
+    </CarouselCard>
+  );
+};

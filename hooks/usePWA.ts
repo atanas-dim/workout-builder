@@ -98,5 +98,6 @@ export const usePWA = () => {
     showIOSInstallModal,
     onInstallClick,
     hideIOSInstallModal,
+    isStandalone,
   };
 };
