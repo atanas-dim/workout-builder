@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import React, { useState, useEffect, useCallback } from "react";
-import ReactDOM from "react-dom";
 
 import { useRouter } from "next/router";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";

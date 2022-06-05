@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 
 import { RouterPath } from "../../resources/routes";
 
-import useRoutines from "../../hooks/useRoutines";
-import useWorkouts from "../../hooks/useWorkouts";
-
 import { Typography, Card } from "@mui/material/";
 import ActionButton from "../../components/buttons/ActionButton";
 

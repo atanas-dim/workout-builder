@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 
 import useRoutines from "../../hooks/useRoutines";
 import useWorkouts from "../../hooks/useWorkouts";
+import { useOnlineStatus } from "../../hooks/useOnlineStatus";
 import SelectRoutineModal from "../../components/modals/SelectRoutineModal";
 
 import RoutineHeader from "./RoutineHeader";
@@ -13,6 +14,7 @@ import { FallbackCardVariant } from "./RoutineFallbackCard";
 
 const CurrentRoutine: FC = () => {
   const [showRoutineSelect, setShowRoutineSelect] = useState(false);
+  const { online } = useOnlineStatus();
 
   const {
     routines,
@@ -44,6 +46,8 @@ const CurrentRoutine: FC = () => {
     else return FallbackCardVariant.SelectRoutine;
   };
 
+  const showCircularProgress = isLoading || (!online && !currentRoutineId);
+
   return (
     <>
       <RoutineHeader onSelectClick={() => setShowRoutineSelect(true)} />
@@ -52,7 +56,7 @@ const CurrentRoutine: FC = () => {
         hide={() => setShowRoutineSelect(false)}
       />
 
-      {isLoading && (
+      {showCircularProgress && (
         <Box
           display="flex"
           justifyContent="center"
@@ -63,7 +67,7 @@ const CurrentRoutine: FC = () => {
         </Box>
       )}
 
-      {!isLoading && (
+      {!showCircularProgress && (
         <>
           {showCarousel && (
             <RoutineCarousel workouts={currentRoutineWorkouts} />

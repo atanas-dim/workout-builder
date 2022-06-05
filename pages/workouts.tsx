@@ -1,5 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React, { FC } from "react";
 
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
