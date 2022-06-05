@@ -17,7 +17,8 @@ import {
 import { firestore } from "../firebase/config";
 
 export default function useRoutines() {
-  const { routines, isLoading, currentRoutineId } = useContext(RoutinesContext);
+  const { routines, setRoutines, isLoading, currentRoutineId } =
+    useContext(RoutinesContext);
   const { user } = useContext(AuthContext);
 
   const routinesCollectionRef = user
@@ -112,6 +113,10 @@ export default function useRoutines() {
     }
   };
 
+  const resetRoutines = () => {
+    setRoutines([]);
+  };
+
   return {
     isLoading,
     createRoutine,
@@ -122,5 +127,7 @@ export default function useRoutines() {
     currentRoutineId,
     setCurrentRoutine,
     updateCurrentRoutine,
+
+    resetRoutines,
   };
 }

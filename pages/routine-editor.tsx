@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 
 import { useRouter } from "next/router";
@@ -22,6 +22,7 @@ import {
   Button,
   IconButton,
   Card,
+  Portal,
 } from "@mui/material";
 
 import {
@@ -33,9 +34,11 @@ import {
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
+import IconButtonWithConfirm from "../components/buttons/IconButtonWithConfirm";
 import AddWorkoutModal from "../components/modals/AddWorkoutModal";
 
 import { Workout } from "../context/WorkoutsContext";
+import { generateRandomId } from "../utilities/general/helpers";
 
 const useStyles = makeStyles((theme: Theme) => ({
   saveButtonContainer: {
@@ -97,24 +100,26 @@ const RoutineEditor: NextPage = () => {
       routines.find((routine) => routine.id === existingRoutineId)?.workouts ||
       [];
     setRoutineOrderArray([...workoutsOrderArray]);
-  }, [existingRoutineId]);
+  }, [existingRoutineId, routines]);
+
+  const getRoutineWorkouts = useCallback(
+    (routineOrderArray: string[]) => {
+      const foundWorkouts: any[] = [];
+
+      routineOrderArray.forEach((entryId) => {
+        const foundWorkout = workouts.find((workout) => workout.id === entryId);
+
+        foundWorkouts.push(foundWorkout);
+      });
+      return foundWorkouts;
+    },
+    [workouts]
+  );
 
   useEffect(() => {
     const foundWorkouts = getRoutineWorkouts(routineOrderArray);
-
     setRoutineWorkouts(foundWorkouts);
-  }, [routineOrderArray]);
-
-  const getRoutineWorkouts = (routineOrderArray: string[]) => {
-    const foundWorkouts: any[] = [];
-
-    routineOrderArray.forEach((entryId) => {
-      const foundWorkout = workouts.find((workout) => workout.id === entryId);
-
-      foundWorkouts.push(foundWorkout);
-    });
-    return foundWorkouts;
-  };
+  }, [routineOrderArray, getRoutineWorkouts]);
 
   const removeWorkout = (index: number) => {
     setRoutineOrderArray((prev) =>
@@ -210,46 +215,55 @@ const RoutineEditor: NextPage = () => {
                 ref={provided.innerRef}
                 style={{ width: "100%" }}
               >
-                {routineWorkouts.map((workout, index) => (
-                  <Draggable
-                    key={workout.id + index}
-                    draggableId={workout.id + index}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <Card
-                        key={"workout-" + index}
-                        sx={{
-                          height: 80,
-                          mb: 2,
-                          p: 1,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                        elevation={0}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                        {...provided.dragHandleProps}
+                {!!routineWorkouts.length &&
+                  routineWorkouts?.map((workout, index) => {
+                    const fallbackId = generateRandomId();
+                    return (
+                      <Draggable
+                        key={workout?.id + index || fallbackId}
+                        draggableId={workout?.id + index || fallbackId}
+                        index={index}
+                        isDragDisabled={!workout?.id}
                       >
-                        <IconButton>
-                          <DragIcon />
-                        </IconButton>
-                        <Typography noWrap sx={{ fontWeight: 500, flex: 1 }}>
-                          {workout.title}
-                        </Typography>
+                        {(provided, snapshot) => (
+                          <Card
+                            key={"workout-" + index}
+                            sx={{
+                              height: 80,
+                              mb: 2,
+                              p: 1,
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                            elevation={0}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style
+                            )}
+                            {...provided.dragHandleProps}
+                          >
+                            <IconButton disabled={!workout?.id}>
+                              <DragIcon />
+                            </IconButton>
+                            <Typography
+                              noWrap
+                              sx={{ fontWeight: 500, flex: 1 }}
+                              color={!!workout?.title ? "default" : "error"}
+                            >
+                              {workout?.title || "Workout not available"}
+                            </Typography>
 
-                        <IconButton onClick={() => removeWorkout(index)}>
-                          <RemoveIcon />
-                        </IconButton>
-                      </Card>
-                    )}
-                  </Draggable>
-                ))}
+                            <IconButton onClick={() => removeWorkout(index)}>
+                              <RemoveIcon />
+                            </IconButton>
+                          </Card>
+                        )}
+                      </Draggable>
+                    );
+                  })}
                 {provided.placeholder}
               </div>
             )}
@@ -298,17 +312,10 @@ const RoutineEditor: NextPage = () => {
 export default withPrivate(RoutineEditor);
 
 const DeleteButton = () => {
-  const [headerToolbarElement, setHeaderToolbarElement] =
-    useState<HTMLElement | null>();
   const router = useRouter();
 
   const { deleteRoutine } = useRoutines();
   const existingRoutineId = router.query.routineId;
-
-  useEffect(() => {
-    const headerToolbar = document.getElementById("right-controls");
-    setHeaderToolbarElement(headerToolbar);
-  }, []);
 
   const onDeleteClick = () => {
     if (!existingRoutineId) return;
@@ -317,12 +324,15 @@ const DeleteButton = () => {
     );
   };
 
-  return headerToolbarElement
-    ? ReactDOM.createPortal(
-        <IconButton color="error" onClick={onDeleteClick}>
-          <DeleteIcon />
-        </IconButton>,
-        headerToolbarElement
-      )
-    : null;
+  return (
+    <Portal container={document.getElementById("right-controls")}>
+      <IconButtonWithConfirm
+        icon={<DeleteIcon />}
+        confirmLabel="Delete"
+        onConfirmClick={onDeleteClick}
+        heading="Delete routine?"
+        message="This action will permanently delete the selected routine entry."
+      />
+    </Portal>
+  );
 };

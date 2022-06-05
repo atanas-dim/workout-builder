@@ -9,17 +9,40 @@ import RoutineCarousel from "../../components/routine/RoutineCarousel";
 import RoutineFallbackCard from "./RoutineFallbackCard";
 import { CircularProgress, Box } from "@mui/material";
 
+import { FallbackCardVariant } from "./RoutineFallbackCard";
+
 const CurrentRoutine: FC = () => {
   const [showRoutineSelect, setShowRoutineSelect] = useState(false);
 
-  const { currentRoutineId, isLoading: isLoadingRoutines } = useRoutines();
-  const { isLoading: isLoadingWorkouts } = useWorkouts();
+  const {
+    routines,
+    currentRoutineId,
+    isLoading: isLoadingRoutines,
+  } = useRoutines();
+
+  const {
+    workouts,
+    routineGroups,
+    isLoading: isLoadingWorkouts,
+  } = useWorkouts();
 
   const isLoading = isLoadingRoutines || isLoadingWorkouts;
 
-  const showCarousel = !!currentRoutineId && !isLoading;
+  const currentRoutineWorkouts = currentRoutineId
+    ? routineGroups?.[currentRoutineId]?.workouts
+    : {};
 
-  const showFallbackCard = !currentRoutineId && !isLoading;
+  const showCarousel =
+    currentRoutineWorkouts && !!Object.keys(currentRoutineWorkouts).length;
+
+  const getFallbackCardVariant = () => {
+    if (!workouts?.length) return FallbackCardVariant.FirstWorkout;
+    else if (!routines?.length) return FallbackCardVariant.FirstRoutine;
+    else if (!currentRoutineId) return FallbackCardVariant.SelectRoutine;
+    else if (!Object.keys(currentRoutineWorkouts).length)
+      return FallbackCardVariant.RoutineIsEmpty;
+    else return FallbackCardVariant.SelectRoutine;
+  };
 
   return (
     <>
@@ -40,10 +63,20 @@ const CurrentRoutine: FC = () => {
         </Box>
       )}
 
-      {showCarousel && <RoutineCarousel />}
+      {!isLoading && (
+        <>
+          {showCarousel && (
+            <RoutineCarousel workouts={currentRoutineWorkouts} />
+          )}
 
-      {showFallbackCard && (
-        <RoutineFallbackCard onSelectClick={() => setShowRoutineSelect(true)} />
+          {!showCarousel && (
+            <RoutineFallbackCard
+              variant={getFallbackCardVariant()}
+              onSelectClick={() => setShowRoutineSelect(true)}
+              currentRoutineId={currentRoutineId}
+            />
+          )}
+        </>
       )}
     </>
   );

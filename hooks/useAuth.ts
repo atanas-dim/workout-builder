@@ -11,12 +11,17 @@ import {
 import { auth } from "../firebase/config";
 
 import useUserProfile from "./useUserProfile";
+import useWorkouts from "./useWorkouts";
+import useRoutines from "./useRoutines";
+
 import { RouterPath } from "../resources/routes";
 
 const useAuth = () => {
   const { user } = useContext(AuthContext);
   const [error, setError] = useState("");
   const { createUserDataInFirestore } = useUserProfile();
+  const { resetWorkouts } = useWorkouts();
+  const { resetRoutines } = useRoutines();
   const { push } = useRouter();
 
   const signUp = (email: string, password: string, displayName: string) => {
@@ -61,6 +66,8 @@ const useAuth = () => {
     SignOutFromFirebase(auth)
       .then(() => {
         console.log("Signed out");
+        resetRoutines();
+        resetWorkouts();
       })
       .then(() => push(RouterPath.Login))
       .catch((error) => {

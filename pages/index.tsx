@@ -22,9 +22,10 @@ const Home: NextPage = () => {
       </Head>
 
       <MainContentWrapper>
-        <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+        {/* TODO Add message here about prev workout with date trained */}
+        {/* <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Hi {user?.displayName} 💪
-        </Typography>
+        </Typography> */}
 
         <CurrentRoutine />
 

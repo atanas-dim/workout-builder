@@ -1,4 +1,11 @@
-import React, { FC, useState, useEffect, createContext } from "react";
+import React, {
+  FC,
+  useState,
+  useEffect,
+  createContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 import {
   Timestamp,
@@ -24,12 +31,14 @@ export type Routine = {
 
 type RoutinesContextValue = {
   routines: Routine[];
+  setRoutines: Dispatch<SetStateAction<Routine[]>>;
   isLoading: boolean;
   currentRoutineId?: string;
 };
 
 const INITIAL_STATE = {
   routines: [],
+  setRoutines: () => {},
   isLoading: true,
   currentRoutineId: undefined,
 };
@@ -128,6 +137,7 @@ export const RoutinesProvider: FC = ({ children }: any) => {
     <RoutinesContext.Provider
       value={{
         routines,
+        setRoutines,
         isLoading,
         currentRoutineId,
       }}

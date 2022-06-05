@@ -10,15 +10,25 @@ import useWorkouts from "../../hooks/useWorkouts";
 import { Typography, Card } from "@mui/material/";
 import ActionButton from "../../components/buttons/ActionButton";
 
+export enum FallbackCardVariant {
+  FirstWorkout,
+  FirstRoutine,
+  SelectRoutine,
+  RoutineIsEmpty,
+}
+
 type Props = {
+  variant: FallbackCardVariant;
   onSelectClick: () => void;
+  currentRoutineId?: string;
 };
 
-const RoutineFallbackCard: FC<Props> = ({ onSelectClick }) => {
+const RoutineFallbackCard: FC<Props> = ({
+  variant,
+  onSelectClick,
+  currentRoutineId,
+}) => {
   const { push } = useRouter();
-
-  const { routines } = useRoutines();
-  const { workouts } = useWorkouts();
 
   const onCreateWorkoutClick = () => {
     push(RouterPath.WorkoutEditor);
@@ -26,6 +36,14 @@ const RoutineFallbackCard: FC<Props> = ({ onSelectClick }) => {
 
   const onCreateRoutineClick = () => {
     push(RouterPath.RoutineEditor);
+  };
+
+  const onAddWorkoutClick = () => {
+    if (!currentRoutineId) return;
+    push({
+      pathname: RouterPath.RoutineEditor,
+      query: { routineId: currentRoutineId },
+    });
   };
 
   return (
@@ -41,26 +59,39 @@ const RoutineFallbackCard: FC<Props> = ({ onSelectClick }) => {
         alignItems: "center",
       }}
     >
-      {!workouts.length ? (
+      {variant === FallbackCardVariant.FirstWorkout && (
         <>
           <Typography component="span" variant="h6" sx={{ mb: 2 }}>
             Create your first workout
           </Typography>
           <ActionButton label="Create workout" onClick={onCreateWorkoutClick} />
         </>
-      ) : !routines?.length ? (
+      )}
+
+      {variant === FallbackCardVariant.FirstRoutine && (
         <>
           <Typography component="span" variant="h6" sx={{ mb: 2 }}>
             Create your first routine
           </Typography>
           <ActionButton label="Create routine" onClick={onCreateRoutineClick} />
         </>
-      ) : (
+      )}
+
+      {variant === FallbackCardVariant.SelectRoutine && (
         <>
           <Typography component="span" variant="h6" sx={{ mb: 2 }}>
             To start training select a routine
           </Typography>
           <ActionButton label="Select routine" onClick={onSelectClick} />
+        </>
+      )}
+
+      {variant === FallbackCardVariant.RoutineIsEmpty && (
+        <>
+          <Typography component="span" variant="h6" sx={{ mb: 2 }}>
+            Selected routine is empty
+          </Typography>
+          <ActionButton label="Add workout" onClick={onAddWorkoutClick} />
         </>
       )}
     </Card>

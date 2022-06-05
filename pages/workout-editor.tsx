@@ -19,13 +19,7 @@ import useWorkouts from "../hooks/useWorkouts";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
-import {
-  TextField,
-  Paper,
-  Typography,
-  Button,
-  IconButton,
-} from "@mui/material";
+import { TextField, Paper, Typography, Button, Portal } from "@mui/material";
 
 import {
   AddRounded as AddIcon,
@@ -34,6 +28,7 @@ import {
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
+import IconButtonWithConfirm from "../components/buttons/IconButtonWithConfirm";
 import ExerciseCard from "../components/cards/ExerciseCard";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -88,7 +83,7 @@ const WorkoutEditor: NextPage = () => {
       setWorkoutTitle(data.title || "");
       setWorkoutExerciseEntries(data.exercises || []);
     });
-  }, [existingWorkoutId]);
+  }, [existingWorkoutId, getWorkoutById]);
 
   // EXERCISES ----------------------
 
@@ -258,17 +253,10 @@ const WorkoutEditor: NextPage = () => {
 export default withPrivate(WorkoutEditor);
 
 const DeleteButton = () => {
-  const [headerToolbarElement, setHeaderToolbarElement] =
-    useState<HTMLElement | null>();
   const router = useRouter();
 
   const { deleteWorkout } = useWorkouts();
   const existingWorkoutId = router.query.workoutId;
-
-  useEffect(() => {
-    const headerToolbar = document.getElementById("right-controls");
-    setHeaderToolbarElement(headerToolbar);
-  }, []);
 
   const onDeleteClick = () => {
     if (!existingWorkoutId) return;
@@ -277,12 +265,15 @@ const DeleteButton = () => {
     );
   };
 
-  return headerToolbarElement
-    ? ReactDOM.createPortal(
-        <IconButton color="error" onClick={onDeleteClick}>
-          <DeleteIcon />
-        </IconButton>,
-        headerToolbarElement
-      )
-    : null;
+  return (
+    <Portal container={document.getElementById("right-controls")}>
+      <IconButtonWithConfirm
+        icon={<DeleteIcon />}
+        confirmLabel="Delete"
+        onConfirmClick={onDeleteClick}
+        heading="Delete workout?"
+        message="This action will permanently delete the selected workout entry."
+      />
+    </Portal>
+  );
 };

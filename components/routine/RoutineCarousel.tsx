@@ -42,22 +42,24 @@ const CarouselCard = styled(Card)(({ theme }) => ({
 
   marginRight: 16,
 
+  "&:only-child": {
+    width: "calc(100% + 48px)",
+  },
+
   "&:first-of-type": {
     marginLeft: 16,
   },
 }));
 
-const RoutineCarousel: FC = () => {
-  const { currentRoutineId } = useRoutines();
-  const { routineGroups } = useWorkouts();
+type Props = {
+  workouts: { [key: string]: Workout };
+};
 
-  const currentRoutineWorkouts = currentRoutineId
-    ? routineGroups?.[currentRoutineId]?.workouts
-    : [];
-
+const RoutineCarousel: FC<Props> = ({ workouts }) => {
   return (
     <CarouselContainer display="flex">
-      {currentRoutineWorkouts?.map((workout, index) => {
+      {Object.keys(workouts)?.map((key, index) => {
+        const workout = workouts[key];
         return (
           <CarouselItem key={"carousel-item-" + index} workout={workout} />
         );

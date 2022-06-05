@@ -11,7 +11,14 @@ import { RoutineGroup } from "../context/WorkoutsContext";
 
 import useWorkouts from "../hooks/useWorkouts";
 
-import { CircularProgress, Box, Typography, Card, Fade } from "@mui/material";
+import {
+  CircularProgress,
+  Box,
+  Typography,
+  Card,
+  Fade,
+  Portal,
+} from "@mui/material";
 import {
   AddCircleOutlineRounded as AddIcon,
   MoreHorizRounded as MoreIcon,
@@ -26,7 +33,7 @@ const Workouts: NextPage = () => {
   const { workouts, isLoading, isSorted, setIsSorted, routineGroups } =
     useWorkouts();
 
-  const routineOrderByUpdated = Object.keys(routineGroups).sort((a, b) =>
+  const routinesOrderedByUpdated = Object.keys(routineGroups).sort((a, b) =>
     routineGroups[a].updated < routineGroups[b].updated ? 1 : -1
   );
 
@@ -79,8 +86,11 @@ const Workouts: NextPage = () => {
 
         {isSorted &&
           routineGroups &&
-          routineOrderByUpdated.map((key) => {
-            if (key === "unsorted" && !routineGroups[key].workouts.length)
+          routinesOrderedByUpdated.map((key) => {
+            if (
+              key === "unsorted" &&
+              !Object.keys(routineGroups[key].workouts).length
+            )
               return;
             else
               return (
@@ -107,7 +117,6 @@ const Workouts: NextPage = () => {
 };
 
 // ROUTINE GROUP -----------------------------------
-
 type RoutineContainerProps = {
   data: RoutineGroup;
 };
@@ -156,11 +165,13 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
         )}
       </Box>
 
-      {data.workouts.length ? (
-        data.workouts.map((workout, index) => {
+      {Object.keys(data.workouts).length ? (
+        Object.keys(data.workouts).map((key, index) => {
+          const workout = data.workouts[key];
+
           return (
             <WorkoutCard
-              key={"workout-" + data.id + workout.id}
+              key={"workout-" + data.id + workout.id + index}
               index={index}
               workout={workout}
             />
@@ -168,8 +179,8 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
         })
       ) : (
         <Fade
-          in={!data.workouts.length}
-          appear={!data.workouts.length}
+          in={!Object.keys(data.workouts).length}
+          appear={!Object.keys(data.workouts).length}
           timeout={600}
         >
           <Card
@@ -191,16 +202,8 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
 };
 
 // CREATE BUTTON ON HEADER -----------------------------------
-
 const CreateButton = () => {
   const { push } = useRouter();
-  const [headerToolbarElement, setHeaderToolbarElement] =
-    useState<HTMLElement | null>();
-
-  useEffect(() => {
-    const headerToolbar = document.getElementById("right-controls");
-    setHeaderToolbarElement(headerToolbar);
-  }, []);
 
   const onCreateWorkoutClick = () => {
     push(RouterPath.WorkoutEditor);
@@ -210,26 +213,25 @@ const CreateButton = () => {
     push(RouterPath.RoutineEditor);
   };
 
-  return headerToolbarElement
-    ? ReactDOM.createPortal(
-        <IconButtonWithMenu
-          id="create-new"
-          icon={<AddIcon />}
-          menuTitle="Create"
-          menuItems={[
-            {
-              label: "Workout",
-              onClick: onCreateWorkoutClick,
-            },
-            {
-              label: "Routine",
-              onClick: onCreateRoutineClick,
-            },
-          ]}
-        />,
-        headerToolbarElement
-      )
-    : null;
+  return (
+    <Portal container={document.getElementById("right-controls")}>
+      <IconButtonWithMenu
+        id="create-new"
+        icon={<AddIcon />}
+        menuTitle="Create"
+        menuItems={[
+          {
+            label: "Workout",
+            onClick: onCreateWorkoutClick,
+          },
+          {
+            label: "Routine",
+            onClick: onCreateRoutineClick,
+          },
+        ]}
+      />
+    </Portal>
+  );
 };
 
 export default withPrivate(Workouts);

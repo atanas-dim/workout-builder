@@ -18,8 +18,8 @@ import { firestore } from "../firebase/config";
 export default function useWorkouts() {
   const {
     workouts,
+    setWorkouts,
     isLoading,
-    setIsLoading,
     isSorted,
     setIsSorted,
     routineGroups,
@@ -87,6 +87,10 @@ export default function useWorkouts() {
     }
   };
 
+  const resetWorkouts = () => {
+    setWorkouts([]);
+  };
+
   return {
     isLoading,
     createWorkout,
@@ -98,5 +102,7 @@ export default function useWorkouts() {
     isSorted,
     setIsSorted,
     routineGroups,
+
+    resetWorkouts,
   };
 }

@@ -10,7 +10,7 @@ const createRoutineGroups = (routinesData: Routine[]) => {
     unsorted: {
       id: undefined,
       title: "Unsorted",
-      workouts: [],
+      workouts: {},
       workoutsOrder: [],
       updated: Timestamp.fromDate(new Date(0, 0, 0)),
     },
@@ -20,7 +20,7 @@ const createRoutineGroups = (routinesData: Routine[]) => {
     const newGroup: RoutineGroup = {
       id: routine.id,
       title: routine.title,
-      workouts: [],
+      workouts: {},
       workoutsOrder: routine?.workouts || [],
       updated: routine.updated || routine.created,
     };
@@ -36,16 +36,25 @@ export const sortWorkoutsByOrderArray = (
   workouts: Workout[],
   orderArray: string[]
 ) => {
-  return workouts.sort(
-    (a, b) => orderArray.indexOf(a.id) - orderArray.indexOf(b.id)
-  );
+  const ordered: Workout[] = [];
+  orderArray.forEach((workoutId) => {
+    const foundWorkout = workouts.find((workout) => workout.id === workoutId);
+    if (foundWorkout) ordered.push(foundWorkout);
+  });
+  return ordered;
 };
 
 const getUnsortedWorkouts = (
   workouts: Workout[],
   addedToRoutines: string[]
 ) => {
-  return workouts.filter((workout) => !addedToRoutines.includes(workout.id));
+  const unsorted: { [key: string]: Workout } = {};
+  workouts.forEach((workout, index) => {
+    if (addedToRoutines.includes(workout.id)) return;
+    unsorted[index.toString()] = workout;
+  });
+
+  return unsorted;
 };
 
 export const sortWorkoutsByRoutine = (
@@ -66,23 +75,15 @@ export const sortWorkoutsByRoutine = (
     const groupKey = Object.keys(routineGroups)[groupIndex];
     const routineGroup = routineGroups[groupKey];
 
-    for (
-      let workoutIndex = workoutsData.length - 1;
-      workoutIndex >= 0;
-      workoutIndex--
-    ) {
-      const workout = workoutsData[workoutIndex];
+    const { workoutsOrder } = routineGroup;
 
-      if (routineGroup.workoutsOrder.includes(workout.id)) {
-        routineGroup.workouts.push(workout);
-        addedToRoutines.push(workout.id);
+    workoutsOrder.forEach((workoutId, index) => {
+      const workout = workoutsData.find((workout) => workout.id === workoutId);
+      if (workout) {
+        routineGroup.workouts[index] = workout;
+        addedToRoutines.push(workoutId);
       }
-    }
-
-    routineGroup.workouts = sortWorkoutsByOrderArray(
-      routineGroup.workouts,
-      routineGroup.workoutsOrder
-    );
+    });
   }
 
   routineGroups.unsorted.workouts = getUnsortedWorkouts(

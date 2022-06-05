@@ -42,7 +42,7 @@ export type RoutineGroup = {
   id?: string;
   title: string;
   workoutsOrder: string[];
-  workouts: Workout[];
+  workouts: { [key: string]: Workout };
   updated: Timestamp;
 };
 
@@ -52,6 +52,7 @@ type RoutineGroups = {
 
 type WorkoutsContextValue = {
   workouts: Workout[];
+  setWorkouts: Dispatch<SetStateAction<Workout[]>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
@@ -61,6 +62,7 @@ type WorkoutsContextValue = {
 
 const INITIAL_STATE = {
   workouts: [],
+  setWorkouts: () => {},
   isLoading: true,
   setIsLoading: () => {},
   isSorted: true,
@@ -83,7 +85,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const { routines } = useRoutines();
 
   useEffect(() => {
-    console.log("updating  workouts data");
+    console.log("updating  workouts data", workouts);
   }, [workouts]);
 
   // FETCH FROM FIRESTORE --------------------------
@@ -139,6 +141,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     <WorkoutsContext.Provider
       value={{
         workouts,
+        setWorkouts,
         isLoading,
         setIsLoading,
         isSorted,
