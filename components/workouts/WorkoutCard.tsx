@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import { RouterPath } from "../../resources/routes";
 
-import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 import { generateRandomId } from "../../utilities/general/helpers";
 
 import { Workout } from "../../context/WorkoutsContext";
@@ -17,9 +16,9 @@ import {
   ButtonBase,
   Collapse,
   Divider,
-  CardMedia,
   Fade,
 } from "@mui/material";
+
 import {
   ExpandMoreRounded as ExpandMoreIcon,
   ExpandLessRounded as ExpandLessIcon,
@@ -29,6 +28,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 
+import ExercisesItem from "./ExercisesItem";
 import IconButtonWithMenu from "../buttons/IconButtonWithMenu";
 
 export const useStyles = makeStyles((theme: Theme) => ({
@@ -135,67 +135,14 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
           </Box>
         </Box>
 
-        <Collapse
-          in={expanded}
-          timeout={workout.exercises.length * 100}
-          sx={{ width: "100%" }}
-        >
+        <Collapse in={expanded} timeout={600} sx={{ width: "100%" }}>
           {workout.exercises.map((exercise, index) => (
-            <Box key={"workout-exersise-" + index}>
-              <Box
-                display="flex"
-                sx={{ width: "100%", mt: index === 0 ? 2 : 0 }}
-              >
-                <CardMedia
-                  component="img"
-                  sx={{
-                    width: { xs: "45%", sm: "30%", md: "25%" },
-                    height: "100%",
-                    minHeight: 50,
-                    mr: 2,
-                    borderRadius: 1 / 2,
-                  }}
-                  image={
-                    exercise.videoUrl
-                      ? getYouTubeVideoThumbUrl(exercise.videoUrl, "mq")
-                      : "/images/exercise-placeholder.jpg"
-                  }
-                  alt={exercise.name + " thumbnail"}
-                />
+            <Box
+              key={"workout-exersise-" + index}
+              sx={{ mt: index === 0 ? 2 : 0 }}
+            >
+              <ExercisesItem data={exercise} />
 
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  key={exercise.id}
-                  sx={{
-                    width: {
-                      xs: "calc(60% - 32px)",
-                      sm: "calc(70% - 32px)",
-                      md: "calc(75% - 32px)",
-                    },
-                  }}
-                >
-                  <Typography
-                    component="span"
-                    variant="body1"
-                    noWrap
-                    sx={{ width: "100%", fontWeight: 500 }}
-                  >
-                    {exercise.name}
-                  </Typography>
-                  <Typography component="span" variant="body2" noWrap>
-                    Sets: {exercise.sets}
-                  </Typography>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    noWrap
-                    sx={{ width: "100%" }}
-                  >
-                    Reps: {exercise.reps}
-                  </Typography>
-                </Box>
-              </Box>
               {index !== workout.exercises.length - 1 && (
                 <Divider sx={{ mt: 1, mb: 1 }} />
               )}

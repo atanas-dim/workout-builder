@@ -7,17 +7,10 @@ import {
   DraggableProvidedDraggableProps,
 } from "react-beautiful-dnd";
 
-import {
-  Box,
-  Card,
-  TextField,
-  IconButton,
-  // InputAdornment,
-} from "@mui/material";
+import { Box, Card, TextField, IconButton } from "@mui/material";
 import {
   CancelRounded as RemoveIcon,
   DragIndicatorRounded as DragIcon,
-  // Search as SearchIcon,
 } from "@mui/icons-material/";
 
 enum ExerciseProperties {

@@ -28,7 +28,7 @@ import {
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import ActionButton from "../components/buttons/ActionButton";
 import IconButtonWithConfirm from "../components/buttons/IconButtonWithConfirm";
-import ExerciseCard from "../components/cards/ExerciseCard";
+import ExerciseCard from "../components/exercises/ExerciseCard";
 
 const useStyles = makeStyles((theme: Theme) => ({
   saveButtonContainer: {

@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
+import Image from "next/image";
+
 import { styled } from "@mui/system";
 
-import useRoutines from "../../hooks/useRoutines";
-import useWorkouts from "../../hooks/useWorkouts";
 import { Workout } from "../../context/WorkoutsContext";
 
-import { Box, Typography, CardMedia, Card, Skeleton } from "@mui/material";
+import { Box, Typography, Card, Skeleton } from "@mui/material";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 import ActionButton from "../buttons/ActionButton";
@@ -99,7 +99,15 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
         {workout.title}
       </Typography>
 
-      <Box sx={{ position: "relative", pt: "55%", mb: 2 }}>
+      <Box
+        sx={{
+          position: "relative",
+          mb: 2,
+          aspectRatio: "16/9",
+          borderRadius: "6px",
+          overflow: "hidden",
+        }}
+      >
         {imgIsLoading && (
           <Skeleton
             variant="rectangular"
@@ -109,27 +117,20 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
               top: 0,
               width: "100%",
               height: "100%",
-              borderRadius: "6px",
             }}
           />
         )}
 
-        <CardMedia
-          component="img"
-          onLoad={() => setImgIsLoading(false)}
-          sx={{
-            position: "absolute",
-            top: 0,
-            width: "100%",
-            height: "100%",
-            borderRadius: 1 / 2,
-          }}
-          image={
+        <Image
+          src={
             thumbUrl
               ? getYouTubeVideoThumbUrl(thumbUrl, "mq")
-              : "/images/exercise-placeholder.jpg"
+              : "./images/exercise-placeholder.jpg"
           }
           alt={workout.title + " cover image"}
+          layout="fill"
+          objectFit="cover"
+          onLoadingComplete={() => setImgIsLoading(false)}
         />
       </Box>
 

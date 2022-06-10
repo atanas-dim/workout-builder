@@ -24,7 +24,7 @@ import {
 } from "@mui/icons-material";
 
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
-import WorkoutCard from "../components/cards/WorkoutCard";
+import WorkoutCard from "../components/workouts/WorkoutCard";
 import IconButtonWithMenu from "../components/buttons/IconButtonWithMenu";
 import LargeSwitch from "../components/buttons/LargeSwitch";
 

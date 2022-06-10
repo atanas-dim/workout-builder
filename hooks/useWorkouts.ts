@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 
 import { AuthContext } from "../context/AuthContext";
 import { WorkoutsContext, Workout } from "../context/WorkoutsContext";
@@ -26,9 +26,11 @@ export default function useWorkouts() {
   } = useContext(WorkoutsContext);
   const { user } = useContext(AuthContext);
 
-  const workoutsCollectionRef = user
-    ? collection(firestore, "users", user.uid, "workouts")
-    : undefined;
+  const workoutsCollectionRef = useMemo(() => {
+    return user
+      ? collection(firestore, "users", user.uid, "workouts")
+      : undefined;
+  }, [user]);
 
   const createWorkout = async ({ title, exercises }: Partial<Workout>) => {
     if (!title || !workoutsCollectionRef) return;
@@ -70,22 +72,25 @@ export default function useWorkouts() {
     }
   };
 
-  const getWorkoutById = async (workoutId: string) => {
-    if (!workoutsCollectionRef || !workoutId) return;
+  const getWorkoutById = useCallback(
+    async (workoutId: string) => {
+      if (!workoutsCollectionRef || !workoutId) return;
 
-    try {
-      let workoutData: any;
+      try {
+        let workoutData: any;
 
-      const docRef = doc(workoutsCollectionRef, workoutId);
-      await getDoc(docRef).then((docSnap) => {
-        workoutData = docSnap.data();
-      });
+        const docRef = doc(workoutsCollectionRef, workoutId);
+        await getDoc(docRef).then((docSnap) => {
+          workoutData = docSnap.data();
+        });
 
-      return workoutData;
-    } catch (error) {
-      console.error("Error loading data: ", error);
-    }
-  };
+        return workoutData;
+      } catch (error) {
+        console.error("Error loading data: ", error);
+      }
+    },
+    [workoutsCollectionRef]
+  );
 
   const resetWorkouts = () => {
     setWorkouts([]);
