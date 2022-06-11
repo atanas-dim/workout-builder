@@ -10,7 +10,7 @@ import useRoutines from "../../hooks/useRoutines";
 
 import { Box, Typography, Card, Skeleton, ButtonBase } from "@mui/material";
 
-import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/youtubeVideos";
 import ActionButton from "../buttons/ActionButton";
 
 import { AddCircleOutlineRounded as AddIcon } from "@mui/icons-material";
@@ -73,7 +73,12 @@ const RoutineCarousel: FC<Props> = ({ workouts }) => {
         );
       })}
       <ButtonBase
-        sx={{ mr: 1, scrollSnapAlign: "center", scrollSnapStop: "always" }}
+        sx={{
+          mr: 1,
+          scrollSnapAlign: "center",
+          scrollSnapStop: "always",
+          borderRadius: 1,
+        }}
         onClick={() =>
           push({
             pathname: RouterPath.RoutineEditor,
@@ -114,11 +119,18 @@ type ItemProps = {
 };
 
 const CarouselItem: FC<ItemProps> = ({ workout }) => {
+  const { push } = useRouter();
+
+  //TODO make these slideshow fade in/out
   const thumbUrl = workout.exercises.find(
     (exercise) => !!exercise.videoUrl
   )?.videoUrl;
 
   const [imgIsLoading, setImgIsLoading] = useState(true);
+
+  const onStartClick = () => {
+    push(RouterPath.Start + `/${workout.id}`);
+  };
 
   return (
     <CarouselCard key={workout.id} elevation={0}>
@@ -167,7 +179,7 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
         />
       </Box>
 
-      <ActionButton label="Start" fullWidth onClick={() => {}} href="/#" />
+      <ActionButton label="Start" fullWidth onClick={onStartClick} />
     </CarouselCard>
   );
 };
