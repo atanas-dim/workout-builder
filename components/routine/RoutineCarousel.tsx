@@ -114,11 +114,18 @@ type ItemProps = {
 };
 
 const CarouselItem: FC<ItemProps> = ({ workout }) => {
+  const { push } = useRouter();
+
+  //TODO make these slideshow fade in/out
   const thumbUrl = workout.exercises.find(
     (exercise) => !!exercise.videoUrl
   )?.videoUrl;
 
   const [imgIsLoading, setImgIsLoading] = useState(true);
+
+  const onStartClick = () => {
+    push(RouterPath.Start + `/${workout.id}`);
+  };
 
   return (
     <CarouselCard key={workout.id} elevation={0}>
@@ -167,7 +174,7 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
         />
       </Box>
 
-      <ActionButton label="Start" fullWidth onClick={() => {}} href="/#" />
+      <ActionButton label="Start" fullWidth onClick={onStartClick} />
     </CarouselCard>
   );
 };

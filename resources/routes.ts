@@ -6,11 +6,12 @@ export enum RouterPath {
   Welcome = "/welcome",
   Login = "/login",
   Register = "/register",
+  Start = "/start",
 }
 
 type RouteSettings = {
   bottomNavValue?: number;
-  title: string;
+  title?: string;
   appBar: boolean;
 };
 export const ROUTE_SETTINGS: {
@@ -36,5 +37,8 @@ export const ROUTE_SETTINGS: {
   [RouterPath.RoutineEditor]: {
     title: "Routine Editor",
     appBar: true,
+  },
+  [RouterPath.Start]: {
+    appBar: false,
   },
 };
