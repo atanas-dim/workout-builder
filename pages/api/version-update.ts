@@ -34,6 +34,11 @@ export default async function appVersionUpdate(
     res.status(405).send({ message: "Only POST requests allowed" });
   }
 
+  if (req.body.deployment.environment !== "Production")
+    return res
+      .status(200)
+      .send({ environment: req.body.deployment.environment });
+
   const validated = validateJsonWebhook(req);
 
   if (!validated) return res.status(403).end();

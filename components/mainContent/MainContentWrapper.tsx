@@ -9,16 +9,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(13),
-    minHeight: "100vh",
+
     width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
 
-    // [theme.breakpoints.down("sm")]: {
-    //   paddingLeft: 8,
-    //   paddingRight: 8,
-    // },
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: 8,
+      paddingRight: 8,
+    },
   },
 }));
 

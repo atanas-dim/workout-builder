@@ -1,18 +1,24 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 
+import { useRouter } from "next/router";
+
 import { styled } from "@mui/system";
 
 import { Workout } from "../../context/WorkoutsContext";
+import useRoutines from "../../hooks/useRoutines";
 
-import { Box, Typography, Card, Skeleton } from "@mui/material";
+import { Box, Typography, Card, Skeleton, ButtonBase } from "@mui/material";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
 import ActionButton from "../buttons/ActionButton";
 
+import { AddCircleOutlineRounded as AddIcon } from "@mui/icons-material";
+import { RouterPath } from "../../resources/routes";
+
 const CarouselContainer = styled(Box)(({ theme }) => ({
-  minWidth: "calc(100% + 32px)",
-  width: "calc(100% + 32px)",
+  minWidth: "calc(100% + 16px)",
+  width: "calc(100% + 16px)",
   maxWidth: "100%",
   overflowY: "auto",
   marginBottom: 16,
@@ -40,14 +46,14 @@ const CarouselCard = styled(Card)(({ theme }) => ({
   scrollSnapAlign: "center",
   scrollSnapStop: "always",
 
-  marginRight: 16,
+  marginRight: 8,
 
-  "&:only-child": {
-    width: "calc(100% + 48px)",
+  "&:only-of-type": {
+    width: "100%",
   },
 
   "&:first-of-type": {
-    marginLeft: 16,
+    marginLeft: 8,
   },
 }));
 
@@ -56,6 +62,8 @@ type Props = {
 };
 
 const RoutineCarousel: FC<Props> = ({ workouts }) => {
+  const { push } = useRouter();
+  const { currentRoutineId } = useRoutines();
   return (
     <CarouselContainer display="flex">
       {Object.keys(workouts)?.map((key, index) => {
@@ -64,6 +72,30 @@ const RoutineCarousel: FC<Props> = ({ workouts }) => {
           <CarouselItem key={"carousel-item-" + index} workout={workout} />
         );
       })}
+      <ButtonBase
+        sx={{ mr: 1, scrollSnapAlign: "center", scrollSnapStop: "always" }}
+        onClick={() =>
+          push({
+            pathname: RouterPath.RoutineEditor,
+            query: { routineId: currentRoutineId },
+          })
+        }
+      >
+        <Card
+          elevation={0}
+          sx={{
+            minWidth: 120,
+            alignSelf: "stretch",
+
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <AddIcon fontSize="large" fill="gray.400" />
+        </Card>
+      </ButtonBase>
+
       <div
         role="presentation"
         style={{

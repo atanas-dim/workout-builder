@@ -46,7 +46,7 @@ const Workouts: NextPage = () => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ mb: 2, width: "100%" }}
+          sx={{ mb: 1, width: "100%" }}
         >
           <Typography
             component="span"
@@ -155,7 +155,10 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
           icon={<MoreIcon fontSize="small" />}
           drawerHeading={data.title}
         >
-          <ActionButton label="Edit routine" />
+          <ActionButton
+            label="Edit routine"
+            onClick={() => onEditRoutineClick(data.id)}
+          />
         </IconButtonWithDrawer>
       </Box>
 

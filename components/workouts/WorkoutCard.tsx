@@ -132,7 +132,11 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
           </Box>
         </Box>
 
-        <Collapse in={expanded} timeout={600} sx={{ width: "100%" }}>
+        <Collapse
+          in={expanded}
+          timeout={workout.exercises.length > 3 ? 600 : 300}
+          sx={{ width: "100%" }}
+        >
           {workout.exercises.map((exercise, index) => (
             <Box
               key={"workout-exersise-" + index}
