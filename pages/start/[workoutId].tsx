@@ -1,12 +1,13 @@
 import React from "react";
 import { NextPage } from "next";
-
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 import useWorkouts from "../../hooks/useWorkouts";
 
 import MainContentWrapper from "../../components/mainContent/MainContentWrapper";
-import VideoPlayer from "../../components/video/VideoPlayer";
+
+const VideoPlayer = dynamic(() => import("../../components/video/VideoPlayer"));
 
 import { getYouTubeVideoId } from "../../utilities/videoHelpers/youtubeVideos";
 
