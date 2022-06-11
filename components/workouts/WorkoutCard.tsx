@@ -29,7 +29,6 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 
 import ExercisesItem from "./ExercisesItem";
-import IconButtonWithMenu from "../buttons/IconButtonWithMenu";
 import IconButtonWithDrawer from "../buttons/IconButtonWithDrawer";
 import ActionButton from "../buttons/ActionButton";
 
@@ -41,20 +40,16 @@ export const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-
-    "&:last-of-type": {
-      marginBottom: 0,
-    },
   },
 }));
 
 type Props = {
   workout: Workout;
   index: number;
+  isLast?: boolean;
 };
 
-const WorkoutCard: FC<Props> = ({ workout, index }) => {
+const WorkoutCard: FC<Props> = ({ workout, index, isLast }) => {
   const router = useRouter();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
@@ -80,7 +75,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
 
   return (
     <Fade in={show} appear={show} timeout={600}>
-      <Card elevation={0} className={classes.root}>
+      <Card elevation={0} className={classes.root} sx={{ mb: isLast ? 2 : 1 }}>
         <Box
           display="flex"
           justifyContent="space-between"

@@ -5,7 +5,6 @@ import useWorkouts from "../../hooks/useWorkouts";
 
 import { Typography, Box } from "@mui/material/";
 import IconButtonWithDrawer from "../buttons/IconButtonWithDrawer";
-import IconButtonWithMenu from "../../components/buttons/IconButtonWithMenu";
 
 import { MoreHorizRounded as MoreIcon } from "@mui/icons-material";
 import ActionButton from "../buttons/ActionButton";

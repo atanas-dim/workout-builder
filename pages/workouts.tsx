@@ -171,6 +171,7 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
               key={"workout-" + data.id + workout.id + index}
               index={index}
               workout={workout}
+              isLast={index === Object.keys(data.workouts).length - 1}
             />
           );
         })
