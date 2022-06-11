@@ -29,7 +29,8 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
 
 import ExercisesItem from "./ExercisesItem";
-import IconButtonWithMenu from "../buttons/IconButtonWithMenu";
+import IconButtonWithDrawer from "../buttons/IconButtonWithDrawer";
+import ActionButton from "../buttons/ActionButton";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -39,20 +40,16 @@ export const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-
-    "&:last-of-type": {
-      marginBottom: 0,
-    },
   },
 }));
 
 type Props = {
   workout: Workout;
   index: number;
+  isLast?: boolean;
 };
 
-const WorkoutCard: FC<Props> = ({ workout, index }) => {
+const WorkoutCard: FC<Props> = ({ workout, index, isLast }) => {
   const router = useRouter();
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
@@ -78,7 +75,7 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
 
   return (
     <Fade in={show} appear={show} timeout={600}>
-      <Card elevation={0} className={classes.root}>
+      <Card elevation={0} className={classes.root} sx={{ mb: isLast ? 2 : 1 }}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -121,21 +118,20 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
               {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
 
-            <IconButtonWithMenu
-              id={generateRandomId()}
+            <IconButtonWithDrawer
               icon={<MoreIcon fontSize="small" />}
-              menuTitle="Workout"
-              menuItems={[
-                {
-                  label: "Edit",
-                  onClick: onEditWorkoutClick,
-                },
-              ]}
-            />
+              drawerHeading={workout.title}
+            >
+              <ActionButton label="Edit workout" onClick={onEditWorkoutClick} />
+            </IconButtonWithDrawer>
           </Box>
         </Box>
 
-        <Collapse in={expanded} timeout={600} sx={{ width: "100%" }}>
+        <Collapse
+          in={expanded}
+          timeout={workout.exercises.length > 3 ? 600 : 300}
+          sx={{ width: "100%" }}
+        >
           {workout.exercises.map((exercise, index) => (
             <Box
               key={"workout-exersise-" + index}

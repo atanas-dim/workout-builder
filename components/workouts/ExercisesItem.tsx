@@ -35,6 +35,7 @@ const ExercisesItem: FC<Props> = ({ data }) => {
               top: 0,
               width: "100%",
               height: "100%",
+              borderRadius: 1 / 2,
             }}
           />
         )}

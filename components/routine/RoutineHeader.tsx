@@ -4,9 +4,10 @@ import useRoutines from "../../hooks/useRoutines";
 import useWorkouts from "../../hooks/useWorkouts";
 
 import { Typography, Box } from "@mui/material/";
-import IconButtonWithMenu from "../../components/buttons/IconButtonWithMenu";
+import IconButtonWithDrawer from "../buttons/IconButtonWithDrawer";
 
 import { MoreHorizRounded as MoreIcon } from "@mui/icons-material";
+import ActionButton from "../buttons/ActionButton";
 
 type Props = {
   onSelectClick: () => void;
@@ -41,17 +42,14 @@ const RoutineHeader: FC<Props> = ({ onSelectClick }) => {
       </Typography>
 
       {currentRoutineId && (
-        <IconButtonWithMenu
-          id="edit-current-routine"
-          icon={<MoreIcon fontSize="small" />}
-          menuTitle=" Current Routine"
-          menuItems={[
-            {
-              label: "Select",
-              onClick: onSelectClick,
-            },
-          ]}
-        />
+        <>
+          <IconButtonWithDrawer
+            icon={<MoreIcon fontSize="small" />}
+            drawerHeading={"Current routine"}
+          >
+            <ActionButton label="Select" onClick={onSelectClick} />
+          </IconButtonWithDrawer>
+        </>
       )}
     </Box>
   );

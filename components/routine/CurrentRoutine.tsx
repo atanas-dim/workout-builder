@@ -40,7 +40,8 @@ const CurrentRoutine: FC = () => {
   const getFallbackCardVariant = () => {
     if (!workouts?.length) return FallbackCardVariant.FirstWorkout;
     else if (!routines?.length) return FallbackCardVariant.FirstRoutine;
-    else if (!currentRoutineId) return FallbackCardVariant.SelectRoutine;
+    else if (!currentRoutineId || !currentRoutineWorkouts)
+      return FallbackCardVariant.SelectRoutine;
     else if (!Object.keys(currentRoutineWorkouts).length)
       return FallbackCardVariant.RoutineIsEmpty;
     else return FallbackCardVariant.SelectRoutine;
