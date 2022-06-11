@@ -30,6 +30,8 @@ import { Theme } from "@mui/material/styles";
 
 import ExercisesItem from "./ExercisesItem";
 import IconButtonWithMenu from "../buttons/IconButtonWithMenu";
+import IconButtonWithDrawer from "../buttons/IconButtonWithDrawer";
+import ActionButton from "../buttons/ActionButton";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -121,17 +123,12 @@ const WorkoutCard: FC<Props> = ({ workout, index }) => {
               {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </IconButton>
 
-            <IconButtonWithMenu
-              id={generateRandomId()}
+            <IconButtonWithDrawer
               icon={<MoreIcon fontSize="small" />}
-              menuTitle="Workout"
-              menuItems={[
-                {
-                  label: "Edit",
-                  onClick: onEditWorkoutClick,
-                },
-              ]}
-            />
+              drawerHeading={workout.title}
+            >
+              <ActionButton label="Edit workout" onClick={onEditWorkoutClick} />
+            </IconButtonWithDrawer>
           </Box>
         </Box>
 

@@ -26,7 +26,9 @@ import {
 import MainContentWrapper from "../components/mainContent/MainContentWrapper";
 import WorkoutCard from "../components/workouts/WorkoutCard";
 import IconButtonWithMenu from "../components/buttons/IconButtonWithMenu";
+import IconButtonWithDrawer from "../components/buttons/IconButtonWithDrawer";
 import LargeSwitch from "../components/buttons/LargeSwitch";
+import ActionButton from "../components/buttons/ActionButton";
 
 const Workouts: NextPage = () => {
   const { workouts, isLoading, isSorted, setIsSorted, routineGroups } =
@@ -149,19 +151,12 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
           {data.title}
         </Typography>
 
-        {data.id && (
-          <IconButtonWithMenu
-            id={data.id}
-            icon={<MoreIcon fontSize="small" />}
-            menuTitle="Routine"
-            menuItems={[
-              {
-                label: "Edit",
-                onClick: () => onEditRoutineClick(data.id),
-              },
-            ]}
-          />
-        )}
+        <IconButtonWithDrawer
+          icon={<MoreIcon fontSize="small" />}
+          drawerHeading={data.title}
+        >
+          <ActionButton label="Edit routine" />
+        </IconButtonWithDrawer>
       </Box>
 
       {Object.keys(data.workouts).length ? (
