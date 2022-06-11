@@ -5,7 +5,7 @@ import { Box, Typography, CardMedia, Skeleton } from "@mui/material";
 
 import { WorkoutExerciseEntry } from "../../context/WorkoutsContext";
 
-import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/youtubeVideos";
 
 type Props = {
   data: WorkoutExerciseEntry;

@@ -10,7 +10,7 @@ import useRoutines from "../../hooks/useRoutines";
 
 import { Box, Typography, Card, Skeleton, ButtonBase } from "@mui/material";
 
-import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/getYouTubeVideoId";
+import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/youtubeVideos";
 import ActionButton from "../buttons/ActionButton";
 
 import { AddCircleOutlineRounded as AddIcon } from "@mui/icons-material";
@@ -73,7 +73,12 @@ const RoutineCarousel: FC<Props> = ({ workouts }) => {
         );
       })}
       <ButtonBase
-        sx={{ mr: 1, scrollSnapAlign: "center", scrollSnapStop: "always" }}
+        sx={{
+          mr: 1,
+          scrollSnapAlign: "center",
+          scrollSnapStop: "always",
+          borderRadius: 1,
+        }}
         onClick={() =>
           push({
             pathname: RouterPath.RoutineEditor,
