@@ -82,9 +82,15 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
     player.current.internalPlayer.playVideo();
   };
 
+  const onPlayerClick = () => {
+    if (isPlaying) player.current.internalPlayer.pauseVideo();
+    else player.current.internalPlayer.playVideo();
+  };
+
   return (
     <Box
       display="flex"
+      flexDirection="column"
       justifyContent="center"
       alignItems="center"
       sx={{
@@ -92,8 +98,52 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
       }}
     >
       <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          maxWidth: "100%",
+          maxHeight: "100%",
+          aspectRatio: "16/9",
+          borderRadius: 1,
+          position: "relative",
+        }}
+        onClick={onPlayerClick}
+      >
+        <YouTube
+          ref={player}
+          videoId={videoId}
+          title={"exercise.name"}
+          loading={"eager"} // defaults -> undefined
+          opts={{
+            playerVars: {
+              controls: 0,
+              showinfo: 0,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1,
+            },
+          }}
+          className={styles.player}
+          iframeClassName={styles.playerIframe}
+          onReady={(e) => {
+            setDuration(e.target.getDuration());
+          }}
+          onPlay={(e) => {
+            setIsPlaying(true);
+          }}
+          onPause={(e) => {
+            setIsPlaying(false);
+          }}
+          onEnd={(e) => {
+            updateStateFromCurrentTime({ completed: true });
+            setIsPlaying(false);
+          }}
+        />
+      </Box>
+
+      {/* Controls */}
+      <Box
         display="flex"
-        flexDirection="column"
         justifyContent="center"
         alignItems="center"
         sx={{
@@ -103,131 +153,69 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
         <Box
           sx={{
             width: "100%",
-            height: "100%",
-            maxWidth: "100%",
-            maxHeight: "100%",
-            marginBottom: "40px",
-            aspectRatio: "16/9",
-            borderRadius: 1,
             position: "relative",
+            ml: 1,
+            mr: 1,
+            height: 30,
           }}
         >
-          <YouTube
-            ref={player}
-            videoId={videoId}
-            title={"exercise.name"}
-            loading={"eager"} // defaults -> undefined
-            opts={{
+          <Box
+            sx={{
               width: "100%",
-              height: "100%",
+              height: 4,
+              marginTop: "13px",
 
-              playerVars: {
-                controls: 0,
-                showinfo: 0,
-                rel: 0,
-                modestbranding: 1,
-                playsinline: 1,
-              },
-            }}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-            iframeClassName={styles.playerIframe}
-            onReady={(e) => {
-              setDuration(e.target.getDuration());
-            }}
-            onPlay={(e) => {
-              setIsPlaying(true);
-            }}
-            onPause={(e) => {
-              setIsPlaying(false);
-            }}
-            onEnd={(e) => {
-              updateStateFromCurrentTime({ completed: true });
-              setIsPlaying(false);
+              bgcolor: "primary.main",
+              opacity: 0.3,
+              borderRadius: 1,
+              transform: ` scaleX(${buffer || 0})`,
+              transformOrigin: "left",
+              transition: "transform 0.3s ease",
             }}
           />
 
-          {/* Controls */}
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
+          <Slider
+            value={progress}
+            onChange={(_, value) => setProgress(value as number)}
+            onChangeCommitted={(_, value) =>
+              updateCurrentVideoTime(value as number)
+            }
             sx={{
-              width: "100%",
               position: "absolute",
-              bottom: "-40px",
+              top: "50%",
+              left: 0,
+              transform: "translateY(-50%)",
+              [".MuiSlider-thumb"]: {
+                width: 16,
+                height: 16,
+              },
             }}
-          >
-            <Box
-              sx={{
-                width: "100%",
-                position: "relative",
-                ml: 2,
-                mr: 1,
-                height: 30,
-              }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: 4,
-                  marginTop: "13px",
-
-                  bgcolor: "primary.main",
-                  opacity: 0.3,
-                  borderRadius: 1,
-                  transform: ` scaleX(${buffer || 0})`,
-                  transformOrigin: "left",
-                  transition: "transform 0.3s ease",
-                }}
-              />
-
-              <Slider
-                value={progress}
-                onChange={(_, value) => setProgress(value as number)}
-                onChangeCommitted={(_, value) =>
-                  updateCurrentVideoTime(value as number)
-                }
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: 0,
-                  transform: "translateY(-50%)",
-                  [".MuiSlider-thumb"]: {
-                    width: 16,
-                    height: 16,
-                  },
-                }}
-              ></Slider>
-            </Box>
-
-            <Typography
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              component="span"
-              variant="body2"
-            >
-              <Box
-                component="span"
-                sx={{ width: 34, mr: 1 / 4, textAlign: "right" }}
-              >
-                {formatTimeForPlayer(currentTime)}
-              </Box>
-              /
-              <Box
-                component="span"
-                sx={{ width: 34, ml: 1 / 4, textAlign: "left" }}
-              >
-                {formatTimeForPlayer(duration)}
-              </Box>
-            </Typography>
-          </Box>
+          ></Slider>
         </Box>
+
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          component="span"
+          variant="body2"
+        >
+          <Box
+            component="span"
+            sx={{ width: 34, mr: 1 / 4, textAlign: "right" }}
+          >
+            {formatTimeForPlayer(currentTime)}
+          </Box>
+          /
+          <Box
+            component="span"
+            sx={{ width: 34, ml: 1 / 4, textAlign: "left" }}
+          >
+            {formatTimeForPlayer(duration)}
+          </Box>
+        </Typography>
       </Box>
     </Box>
   );

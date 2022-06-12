@@ -1,3 +1,14 @@
-.playerIframe {
+.player {
+  width: 100%;
+  height: 100%;
   border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+  touch-action: none;
+}
+.playerIframe {
+  width: 300%;
+  height: 100%;
+  /* ...and bring it back again */
+  margin-left: -100%;
 }
