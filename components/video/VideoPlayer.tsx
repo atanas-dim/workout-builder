@@ -2,12 +2,7 @@ import React, { FC, useState, useRef, useEffect, useCallback } from "react";
 
 import YouTube from "react-youtube";
 
-import { Box, Slider, Typography, IconButton } from "@mui/material";
-
-import {
-  Fullscreen as FullscreenIcon,
-  FullscreenExit as FullscreenExitIcon,
-} from "@mui/icons-material/";
+import { Box, Slider, Typography } from "@mui/material";
 
 import { formatTimeForPlayer } from "../../utilities/videoHelpers/timeFormat";
 
@@ -26,7 +21,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const updateProgress = useCallback(
     (currentTime: number) => {
@@ -88,10 +82,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
     player.current.internalPlayer.playVideo();
   };
 
-  const onFullScreenClick = () => {
-    setIsFullscreen((prev) => !prev);
-  };
-
   return (
     <Box
       display="flex"
@@ -99,14 +89,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
       alignItems="center"
       sx={{
         backgroundColor: "background.default",
-
-        ...(isFullscreen && {
-          position: "fixed",
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
-        }),
       }}
     >
       <Box
@@ -116,14 +98,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
         alignItems="center"
         sx={{
           width: "100%",
-          ...(isFullscreen && {
-            maxWidth: "100%",
-
-            "@media (orientation:landscape)": {
-              width: "unset",
-              height: "100%",
-            },
-          }),
         }}
       >
         <Box
@@ -136,11 +110,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
             aspectRatio: "16/9",
             borderRadius: 1,
             position: "relative",
-            ...(isFullscreen && {
-              "@media (orientation:landscape)": {
-                width: "unset",
-              },
-            }),
           }}
         >
           <YouTube
@@ -257,9 +226,6 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
                 {formatTimeForPlayer(duration)}
               </Box>
             </Typography>
-            <IconButton onClick={onFullScreenClick}>
-              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-            </IconButton>
           </Box>
         </Box>
       </Box>
