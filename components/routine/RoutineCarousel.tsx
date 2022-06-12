@@ -24,8 +24,7 @@ const CarouselContainer = styled(Box)(({ theme }) => ({
   marginBottom: 16,
 
   [theme.breakpoints.up("sm")]: {
-    minWidth: "calc(100% + 48px)",
-    width: "calc(100% + 48px)",
+    minWidth: "100%",
   },
 
   "&::-webkit-scrollbar": {
@@ -54,6 +53,9 @@ const CarouselCard = styled(Card)(({ theme }) => ({
 
   "&:first-of-type": {
     marginLeft: 8,
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: 0,
+    },
   },
 }));
 
@@ -74,7 +76,7 @@ const RoutineCarousel: FC<Props> = ({ workouts }) => {
       })}
       <ButtonBase
         sx={{
-          mr: 1,
+          mr: { xs: 1, sm: 0 },
           scrollSnapAlign: "center",
           scrollSnapStop: "always",
           borderRadius: 1,
