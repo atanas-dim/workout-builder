@@ -27,7 +27,7 @@ const Start: NextPage = () => {
         {currentWorkout?.title}
         <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
           {currentWorkout?.exercises.map((exercise, index) => {
-            // if (index > 0) return;
+            if (index > 0) return;
             const videoId = getYouTubeVideoId(exercise.videoUrl);
             return <VideoPlayer key={"video-" + index} videoId={videoId} />;
           })}

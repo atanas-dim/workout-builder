@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { Box, Container } from "@mui/material";
+import { Container } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
-import { alpha } from "@mui/system";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -18,6 +17,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down("sm")]: {
       paddingLeft: 8,
       paddingRight: 8,
+    },
+
+    [`${theme.breakpoints.down("md")} and (orientation: landscape)`]: {
+      maxWidth: theme.breakpoints.values.sm,
     },
   },
 }));
