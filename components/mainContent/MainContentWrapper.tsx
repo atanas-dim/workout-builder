@@ -6,7 +6,7 @@ import { Theme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    paddingTop: theme.spacing(9),
+    paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(13),
 
     width: "100%",

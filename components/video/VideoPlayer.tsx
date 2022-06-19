@@ -106,6 +106,7 @@ const VideoPlayer: FC<Props> = ({ videoId }) => {
           aspectRatio: "16/9",
           borderRadius: 1,
           position: "relative",
+          overflow: "hidden",
         }}
         onClick={onPlayerClick}
       >

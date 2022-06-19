@@ -84,7 +84,7 @@ const ExerciseCard: FC<Props> = ({
   return (
     <Card
       elevation={0}
-      sx={{ width: "100%", mb: 2, p: 1 }}
+      sx={{ width: "100%", mb: 1, p: 1 }}
       ref={draggableRef}
       {...draggableProps}
       style={draggableStyle}

@@ -162,12 +162,10 @@ const Calendar: FC = () => {
           return <Box key={weekday}>{weekday}</Box>;
         })}
         {daysforCalendarView.map((day, index) => {
-          const columnNumber = day.dayOfWeek === 0 ? 7 : day.dayOfWeek;
           return (
             <DayBox
               key={day.date}
               sx={{
-                gridColumn: `${columnNumber} / span 1`,
                 color: day.isCurrentMonth ? "default" : "grey.500",
               }}
             >
