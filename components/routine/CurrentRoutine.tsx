@@ -8,7 +8,7 @@ import SelectRoutineModal from "../../components/modals/SelectRoutineModal";
 import RoutineHeader from "./RoutineHeader";
 import RoutineCarousel from "../../components/routine/RoutineCarousel";
 import RoutineFallbackCard from "./RoutineFallbackCard";
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Box, Card } from "@mui/material";
 
 import { FallbackCardVariant } from "./RoutineFallbackCard";
 
@@ -58,14 +58,20 @@ const CurrentRoutine: FC = () => {
       />
 
       {showCircularProgress && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ width: "100%", height: 260 }}
+        <Card
+          elevation={0}
+          sx={{
+            width: "100%",
+            height: "80vw",
+            maxHeight: 328,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 2,
+          }}
         >
           <CircularProgress />
-        </Box>
+        </Card>
       )}
 
       {!showCircularProgress && (

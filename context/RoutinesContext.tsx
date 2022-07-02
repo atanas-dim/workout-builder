@@ -30,14 +30,14 @@ export type Routine = {
 };
 
 type RoutinesContextValue = {
-  routines: Routine[];
-  setRoutines: Dispatch<SetStateAction<Routine[]>>;
+  routines: Routine[] | undefined;
+  setRoutines: Dispatch<SetStateAction<Routine[] | undefined>>;
   isLoading: boolean;
   currentRoutineId?: string;
 };
 
 const INITIAL_STATE = {
-  routines: [],
+  routines: undefined,
   setRoutines: () => {},
   isLoading: true,
   currentRoutineId: undefined,
@@ -47,7 +47,9 @@ export const RoutinesContext =
   createContext<RoutinesContextValue>(INITIAL_STATE);
 
 export const RoutinesProvider: FC = ({ children }: any) => {
-  const [routines, setRoutines] = useState<Routine[]>(INITIAL_STATE.routines);
+  const [routines, setRoutines] = useState<Routine[] | undefined>(
+    INITIAL_STATE.routines
+  );
   const [currentRoutineId, setCurrentRoutineId] = useState<string | undefined>(
     INITIAL_STATE.currentRoutineId
   );
@@ -83,6 +85,8 @@ export const RoutinesProvider: FC = ({ children }: any) => {
     const unsubscribe = onSnapshot(
       routinesQuery,
       (querySnapshot) => {
+        if (querySnapshot.metadata.fromCache) return;
+
         const routines: Routine[] = [];
 
         querySnapshot.forEach((doc) => {

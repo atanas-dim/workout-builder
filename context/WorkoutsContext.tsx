@@ -51,8 +51,8 @@ type RoutineGroups = {
 };
 
 type WorkoutsContextValue = {
-  workouts: Workout[];
-  setWorkouts: Dispatch<SetStateAction<Workout[]>>;
+  workouts?: Workout[];
+  setWorkouts: Dispatch<SetStateAction<Workout[] | undefined>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
@@ -61,7 +61,7 @@ type WorkoutsContextValue = {
 };
 
 const INITIAL_STATE = {
-  workouts: [],
+  workouts: undefined,
   setWorkouts: () => {},
   isLoading: true,
   setIsLoading: () => {},
@@ -75,7 +75,9 @@ export const WorkoutsContext =
 
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [workouts, setWorkouts] = useState<Workout[] | undefined>(
+    INITIAL_STATE.workouts
+  );
   const [routineGroups, setRoutineGroups] = useState<RoutineGroups>(
     INITIAL_STATE.routineGroups
   );
@@ -86,6 +88,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
 
   useEffect(() => {
     console.log("updating  workouts data", workouts);
+    if (workouts) setIsLoading(false);
   }, [workouts]);
 
   // FETCH FROM FIRESTORE --------------------------
@@ -105,6 +108,8 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     const unsubscribe = onSnapshot(
       workoutsQuery,
       (querySnapshot) => {
+        if (querySnapshot.metadata.fromCache) return;
+
         const workouts: Workout[] = [];
 
         querySnapshot.forEach((doc) => {
@@ -133,7 +138,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
 
   // SORT WORKOUTS DATA --------------------------
   useEffect(() => {
-    if (!routines) return;
+    if (!routines || !workouts) return;
     setRoutineGroups(sortWorkoutsByRoutine(routines, workouts));
   }, [routines, workouts]);
 

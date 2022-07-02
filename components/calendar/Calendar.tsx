@@ -47,15 +47,9 @@ const WeekdayBox = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.divider,
 }));
 
-const DayBox = styled(ButtonBase)(({ theme }) => ({
+const DayBox = styled(IconButton)(({ theme }) => ({
   width: "100%",
   aspectRatio: "1/1",
-
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-
-  borderRadius: "100%",
 }));
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -107,7 +101,7 @@ const Calendar: FC = () => {
             ml: 1,
           }}
         >
-          Calendar
+          History
         </Typography>
       </Box>
       <Card elevation={0} sx={{ p: 2, width: "100%" }}>
@@ -132,7 +126,7 @@ const Calendar: FC = () => {
           justifyContent="space-between"
           sx={{ width: "100%", flexDirection: { xs: "column", sm: "row" } }}
         >
-          <Box sx={{ mb: 3, mr: 2, minWidth: 280 }}>
+          <Box sx={{ mb: 3, mr: 2, minWidth: 230 }}>
             <Typography component="span" variant="body1" display="block">
               Last workout: Push Day, 12.06.2022.
             </Typography>
