@@ -1,19 +1,19 @@
 import { FC, useState } from "react";
 import Image from "next/image";
-
 import { useRouter } from "next/router";
 
 import { styled } from "@mui/system";
 
 import { Workout } from "../../context/WorkoutsContext";
+
 import useRoutines from "../../hooks/useRoutines";
 
 import { Box, Typography, Card, Skeleton, ButtonBase } from "@mui/material";
+import { AddCircleOutlineRounded as AddIcon } from "@mui/icons-material";
 
 import { getYouTubeVideoThumbUrl } from "../../utilities/videoHelpers/youtubeVideos";
 import ActionButton from "../buttons/ActionButton";
 
-import { AddCircleOutlineRounded as AddIcon } from "@mui/icons-material";
 import { RouterPath } from "../../resources/routes";
 
 const CarouselContainer = styled(Box)(({ theme }) => ({
@@ -66,6 +66,7 @@ type Props = {
 const RoutineCarousel: FC<Props> = ({ workouts }) => {
   const { push } = useRouter();
   const { currentRoutineId } = useRoutines();
+
   return (
     <CarouselContainer display="flex">
       {Object.keys(workouts)?.map((key, index) => {

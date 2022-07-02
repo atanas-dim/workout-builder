@@ -3,11 +3,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useState,
-  useEffect,
-  useRef,
 } from "react";
-
-import { Portal } from "@mui/material";
 
 type PWAContextProps = {
   deferredPrompt: any;
@@ -40,23 +36,6 @@ export const PWAProvider: React.FC = ({ children }) => {
   const [showIOSInstallModal, setShowIOSInstallModal] =
     useState<boolean>(false);
 
-  const preventSwipeEl = useRef<HTMLDivElement>(null);
-
-  const preventDefaultSwipeNav = (e: any) => {
-    // prevent swipe to navigate gesture on mobile Safari
-    if (e.pageX > 10 && e.pageX < window.innerWidth - 10) return;
-    e.preventDefault();
-  };
-
-  useEffect(() => {
-    const element = preventSwipeEl.current;
-    element?.addEventListener("touchstart", preventDefaultSwipeNav);
-
-    return () => {
-      element?.removeEventListener("touchstart", preventDefaultSwipeNav);
-    };
-  }, []);
-
   const contextValue: PWAContextProps = {
     deferredPrompt,
     setDeferredPrompt,
@@ -69,20 +48,6 @@ export const PWAProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <PWAContext.Provider value={contextValue}>
-      <div
-        ref={preventSwipeEl}
-        style={{
-          width: "100%",
-          height: "100%",
-          // border: "solid 1px red",
-          position: "fixed",
-          top: 0,
-          left: 0,
-        }}
-      />
-
-      {children}
-    </PWAContext.Provider>
+    <PWAContext.Provider value={contextValue}>{children}</PWAContext.Provider>
   );
 };
