@@ -30,14 +30,14 @@ export type Routine = {
 };
 
 type RoutinesContextValue = {
-  routines: Routine[] | undefined;
-  setRoutines: Dispatch<SetStateAction<Routine[] | undefined>>;
+  routines: Routine[];
+  setRoutines: Dispatch<SetStateAction<Routine[]>>;
   isLoading: boolean;
   currentRoutineId?: string;
 };
 
 const INITIAL_STATE = {
-  routines: undefined,
+  routines: [],
   setRoutines: () => {},
   isLoading: true,
   currentRoutineId: undefined,
@@ -47,9 +47,7 @@ export const RoutinesContext =
   createContext<RoutinesContextValue>(INITIAL_STATE);
 
 export const RoutinesProvider: FC = ({ children }: any) => {
-  const [routines, setRoutines] = useState<Routine[] | undefined>(
-    INITIAL_STATE.routines
-  );
+  const [routines, setRoutines] = useState<Routine[]>(INITIAL_STATE.routines);
   const [currentRoutineId, setCurrentRoutineId] = useState<string | undefined>(
     INITIAL_STATE.currentRoutineId
   );

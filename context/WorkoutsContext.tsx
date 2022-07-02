@@ -51,8 +51,8 @@ type RoutineGroups = {
 };
 
 type WorkoutsContextValue = {
-  workouts?: Workout[];
-  setWorkouts: Dispatch<SetStateAction<Workout[] | undefined>>;
+  workouts: Workout[];
+  setWorkouts: Dispatch<SetStateAction<Workout[]>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isSorted: boolean;
@@ -61,7 +61,7 @@ type WorkoutsContextValue = {
 };
 
 const INITIAL_STATE = {
-  workouts: undefined,
+  workouts: [],
   setWorkouts: () => {},
   isLoading: true,
   setIsLoading: () => {},
@@ -75,9 +75,7 @@ export const WorkoutsContext =
 
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
-  const [workouts, setWorkouts] = useState<Workout[] | undefined>(
-    INITIAL_STATE.workouts
-  );
+  const [workouts, setWorkouts] = useState<Workout[]>(INITIAL_STATE.workouts);
   const [routineGroups, setRoutineGroups] = useState<RoutineGroups>(
     INITIAL_STATE.routineGroups
   );
@@ -88,7 +86,6 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
 
   useEffect(() => {
     console.log("updating  workouts data", workouts);
-    if (workouts) setIsLoading(false);
   }, [workouts]);
 
   // FETCH FROM FIRESTORE --------------------------
