@@ -75,7 +75,7 @@ export const WorkoutsContext =
 
 export const WorkoutsProvider: FC = ({ children }: any) => {
   const [isSorted, setIsSorted] = useState(INITIAL_STATE.isSorted);
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [workouts, setWorkouts] = useState<Workout[]>(INITIAL_STATE.workouts);
   const [routineGroups, setRoutineGroups] = useState<RoutineGroups>(
     INITIAL_STATE.routineGroups
   );
@@ -105,6 +105,8 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
     const unsubscribe = onSnapshot(
       workoutsQuery,
       (querySnapshot) => {
+        if (querySnapshot.metadata.fromCache) return;
+
         const workouts: Workout[] = [];
 
         querySnapshot.forEach((doc) => {
@@ -133,7 +135,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
 
   // SORT WORKOUTS DATA --------------------------
   useEffect(() => {
-    if (!routines) return;
+    if (!routines || !workouts) return;
     setRoutineGroups(sortWorkoutsByRoutine(routines, workouts));
   }, [routines, workouts]);
 

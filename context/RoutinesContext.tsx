@@ -83,6 +83,8 @@ export const RoutinesProvider: FC = ({ children }: any) => {
     const unsubscribe = onSnapshot(
       routinesQuery,
       (querySnapshot) => {
+        if (querySnapshot.metadata.fromCache) return;
+
         const routines: Routine[] = [];
 
         querySnapshot.forEach((doc) => {

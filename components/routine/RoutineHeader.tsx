@@ -26,7 +26,7 @@ const RoutineHeader: FC<Props> = ({ onSelectClick }) => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      sx={{ width: "100%" }}
+      sx={{ width: "100%", minHeight: 36 }}
     >
       <Typography
         component="span"

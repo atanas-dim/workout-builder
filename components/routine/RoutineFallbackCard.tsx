@@ -45,9 +45,11 @@ const RoutineFallbackCard: FC<Props> = ({
 
   return (
     <Card
+      elevation={0}
       sx={{
         width: "100%",
-        height: 320,
+        height: "80vw",
+        maxHeight: 328,
         p: 2,
         mb: 2,
         display: "flex",
