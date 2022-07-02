@@ -229,7 +229,7 @@ const RoutineEditor: NextPage = () => {
                             key={"workout-" + index}
                             sx={{
                               height: 80,
-                              mb: 2,
+                              mb: 1,
                               p: 1,
                               display: "flex",
                               justifyContent: "space-between",
@@ -272,7 +272,7 @@ const RoutineEditor: NextPage = () => {
         <ActionButton
           label="Add workout"
           onClick={onAddWorkoutClick}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, maxWidth: 400, margin: "auto" }}
           fullWidth
           endIcon={<AddIcon />}
         />

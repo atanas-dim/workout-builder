@@ -32,7 +32,14 @@ const IconButtonWithDrawer: FC<PropsWithChildren<Props>> = ({
         onOpen={handleOpen}
         elevation={1}
         PaperProps={{
-          sx: { borderRadius: "12px 12px 0 0", p: 4, pt: 2, pb: 6 },
+          sx: (theme) => ({
+            borderRadius: "12px 12px 0 0",
+            p: 4,
+            pt: 2,
+            pb: 6,
+            mx: "auto",
+            maxWidth: theme.breakpoints.values.md,
+          }),
         }}
       >
         <Box

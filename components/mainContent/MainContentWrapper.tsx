@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 
     [`${theme.breakpoints.down("md")} and (orientation: landscape)`]: {
-      maxWidth: theme.breakpoints.values.sm,
+      maxWidth: "90%",
     },
   },
 }));

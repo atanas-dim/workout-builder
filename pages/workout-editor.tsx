@@ -218,7 +218,7 @@ const WorkoutEditor: NextPage = () => {
         <ActionButton
           label="Add exercise"
           onClick={onAddExerciseClick}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, maxWidth: 400, margin: "auto" }}
           fullWidth
           endIcon={<AddIcon />}
         />

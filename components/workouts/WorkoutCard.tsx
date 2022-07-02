@@ -122,7 +122,12 @@ const WorkoutCard: FC<Props> = ({ workout, index, isLast }) => {
               icon={<MoreIcon fontSize="small" />}
               drawerHeading={workout.title}
             >
-              <ActionButton label="Edit workout" onClick={onEditWorkoutClick} />
+              <ActionButton
+                label="Edit workout"
+                onClick={onEditWorkoutClick}
+                fullWidth
+                sx={{ maxWidth: 400, margin: "auto" }}
+              />
             </IconButtonWithDrawer>
           </Box>
         </Box>
