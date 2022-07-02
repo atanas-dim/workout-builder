@@ -31,8 +31,6 @@ const Home: NextPage = () => {
         <CurrentRoutine />
 
         <Calendar />
-
-        <ActionButton label="Sign out" onClick={() => signOut()} />
       </MainContentWrapper>
     </>
   );

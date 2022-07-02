@@ -272,7 +272,7 @@ const RoutineEditor: NextPage = () => {
         <ActionButton
           label="Add workout"
           onClick={onAddWorkoutClick}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, maxWidth: 400, margin: "auto" }}
           fullWidth
           endIcon={<AddIcon />}
         />

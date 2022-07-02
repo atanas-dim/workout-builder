@@ -47,7 +47,12 @@ const RoutineHeader: FC<Props> = ({ onSelectClick }) => {
             icon={<MoreIcon fontSize="small" />}
             drawerHeading={"Current routine"}
           >
-            <ActionButton label="Select" onClick={onSelectClick} />
+            <ActionButton
+              label="Select"
+              onClick={onSelectClick}
+              fullWidth
+              sx={{ maxWidth: 400, margin: "auto" }}
+            />
           </IconButtonWithDrawer>
         </>
       )}

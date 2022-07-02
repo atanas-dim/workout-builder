@@ -158,6 +158,8 @@ const RoutineContainer: FC<RoutineContainerProps> = ({ data }) => {
           <ActionButton
             label="Edit routine"
             onClick={() => onEditRoutineClick(data.id)}
+            fullWidth
+            sx={{ maxWidth: 400, margin: "auto" }}
           />
         </IconButtonWithDrawer>
       </Box>

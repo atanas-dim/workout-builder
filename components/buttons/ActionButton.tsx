@@ -1,9 +1,8 @@
 import { FC } from "react";
 import Link from "next/link";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, ButtonProps } from "@mui/material";
 
-import { alpha } from "@mui/system";
-import { styled } from "@mui/system";
+import { SxProps, alpha, styled } from "@mui/system";
 
 const StyledButton = styled(Button, {
   shouldForwardProp: (prop: string) => prop !== "classes",
@@ -13,11 +12,13 @@ const StyledButton = styled(Button, {
   return {
     height: size === "large" ? 64 : size === "medium" ? 48 : "",
     lineHeight: "initial",
+
     borderColor: variant === "outlined" ? alpha(themeColor, 0.4) : "",
     backgroundColor: variant === "outlined" ? alpha(themeColor, 0.08) : "",
     "&:focus, &:active, &:hover": {
       borderColor: variant === "outlined" ? themeColor : "",
     },
+
     ...(size === "small" && {
       padding: theme.spacing(0.5, 1.5),
       minHeight: "auto",
@@ -37,27 +38,9 @@ const StyledButton = styled(Button, {
   };
 });
 
-type Props = {
-  variant?: "text" | "outlined" | "contained" | undefined;
-  color?:
-    | "inherit"
-    | "primary"
-    | "secondary"
-    | "success"
-    | "error"
-    | "info"
-    | "warning"
-    | undefined;
+type Props = ButtonProps & {
   label: string;
-  onClick?: () => void;
-  sx?: object;
-  href?: string;
-  endIcon?: React.ReactNode;
-  fullWidth?: boolean;
-  size?: "small" | "medium" | "large" | undefined;
-  className?: string;
-  disabled?: boolean;
-  type?: "button" | "submit" | "reset" | undefined;
+  sx?: SxProps;
 };
 
 const ActionButton: FC<Props> = ({
@@ -74,27 +57,7 @@ const ActionButton: FC<Props> = ({
   disabled,
   type,
 }) => {
-  if (href)
-    return (
-      <Link href={href} passHref>
-        <StyledButton
-          size={size}
-          variant={variant}
-          color={color}
-          endIcon={endIcon}
-          fullWidth={fullWidth}
-          sx={sx}
-          className={className}
-          disabled={disabled}
-        >
-          <Typography component="span" variant="button" noWrap>
-            {label}
-          </Typography>
-        </StyledButton>
-      </Link>
-    );
-
-  return (
+  const component = (
     <StyledButton
       type={type}
       size={size}
@@ -112,6 +75,15 @@ const ActionButton: FC<Props> = ({
       </Typography>
     </StyledButton>
   );
+
+  if (href)
+    return (
+      <Link href={href} passHref>
+        {component}
+      </Link>
+    );
+
+  return component;
 };
 
 export default ActionButton;

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { RouterPath, ROUTE_SETTINGS } from "../../resources/routes";
 
 import { usePWA } from "../../hooks/usePWA";
+import useAuth from "../../hooks/useAuth";
 
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/material/styles";
@@ -14,6 +15,7 @@ import { AppBar, Toolbar, Typography, IconButton, Box } from "@mui/material/";
 import {
   DownloadForOfflineRounded as DownloadIcon,
   ArrowBackIosNewRounded as BackIcon,
+  LogoutRounded as SignOutIcon,
 } from "@mui/icons-material";
 
 import IOSInstallInstructionsModal from "../modals/IOSInstallInstructionsModal";
@@ -75,6 +77,8 @@ export default function Header() {
   const classes = useStyles();
   const { push, pathname, back } = useRouter();
 
+  const { signOut } = useAuth();
+
   const {
     showInstallButton,
     showIOSInstallModal,
@@ -89,6 +93,8 @@ export default function Header() {
   const showBackButton =
     pathname === RouterPath.WorkoutEditor ||
     pathname === RouterPath.RoutineEditor;
+
+  const showSignOutButton = pathname === RouterPath.Training;
 
   const onBackClick = () => {
     if (pathname === RouterPath.WorkoutEditor) push(RouterPath.Workouts);
@@ -115,6 +121,14 @@ export default function Header() {
             justifyContent="flex-start"
             sx={{ flex: 1 }}
           >
+            {showSignOutButton && (
+              <IconButton onClick={signOut}>
+                <SignOutIcon
+                  fontSize="small"
+                  sx={{ transform: "scaleX(-1)" }}
+                />
+              </IconButton>
+            )}
             {showBackButton && (
               <IconButton onClick={onBackClick}>
                 <BackIcon fontSize="small" />
