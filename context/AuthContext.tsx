@@ -87,8 +87,8 @@ export const withPrivate = (Component: any) => {
           justifyContent="center"
           alignItems="center"
           sx={{
-            width: "100vw",
-            height: "100vh",
+            width: "100%",
+            height: "100%",
             backgroundColor: theme.palette.background.default,
             zIndex: theme.zIndex.modal,
             position: "fixed",

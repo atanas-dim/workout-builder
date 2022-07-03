@@ -36,7 +36,7 @@ import ActionButton from "../components/buttons/ActionButton";
 import IconButtonWithConfirm from "../components/buttons/IconButtonWithConfirm";
 import AddWorkoutModal from "../components/modals/AddWorkoutModal";
 
-import { Workout } from "../context/WorkoutsContext";
+import { Workout, WorkoutOrderItem } from "../context/WorkoutsContext";
 import { generateRandomId } from "../utilities/general/helpers";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -79,9 +79,13 @@ const RoutineEditor: NextPage = () => {
   const { routines, createRoutine, updateRoutine } = useRoutines();
 
   const [routineTitle, setRoutineTitle] = useState("");
-  const [routineWorkouts, setRoutineWorkouts] = useState<Workout[]>([]);
+  const [draggableItems, setDraggableItems] = useState<
+    { title: string; id: string; orderId: string }[]
+  >([]);
 
-  const [routineOrderArray, setRoutineOrderArray] = useState<string[]>([]);
+  const [routineOrderArray, setRoutineOrderArray] = useState<
+    WorkoutOrderItem[]
+  >([]);
 
   // WORKOUTS ----------------------
   const { workouts } = useWorkouts();
@@ -101,28 +105,38 @@ const RoutineEditor: NextPage = () => {
     setRoutineOrderArray([...workoutsOrderArray]);
   }, [existingRoutineId, routines]);
 
-  const getRoutineWorkouts = useCallback(
-    (routineOrderArray: string[]) => {
-      const foundWorkouts: any[] = [];
+  const getDraggableItems = useCallback(
+    (routineOrderArray: WorkoutOrderItem[]) => {
+      const draggableItems: any[] = [];
 
-      routineOrderArray.forEach((entryId) => {
-        const foundWorkout = workouts.find((workout) => workout.id === entryId);
+      routineOrderArray.forEach((entry) => {
+        const foundWorkout = workouts.find(
+          (workout) => workout.id === entry.id
+        );
+        if (!foundWorkout) return;
 
-        foundWorkouts.push(foundWorkout);
+        const draggableItemData = {
+          title: foundWorkout.title,
+          id: foundWorkout.id,
+          orderId: entry.orderId,
+        };
+
+        draggableItems.push(draggableItemData);
       });
-      return foundWorkouts;
+
+      return draggableItems;
     },
     [workouts]
   );
 
   useEffect(() => {
-    const foundWorkouts = getRoutineWorkouts(routineOrderArray);
-    setRoutineWorkouts(foundWorkouts);
-  }, [routineOrderArray, getRoutineWorkouts]);
+    const itemsArray = getDraggableItems(routineOrderArray);
+    setDraggableItems(itemsArray);
+  }, [routineOrderArray, getDraggableItems]);
 
-  const removeWorkout = (index: number) => {
+  const removeWorkout = (orderId: string) => {
     setRoutineOrderArray((prev) =>
-      prev.filter((item, itemIndex) => itemIndex !== index)
+      prev.filter((item) => item.orderId !== orderId)
     );
   };
 
@@ -182,13 +196,16 @@ const RoutineEditor: NextPage = () => {
   // -------------
   const [showWorkoutsModal, setShowWorkoutsModal] = useState(false);
 
-  const onAddWorkoutClick = () => {
+  const openAddWorkoutModal = () => {
     setShowWorkoutsModal(true);
   };
 
   const onAddWorkoutToRoutineClick = (workoutId: string) => {
     if (!workoutId) return;
-    setRoutineOrderArray((prev) => [...prev, workoutId]);
+    setRoutineOrderArray((prev) => [
+      ...prev,
+      { id: workoutId, orderId: generateRandomId() },
+    ]);
   };
 
   return (
@@ -214,15 +231,15 @@ const RoutineEditor: NextPage = () => {
                 ref={provided.innerRef}
                 style={{ width: "100%" }}
               >
-                {!!routineWorkouts.length &&
-                  routineWorkouts?.map((workout, index) => {
+                {!!draggableItems.length &&
+                  draggableItems?.map((item, index) => {
                     const fallbackId = generateRandomId();
                     return (
                       <Draggable
-                        key={workout?.id + index || fallbackId}
-                        draggableId={workout?.id + index || fallbackId}
+                        key={item?.orderId || fallbackId}
+                        draggableId={item?.orderId || fallbackId}
                         index={index}
-                        isDragDisabled={!workout?.id}
+                        isDragDisabled={!item?.id}
                       >
                         {(provided, snapshot) => (
                           <Card
@@ -244,18 +261,20 @@ const RoutineEditor: NextPage = () => {
                             )}
                             {...provided.dragHandleProps}
                           >
-                            <IconButton disabled={!workout?.id}>
+                            <IconButton disabled={!item?.id}>
                               <DragIcon />
                             </IconButton>
                             <Typography
                               noWrap
                               sx={{ fontWeight: 500, flex: 1 }}
-                              color={!!workout?.title ? "default" : "error"}
+                              color={!!item?.title ? "default" : "error"}
                             >
-                              {workout?.title || "Workout not available"}
+                              {item?.title || "Workout not available"}
                             </Typography>
 
-                            <IconButton onClick={() => removeWorkout(index)}>
+                            <IconButton
+                              onClick={() => removeWorkout(item.orderId)}
+                            >
                               <RemoveIcon />
                             </IconButton>
                           </Card>
@@ -271,7 +290,7 @@ const RoutineEditor: NextPage = () => {
 
         <ActionButton
           label="Add workout"
-          onClick={onAddWorkoutClick}
+          onClick={openAddWorkoutModal}
           sx={{ mb: 2, maxWidth: 400, margin: "auto" }}
           fullWidth
           endIcon={<AddIcon />}

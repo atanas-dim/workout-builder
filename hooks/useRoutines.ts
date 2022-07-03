@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 import { AuthContext } from "../context/AuthContext";
 import { RoutinesContext, Routine } from "../context/RoutinesContext";
@@ -21,9 +21,11 @@ export default function useRoutines() {
     useContext(RoutinesContext);
   const { user } = useContext(AuthContext);
 
-  const routinesCollectionRef = user
-    ? collection(firestore, "users", user.uid, "routines")
-    : undefined;
+  const routinesCollectionRef = useMemo(() => {
+    return user
+      ? collection(firestore, "users", user.uid, "routines")
+      : undefined;
+  }, [user]);
 
   const createRoutine = async ({ id, title, ...data }: Partial<Routine>) => {
     if (!title || !routinesCollectionRef) return;
