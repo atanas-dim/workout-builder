@@ -21,12 +21,14 @@ import { firestore } from "../firebase/config";
 
 import useAuth from "../hooks/useAuth";
 
+import { WorkoutOrderItem } from "./WorkoutsContext";
+
 export type Routine = {
   id: string;
   title: string;
   created: Timestamp;
   updated: Timestamp;
-  workouts?: string[];
+  workouts?: WorkoutOrderItem[];
 };
 
 type RoutinesContextValue = {

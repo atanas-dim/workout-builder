@@ -38,11 +38,15 @@ export type Workout = {
   updated: Timestamp;
 };
 
+export type WorkoutExtended = Workout & { orderId?: string };
+
+export type WorkoutOrderItem = { id: string; orderId: string };
+
 export type RoutineGroup = {
   id?: string;
   title: string;
-  workoutsOrder: string[];
-  workouts: { [key: string]: Workout };
+  workoutsOrder: WorkoutOrderItem[];
+  workouts: { [key: string]: WorkoutExtended };
   updated: Timestamp;
 };
 
@@ -85,7 +89,7 @@ export const WorkoutsProvider: FC = ({ children }: any) => {
   const { routines } = useRoutines();
 
   useEffect(() => {
-    console.log("updating  workouts data", workouts);
+    console.log("updating  workouts data");
   }, [workouts]);
 
   // FETCH FROM FIRESTORE --------------------------

@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { styled } from "@mui/system";
 
-import { Workout } from "../../context/WorkoutsContext";
+import { Workout, WorkoutExtended } from "../../context/WorkoutsContext";
 
 import useRoutines from "../../hooks/useRoutines";
 
@@ -36,43 +36,83 @@ const CarouselContainer = styled(Box)(({ theme }) => ({
   scrollSnapType: "x mandatory",
 }));
 
-const CarouselCard = styled(Card)(({ theme }) => ({
-  minWidth: "min(calc(100% - 56px), 360px)",
-  height: "fit-content",
+const CarouselCard = styled(Card)(({ theme }) => {
+  return {
+    minWidth: "min(calc(100% - 56px), 360px)",
+    height: "fit-content",
 
-  padding: 16,
+    padding: 16,
+    marginRight: 8,
 
-  scrollSnapAlign: "center",
-  scrollSnapStop: "always",
+    position: "relative",
 
-  marginRight: 8,
+    scrollSnapAlign: "center",
+    scrollSnapStop: "always",
 
-  "&:only-of-type": {
-    width: "100%",
-  },
-
-  "&:first-of-type": {
-    marginLeft: 8,
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: 0,
+    "&:only-of-type": {
+      width: "100%",
     },
-  },
-}));
+
+    "&:first-of-type": {
+      marginLeft: 8,
+      [theme.breakpoints.up("sm")]: {
+        marginLeft: 0,
+      },
+    },
+  };
+});
 
 type Props = {
-  workouts: { [key: string]: Workout };
+  workouts: { [key: string]: WorkoutExtended };
 };
 
 const RoutineCarousel: FC<Props> = ({ workouts }) => {
   const { push } = useRouter();
   const { currentRoutineId } = useRoutines();
 
+  // TODO Temporary here. Should be in context
+  const lastCompletedOrderId = useMemo(
+    () => localStorage?.getItem("lastCompletedOrderId"),
+    []
+  );
+
+  const lastWorkoutIndex = useMemo(
+    () =>
+      Object.keys(workouts).findIndex(
+        (key) => workouts[key].orderId === lastCompletedOrderId
+      ),
+    [lastCompletedOrderId, workouts]
+  );
+
+  const nextWorkoutIndex = useMemo(
+    () =>
+      lastWorkoutIndex === Object.keys(workouts).length - 1
+        ? 0
+        : lastWorkoutIndex + 1,
+    [lastWorkoutIndex, workouts]
+  );
+
+  useEffect(() => {
+    document
+      .getElementById("carousel-item-" + nextWorkoutIndex)
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "center",
+      });
+  }, [nextWorkoutIndex]);
+
   return (
     <CarouselContainer display="flex">
       {Object.keys(workouts)?.map((key, index) => {
         const workout = workouts[key];
         return (
-          <CarouselItem key={"carousel-item-" + index} workout={workout} />
+          <CarouselItem
+            key={"carousel-item-" + index}
+            id={"carousel-item-" + index}
+            workout={workout}
+            isHighlighted={index === nextWorkoutIndex}
+          />
         );
       })}
       <ButtonBase
@@ -118,13 +158,14 @@ const RoutineCarousel: FC<Props> = ({ workouts }) => {
 export default RoutineCarousel;
 
 type ItemProps = {
-  workout: Workout;
+  id: string;
+  workout: WorkoutExtended;
+  isHighlighted: boolean;
 };
 
-const CarouselItem: FC<ItemProps> = ({ workout }) => {
+const CarouselItem: FC<ItemProps> = ({ id, workout, isHighlighted }) => {
   const { push } = useRouter();
 
-  //TODO make these slideshow fade in/out
   const thumbUrl = workout.exercises.find(
     (exercise) => !!exercise.videoUrl
   )?.videoUrl;
@@ -132,16 +173,34 @@ const CarouselItem: FC<ItemProps> = ({ workout }) => {
   const [imgIsLoading, setImgIsLoading] = useState(true);
 
   const onStartClick = () => {
-    push(RouterPath.Start + `/${workout.id}`);
+    push(RouterPath.Start + `/${workout.id}?orderId=${workout.orderId}`);
   };
 
   return (
-    <CarouselCard key={workout.id} elevation={0}>
+    <CarouselCard id={id} elevation={0}>
+      {isHighlighted && (
+        <Typography
+          component="span"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 16,
+            p: "3px 6px",
+            lineHeight: 1,
+            borderRadius: 1,
+            bgcolor: "primary.main",
+            color: "#000",
+            fontSize: "0.75rem",
+          }}
+        >
+          Next
+        </Typography>
+      )}
       <Typography
         component="span"
         variant="h6"
         noWrap
-        sx={{ mb: 2, display: "block", textTransform: "uppercase" }}
+        sx={{ mb: 2, display: "block" }}
       >
         {workout.title}
       </Typography>

@@ -1,5 +1,9 @@
 import { Routine } from "../../context/RoutinesContext";
-import { Workout, RoutineGroup } from "../../context/WorkoutsContext";
+import {
+  Workout,
+  WorkoutExtended,
+  RoutineGroup,
+} from "../../context/WorkoutsContext";
 import { Timestamp } from "firebase/firestore";
 
 // Create object with initial routines data grouped by routine Id
@@ -45,7 +49,7 @@ export const sortWorkoutsByOrderArray = (
 };
 
 const getUnsortedWorkouts = (
-  workouts: Workout[],
+  workouts: WorkoutExtended[],
   addedToRoutines: string[]
 ) => {
   const unsorted: { [key: string]: Workout } = {};
@@ -77,11 +81,16 @@ export const sortWorkoutsByRoutine = (
 
     const { workoutsOrder } = routineGroup;
 
-    workoutsOrder.forEach((workoutId, index) => {
-      const workout = workoutsData.find((workout) => workout.id === workoutId);
+    workoutsOrder.forEach((workoutOrderEntry, index) => {
+      const workout = workoutsData.find(
+        (workout) => workout.id === workoutOrderEntry.id
+      );
       if (workout) {
-        routineGroup.workouts[index] = workout;
-        addedToRoutines.push(workoutId);
+        routineGroup.workouts[index] = {
+          ...workout,
+          orderId: workoutOrderEntry.orderId,
+        };
+        addedToRoutines.push(workoutOrderEntry.id);
       }
     });
   }
