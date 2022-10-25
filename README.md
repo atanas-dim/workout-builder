@@ -1,6 +1,58 @@
+# Workout Builder - NextJS App / PWA
+
+> Personal project.
+
+## Table of contents
+
+- [General info](#general-info)
+- [Screenshots](#screenshots)
+- [Technologies](#technologies)
+- [To-do list](#to-do-list)
+- [See live](#see-live)
+- [Run locally](#run-locally)
+
+## General info
+
+Organising workouts with sortable exercises into routines.
+
+## Screenshots
+
+<img src="./public/images/screenshot.jpg" width="300px">
+
+## Technologies
+
+- NextJS
+- Firebase
+- Drag to reorder lists
+- Progressive Web App / Add to home screen / Custom install prompt
+- MUI 5 for UI components
+- Internet connection in-app snackbar notifications
+- Guthub webhook for in-app nortifications on updates to repo
+
+## To-do list
+
+- Improve folder and pathnames structure eg. /editor/workout/[id] instead of /workout-editor?id=xxxxxxxxx
+- Refactor/Reorganise components into individual files where created in a single file
+- Finish current workout page (/start)
+- Replace calendar with summary component
+- Improve/Finish auth screens eg. add forgotten password
+- Create menu and user profile components
+
+## See live
+
+Visit [this link](https://workout-builder.vercel.app/)
+
+---
+
+---
+
+---
+
+## See live
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Run locally
 
 First, run the development server:
 
